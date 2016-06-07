@@ -23,3 +23,12 @@ e6244d,::1,GET,http://localhost/intranettestversion/web/app_dev.php/es/moment.mi
 0dd242,::1,GET,http://localhost/intranettestversion/web/app_dev.php/es/moment.min.js,1465295966,,404
 32dca2,::1,GET,http://localhost/intranettestversion/web/app_dev.php/es/taskStyles.css,1465295966,,404
 02fed3,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/tasks,1465295967,,200
+4c0c43,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/users/imar1i,1465299782,346842,200
+346842,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/users/imar1i,1465299782,,404
+e94b24,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i,1465299787,059e27,200
+059e27,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i,1465299787,,500
+792684,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i.html,1465299800,0c5fc0,200
+0c5fc0,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i.html,1465299800,,500
+4d34ed,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i.html,1465299899,b9c748,200
+b9c748,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i.html,1465299899,,500
+a7a3f5,::1,GET,http://localhost/intranettestversion/web/app_dev.php/api/user/imar1i,1465299906,,200
