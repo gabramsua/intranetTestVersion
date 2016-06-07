@@ -5,7 +5,7 @@ users :
   name_prefix:  api_
 
 api_get_user:
-    pattern: /user/{id}
+    pattern: /user/{login}
     defaults: { _controller: "intranetBundle:ApiRest:getUser"}
     requirements:
         _method: GET
