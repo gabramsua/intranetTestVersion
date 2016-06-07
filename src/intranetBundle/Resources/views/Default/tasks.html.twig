@@ -32,7 +32,7 @@
                 dataFromServer = dataFromServer.replace("]]", "");
                 dataFromServer = dataFromServer.split("],[");
                 
-                $scope.userRol = "asd";//("{{rol | json_encode()}}").replace(/&quot;/g, "");
+                $scope.userRol = ({{rol | json_encode()}}").replace(/&quot;/g, "");
                 $scope.userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.tasks = [];
@@ -149,7 +149,7 @@
             
             function updateTaskDialogController($scope, $mdDialog, $http, currentTask, rol){
                 
-                $scope.userRol = "rol";
+                $scope.userRol = rol;
                 $scope.task = currentTask;
                 $scope.infoLoaded = false
                 

@@ -4,6 +4,12 @@ users :
   resource:     "intranetBundle:ApiRest"
   name_prefix:  api_
 
+api_get_user:
+    pattern: /user/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getUser"}
+    requirements:
+        _method: GET
+
 api_get_task:
     pattern: /tasks/{id}
     defaults: { _controller: "intranetBundle:ApiRest:getTask"}
