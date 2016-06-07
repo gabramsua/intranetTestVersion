@@ -21,20 +21,20 @@ class __TwigTemplate_a63da794e0356ecb1966962c01fc74332886fc7dcda4b3136910d56f8dd
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_5af95143c06bc1f54cfa192d10403d2b174700838c899a8e4fe75e3af5c3492a = $this->env->getExtension("native_profiler");
-        $__internal_5af95143c06bc1f54cfa192d10403d2b174700838c899a8e4fe75e3af5c3492a->enter($__internal_5af95143c06bc1f54cfa192d10403d2b174700838c899a8e4fe75e3af5c3492a_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "intranetBundle:Default:landing.html.twig"));
+        $__internal_e316c518750e1d398dde0cb7e872c53a62c1c5391653cb8c6cf4fa4f6fe1d41f = $this->env->getExtension("native_profiler");
+        $__internal_e316c518750e1d398dde0cb7e872c53a62c1c5391653cb8c6cf4fa4f6fe1d41f->enter($__internal_e316c518750e1d398dde0cb7e872c53a62c1c5391653cb8c6cf4fa4f6fe1d41f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "intranetBundle:Default:landing.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_5af95143c06bc1f54cfa192d10403d2b174700838c899a8e4fe75e3af5c3492a->leave($__internal_5af95143c06bc1f54cfa192d10403d2b174700838c899a8e4fe75e3af5c3492a_prof);
+        $__internal_e316c518750e1d398dde0cb7e872c53a62c1c5391653cb8c6cf4fa4f6fe1d41f->leave($__internal_e316c518750e1d398dde0cb7e872c53a62c1c5391653cb8c6cf4fa4f6fe1d41f_prof);
 
     }
 
     // line 4
     public function block_contenido($context, array $blocks = array())
     {
-        $__internal_c0f70d1c559d8ca07361f133fefeebf4763c16850c04587ea1a4123263703f28 = $this->env->getExtension("native_profiler");
-        $__internal_c0f70d1c559d8ca07361f133fefeebf4763c16850c04587ea1a4123263703f28->enter($__internal_c0f70d1c559d8ca07361f133fefeebf4763c16850c04587ea1a4123263703f28_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "contenido"));
+        $__internal_1530e6e5f89c153ee5277fefc321c51094de8813be4ef156efc03c1d3abb3ad1 = $this->env->getExtension("native_profiler");
+        $__internal_1530e6e5f89c153ee5277fefc321c51094de8813be4ef156efc03c1d3abb3ad1->enter($__internal_1530e6e5f89c153ee5277fefc321c51094de8813be4ef156efc03c1d3abb3ad1_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "contenido"));
 
         // line 5
         echo "<h2> LANDING PAGE   </h2>
@@ -52,7 +52,7 @@ Menu not visible for all => indicate routes?<br><br>
 <br>The language can be /es/, /en/ or /fr/
 ";
         
-        $__internal_c0f70d1c559d8ca07361f133fefeebf4763c16850c04587ea1a4123263703f28->leave($__internal_c0f70d1c559d8ca07361f133fefeebf4763c16850c04587ea1a4123263703f28_prof);
+        $__internal_1530e6e5f89c153ee5277fefc321c51094de8813be4ef156efc03c1d3abb3ad1->leave($__internal_1530e6e5f89c153ee5277fefc321c51094de8813be4ef156efc03c1d3abb3ad1_prof);
 
     }
 

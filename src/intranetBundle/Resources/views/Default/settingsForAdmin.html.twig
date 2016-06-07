@@ -16,9 +16,13 @@
     function settingsController ($scope) { 
        $scope.languages = ("{{me.lang | json_encode()}}").replace(/&quot;/g, "");
        $scope.notific = ("{{me.notifications | json_encode()}}");
+       $scope.onboar = ({{me.onboard | json_encode()}});
        $scope.aux = $scope.notific;
        $scope.aux2 = $scope.languages;
-       //alert($scope.aux);
+       //alert($scope.onboar);
+       $scope.isOnboard = function () {
+        return ("{{me.onboard | json_encode()}}");
+      };
     }    
     
     function handleClick(event){
@@ -110,8 +114,34 @@
                         </md-radio-group>
                     </md-input-container>
                 </md-list-item>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>Onboard</label><br><br>
+                        <md-checkbox ng-model="onboar" id="onb" aria-label="Checkbox 1">
+                            {% trans %}Usuario nuevo{% endtrans %}
+                        </md-checkbox>
+                    </md-input-container>
+                </md-list-item>
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
                     <label>{% trans %}Photo{% endtrans %}</label><br>
@@ -126,8 +156,19 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Email{% endtrans %}</label>
-                        <input type='text' name="myEmail" id="myEmail" value="{{ me.email }}" required="required" style="width: 250px;">
+                        <input type='text' name="myEmail" id="myEmail" value="{{ me.email }}" required="required" style="width: 250px;" readonly>
 
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify an email.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Login{% endtrans %}</label>
+                        <input type="text" name="myLogin" id="myLogin" value="{{ me.login }}" readonly>
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify an email.</div>
                         </div>
@@ -140,7 +181,7 @@
             <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid">
                 {% trans %}Modify{% endtrans %}
             </md-button>
-            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid">
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="delete" ng-disabled="settingsForm.$invalid">
                 {% trans %}Delete{% endtrans %}
             </md-button>
         </md-list-item>
@@ -152,24 +193,27 @@
     </form>
 </div>
 
-#####################################################################################################################
-CONTENIDO DEL ADMIN line.4
-<form action="{{ path('intranet_cruduser') }}" method="post" style="border: 1px solid;width: 500px;">
-      
-<!-- SI NO SOY YO, PUEDO BORRAR EL USUARIO YA QUE SOY ADMIN -->
-{# if no soy yo#}
-      <label>{% trans %}Onboard{% endtrans %}</label><input type='checkbox' id="myOnboard" name="myOnboard" value="{{ me.onboard }}"{% if me.onboard==1 %} checked {% endif %}><BR>
-{# endif #}
+
+
+
+
+
+
+
+
+
+
+<form action="{{ path('intranet_cruduser') }}" method="post" style="border: 1px solid;width: 500px;margin: 0 auto;">
+  
+
+
+      <label>{% trans %}Onboard{% endtrans %}</label>
+          <input type='checkbox' id="myOnboard" name="myOnboard" value="{{ me.onboard }}"{% if me.onboard==1 %} checked {% endif %}><BR>
+
       
 
-                                   <input type="submit" value="{% trans %}Modify{% endtrans %}" name="update">
-<!-- SI NO SOY YO, PUEDO BORRAR EL USUARIO YA QUE SOY ADMIN -->
-{# if no soy yo#}
-                                   <input type="submit" value="{% trans %}DELETE{% endtrans %}" name="delete">
-{# endif #}
 
-                                   <input type="text" value="{{ me.login }}" name="myLogin" readonly>
-                                   <input type="hidden" value="{{ me.id }}" name="id">
+                                   
  </form>
 
 

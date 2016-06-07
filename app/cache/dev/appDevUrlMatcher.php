@@ -344,17 +344,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_api_get_users:
 
-                // api_get_user
-                if (preg_match('#^/api/users/(?P<login>[^/\\.]++)(?:\\.(?P<_format>xml|json|html))?$#s', $pathinfo, $matches)) {
-                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                        $allow = array_merge($allow, array('GET', 'HEAD'));
-                        goto not_api_get_user;
-                    }
-
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'api_get_user')), array (  '_controller' => 'intranetBundle\\Controller\\ApiRestController::getUserAction',  '_format' => 'json',));
-                }
-                not_api_get_user:
-
                 // api_get_users_all_onboard
                 if (0 === strpos($pathinfo, '/api/users/all/onboard') && preg_match('#^/api/users/all/onboard(?:\\.(?P<_format>xml|json|html))?$#s', $pathinfo, $matches)) {
                     if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
@@ -439,6 +428,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'api_get_news')), array (  '_controller' => 'intranetBundle\\Controller\\ApiRestController::getNewsAction',  '_format' => 'json',));
             }
             not_api_get_news:
+
+            // api_get_user
+            if (0 === strpos($pathinfo, '/api/user') && preg_match('#^/api/user/(?P<id>[^/\\.]++)(?:\\.(?P<_format>xml|json|html))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_api_get_user;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'api_get_user')), array (  '_controller' => 'intranetBundle\\Controller\\ApiRestController::getUserAction',  '_format' => 'json',));
+            }
+            not_api_get_user:
 
             // api_get_task
             if (0 === strpos($pathinfo, '/api/tasks') && preg_match('#^/api/tasks/(?P<id>[^/\\.]++)(?:\\.(?P<_format>xml|json|html))?$#s', $pathinfo, $matches)) {
