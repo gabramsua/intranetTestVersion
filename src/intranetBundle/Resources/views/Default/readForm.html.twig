@@ -1,0 +1,119 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+{% if form.type=="hours" %}
+
+      <table border=1>
+          <tr >
+              <th>Type</th>
+              <th>DATE SEND</th>
+              <th>Hours Requested</th>
+              <th>From</th>
+              <th>To</th>
+              <th>READ</th>
+              <th>STATUS</th>
+          </tr>
+          <tr>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.numHours }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.date2 }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
+              <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
+          </tr>
+      </table>
+{% endif %}
+
+{% if form.type=="vacation" %}
+      <table border=1>
+      <tr>
+         <th>DATE</th>
+         <th>READ</th>
+         <th>FROM</th>
+         <th>TO</th>
+         <th>STATUS</th>
+      </tr>
+      <tr>
+         <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
+         <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
+         <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
+         <td style="padding-left: 10px;padding-right: 10px;">{{ form.date2 }}</td>
+         <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
+      </tr>
+    </table>
+{% endif %}
+
+{% if form.type=="expenses" %}
+      <table border=1>
+          <tr>
+          <th></th>
+             <th>DATE</th>
+             <th>READ</th>
+             <th>COMPANY</th>
+             <th>CONCEPT</th>
+             <th>AMOUNT</th>
+             <th>STATUS</th>
+          </tr>
+          <tr>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.company }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.concept }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.amount }} €</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
+          </tr>
+        </table>
+{% endif %}
+
+{% if form.type=="trip" %}
+      <table border=1>
+          <tr>
+          <th></th>
+             <th>DATE</th>
+             <th>READ</th>
+             <th>FROM</th>
+             <th>TO</th>
+             <th>PLACE</th>
+             <th>REASON</th>
+             <th>STATUS</th>
+          </tr>
+          <tr>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.date2 }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.place }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.reasons }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
+          </tr>
+      </table>
+{% endif %}
+
+{% if form.type=="Home" %}
+      <table border=1>
+          <tr>
+             <th>DATE</th>
+             <th>READ</th>
+             <th>Reasons</th>
+             <th>Whole_Day</th>
+             <th>STATUS</th>
+          </tr>
+          <tr>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.reason }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.wholeday }}</td>
+             <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
+          </tr>
+      </table>
+{% endif %}
+<form action='{{ path('intranet_statusForm') }}' method='post'>
+      <input type="submit" value="accept" name="status">
+      <input type="submit" value="reject" name="status">
+        <input type="hidden" name="typeF" value="{{ form.type }}">
+        <input type="hidden" name="id" value="{{form.id}}">
+</form>
+
+{% endblock %}

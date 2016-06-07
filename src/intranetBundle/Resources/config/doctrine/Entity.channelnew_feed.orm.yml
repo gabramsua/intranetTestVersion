@@ -1,0 +1,18 @@
+intranetBundle\Entity\Entity\channelnew_feed:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\channelnew_feedRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        idNew:
+            type: integer
+            column: id_new
+    lifecycleCallbacks: {  }

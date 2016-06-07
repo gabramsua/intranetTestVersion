@@ -1,0 +1,25 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+<form action="{{ path('intranet_editchannel') }}" method="post" style="border: 1px solid;width: 500px;">
+
+      <label>{% trans %}Name{% endtrans %}</label><input type='text' id="nameChannel" name="nameChannel" value="{{channel.name}}"><BR>
+      <label>{% trans %}Users{% endtrans %}</label><br>
+              {% for u in allUsers %}
+              {% set flag=0 %}
+                {% for us in usersWithChannel %}
+                    {% if u.login==us.login %}
+                      <input type='checkbox' name="{{ us.login }}" id="{{ us.login }}" value="{{ us.login }}" checked>{{ us.login }}<BR>
+                      {% set flag=1 %}
+                    {% endif %}
+                {% endfor %}
+                {% if flag==0 %}
+                    <input type='checkbox' name="{{ u.login }}" id="{{ u.login }}" value="{{ u.login }}" >{{ u.login }}<br>
+                {% endif %}
+              {% endfor %}
+                                   <input type="submit" name="update" value="{% trans %}Modify{% endtrans %}">
+                                   <input type="submit" name="delete" value="{% trans %}DELETE{% endtrans %}">
+                                   <input type="hidden" name="id" value="{{channel.id}}">
+ </form>
+{% endblock %}

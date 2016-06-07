@@ -1,0 +1,18 @@
+intranetBundle\Entity\Entity\userschannel:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\userschannelRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        login:
+            type: string
+            length: '9'
+        name:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

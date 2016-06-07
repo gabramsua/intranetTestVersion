@@ -1,0 +1,257 @@
+#LOGIN & LOGOUT PART
+
+intranet_login:
+    path:     /{_locale}/login
+    defaults: { _controller: intranetBundle:Default:login, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_nonExistingUserA:
+    path:     /createUserA
+    defaults: { _controller: intranetBundle:Default:createUserA }
+
+intranet_nonExistingUser:
+    path:     /createUser
+    defaults: { _controller: intranetBundle:Default:createUser }
+
+intranet_homepage:
+    path:     /{_locale}/
+    defaults: { _controller: intranetBundle:Default:index, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_logout:
+    path:     /{_locale}/intranet_logout
+    defaults: { _controller: intranetBundle:Default:logout, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+#MENU ROUTING
+
+intranet_formHistorical:
+    path:     /{_locale}/MyHistorical
+    defaults: { _controller: intranetBundle:Default:myforms, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_formHours:
+    path:     /{_locale}/formHours
+    defaults: { _controller: intranetBundle:Default:formHours, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_formVacations:
+    path:     /{_locale}/formVacations
+    defaults: { _controller: intranetBundle:Default:formVacation, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_formExpenses:
+    path:     /{_locale}/formExpenses
+    defaults: { _controller: intranetBundle:Default:formExpenses, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_formHome:
+    path:     /{_locale}/formWork_At_Home
+    defaults: { _controller: intranetBundle:Default:formHome, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_formRequest:
+    path:     /{_locale}/formRequest
+    defaults: { _controller: intranetBundle:Default:formRequest, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_news:
+    path:     /{_locale}/news
+    defaults: { _controller: intranetBundle:Default:news, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_channels:
+    path:     /{_locale}/channels
+    defaults: { _controller: intranetBundle:Default:channels, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_incomingForms:
+    path:     /{_locale}/incomingForms
+    defaults: { _controller: intranetBundle:Default:incomingForms, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_oldForms:
+    path:     /{_locale}/oldForms
+    defaults: { _controller: intranetBundle:Default:oldForms, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_tasks:
+    path:     /{_locale}/tasks
+    defaults: { _controller: intranetBundle:Default:tasks, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_userManagement:
+    path:     /{_locale}/userManagement
+    defaults: { _controller: intranetBundle:Default:userManagement, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_settings:
+    path:     /{_locale}/settings
+    defaults: { _controller: intranetBundle:Default:settings, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+#CRUD OPERATIONS
+intranet_cruduser:
+    path:     /{_locale}/editUser
+    defaults: { _controller: intranetBundle:Default:updateUser, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_newuser:
+    path:     /{_locale}/addUser
+    defaults: { _controller: intranetBundle:Default:addUser, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_newnew:
+    path:     /{_locale}/createNew
+    defaults: { _controller: intranetBundle:Default:createNew, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_insertnew:
+    path:     /{_locale}/insertNew
+    defaults: { _controller: intranetBundle:Default:insertNew, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_crudnew:
+    path:     /{_locale}/editeNew
+    defaults: { _controller: intranetBundle:Default:editeNew, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_editnew:
+    path:     /{_locale}/updateNew
+    defaults: { _controller: intranetBundle:Default:updateNew, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_insertTask:
+  path:     /{_locale}/insertTask
+  defaults: { _controller: intranetBundle:Default:insertTask, _locale:en }
+  requirements:
+    _locale: en|fr|es
+
+intranet_newtask:
+    path:     /{_locale}/createTask
+    defaults: { _controller: intranetBundle:Default:createtask, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_crudtask:
+    path:     /{_locale}/editeTask
+    defaults: { _controller: intranetBundle:Default:editeTask, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_edittask:
+    path:     /{_locale}/updateTask
+    defaults: { _controller: intranetBundle:Default:updatetask, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_newchannel:
+    path:     /{_locale}/createChannel
+    defaults: { _controller: intranetBundle:Default:createChannel, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_insertChannel:
+  path:     /{_locale}/insertChannel
+  defaults: { _controller: intranetBundle:Default:insertChannel, _locale:en }
+  requirements:
+    _locale: en|fr|es
+
+intranet_crudchannel:
+    path:     /{_locale}/editeChannel
+    defaults: { _controller: intranetBundle:Default:editeChannel, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_editchannel:
+    path:     /{_locale}/updateChannel
+    defaults: { _controller: intranetBundle:Default:updatechannel, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_f:
+    path:     /{_locale}/historical
+    defaults: { _controller: intranetBundle:Default:insertForm, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_readForm:
+    path:     /{_locale}/readForm
+    defaults: { _controller: intranetBundle:Default:readForm, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_statusForm:
+    path:     /{_locale}/statusForm
+    defaults: { _controller: intranetBundle:Default:statusForm, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_crudForm:
+    path:     /{_locale}/crudForm
+    defaults: { _controller: intranetBundle:Default:crudForm, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_editForm:
+    path:     /{_locale}/editForm
+    defaults: { _controller: intranetBundle:Default:editForm, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+
+
+#TESTING SHIT
+
+intranet_translation:
+    path:     /{_locale}/translation
+    defaults: { _controller: intranetBundle:Default:translation, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_testBD:
+    path:     /{_locale}/testDoctrine
+    defaults: { _controller: intranetBundle:Default:usarDoctrine, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+test_email:
+    path:     /enviarMail
+    defaults: { _controller: intranetBundle:Default:testEmail}
+    
+
+#TASKTEMPLATES
+
+intranet_main_task_dialog:
+    path:     /{_locale}/mainTaskDialog
+    defaults: { _controller: intranetBundle:Default:mainTaskDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_main_task_dialog2:
+    path:     /{_locale}/mainTaskDialog
+    defaults: { _controller: intranetBundle:Default:editeTaskAction, _locale:en }
+    requirements:
+        _locale: en|fr|es

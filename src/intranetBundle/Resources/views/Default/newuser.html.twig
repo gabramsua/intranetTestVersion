@@ -1,0 +1,28 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+<form action="{{ path('intranet_nonExistingUser') }}" method="post" style="border: 1px solid;width: 500px;">
+
+      Login: <input type='text' name="myLogin" id="myLogin" value="" class="form-control">
+      Nombre: <input type='text' name="myName" id="myName" value="" class="form-control">
+      Apellidos: <input type='text' id="mySurname"name="mySurname" value="" class="form-control"><BR>
+      <label>{% trans %}Language{% endtrans %}</label>
+            <select class="form-control" name="myLang" >
+              <option value="es">ES</option>
+              <option value="en">EN</option>
+              <option value="fr">FR</option>
+              <option value="de">DE</option>
+            </select>
+      <BR>
+
+      <label>{% trans %}Photo{% endtrans %}</label><input type='file' id="myPhoto"name="myPhoto"><img src=""><BR>
+      <label class="radio">{% trans %}Notifications{% endtrans %}</label>
+                                  <input type='radio' id="myNotification" name="myNotifications" value="1"><label for="myNotification">ON</label>
+                                  <input type='radio' id="myNotifications" name="myNotifications" value="0"   checked ><label for="myNotifications">OFF</label><br>
+
+                                  <input type="submit" value="{% trans %}new{% endtrans %}">
+                                  <input type="hidden" name="webCuisine" value="test" >
+ </form>
+
+{% endblock %}

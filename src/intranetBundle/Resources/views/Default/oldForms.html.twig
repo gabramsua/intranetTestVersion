@@ -1,0 +1,36 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+ <!-- <form action="vHours.php" method="post" style="border: 1px solid;width: 500px;">
+        <label>Number of hours: </label><input type='number' name="numhours" id="numhours" min="1" max="50"><i>min:1, max:20</i><BR>
+        <label>Between: </label><input type='date' id="betw"name="betw" min="<?php echo date("Y-m-d");?>" value="<?php echo date("Y-m-d");?>"><i>default: TODAY</i><BR>
+        <label>and: </label><input type='date' id="and"name="and" max="<?php echo date("Y-m-d", strtotime("+3 month")); ?>" value="<?php echo date("Y-m-d", strtotime("+1 week")); ?>">
+        <i>default: 1 WEEK, max 3 months</i><BR>
+                                     <input type="submit" value="Modify">
+                                     <input type="hidden" name="typeF" value="hours">
+                                     <input type="hidden" name="actualDate" value="<?php echo date("Y-m-d H:i:s");?>">
+   </form>
+-->
+
+<table border=1>
+<tr >
+    <th>Type</th>
+    <th>USER</th>
+    <th>LOGIN</th>
+    <th>DATE</th>
+    <th>V/F</th>
+</tr>
+{% for new in listOldForms %}
+<tr>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ new.type }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ new.user }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ new.login }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ new.send }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ new.accepted }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

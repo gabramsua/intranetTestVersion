@@ -1,0 +1,10 @@
+{% extends 'intranetBundle::layout2.html.twig' %}
+
+{% block contenido %}
+<script>
+    window.onload = function(){
+          document.forms['form1'].submit();
+    }
+</script>
+    <form action="{{ path('intranet_homepage', {_locale: user.lang }) }}" method="post" id="form1"></form>
+{% endblock %}

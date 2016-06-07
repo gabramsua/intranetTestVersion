@@ -1,0 +1,133 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+<b>TABLA FORMULARIOS HORAS</b><br><br>
+<table border=1>
+<tr >
+<th></th>
+    <th>numHours</th>
+    <th>Ticket</th>
+    <th>TO</th>
+</tr>
+{% for forms in myHours %}
+{% for f in forms %}
+<tr>
+  	<td><form action='{{ path('intranet_crudForm') }}' method='post'><input type="hidden" name="typeF" value="hours">
+    <input type="hidden" name="id" value="{{f.id}}"> <input type="submit" value="VER" ></form></td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.numhours }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.ticket }}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</table>
+<br>
+
+{##############################################################################}
+
+<br>
+<b>TABLA FORMULARIOS Vacaciones</b><br>
+<table border=1>
+<tr >
+<th></th>
+    <th>SEND</th>
+    <th>FROM</th>
+    <th>TO</th>
+</tr>
+{% for forms in myVacations %}
+{% for f in forms %}
+<tr>
+  	<td><form action='{{ path('intranet_crudForm') }}' method='post'> <input type="hidden" name="typeF" value="vacations">
+    <input type="hidden" name="id" value="{{f.id}}"><input type="submit" value="VER" ></form></td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.send }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date1 }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date2 }}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</table><br>
+
+{##############################################################################}
+
+<br>
+<b>TABLA FORMULARIOS EXPENSES</b><br>
+<table border=1>
+<tr >
+<th></th>
+    <th>SEND</th>
+    <th>Company</th>
+    <th>Date</th>
+    <th>Concept</th>
+    <th>Amount</th>
+</tr>
+{% for forms in myExpenses %}
+{% for f in forms %}
+<tr>
+  	<td><form action='{{ path('intranet_crudForm') }}' method='post'><input type="hidden" name="typeF" value="expenses">
+    <input type="hidden" name="id" value="{{f.id}}"> <input type="submit" value="VER" ></form></td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.send }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.company }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date1 }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.concept }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.amount }}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</table><br>
+
+{##############################################################################}
+
+<br>
+<b>TABLA FORMULARIOS TRIP</b><br>
+<table border=1>
+<tr >
+<th></th>
+    <th>SEND</th>
+    <th>Place</th>
+    <th>Name Congress</th>
+    <th>Reasons</th>
+    <th>From</th>
+    <th>To</th>
+</tr>
+{% for forms in myTrips %}
+{% for f in forms %}
+<tr>
+  	<td><form action='{{ path('intranet_crudForm') }}' method='post'><input type="hidden" name="typeF" value="trip">
+    <input type="hidden" name="id" value="{{f.id}}"> <input type="submit" value="VER" ></form></td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.send }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.place }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.nameCongress }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.reasons }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date1 }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date2 }}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</table>
+
+{##############################################################################}
+
+<br>
+<b>TABLA FORMULARIOS WORK AT HOME</b><br>
+<table border=1>
+<tr >
+  <th></th>
+  <th>SEND</th>
+  <th>DATE</th>
+  <th>REASON</th>
+  <th>WHOLE DAY</th>
+</tr>
+{% for forms in myHomes %}
+{% for f in forms %}
+<tr>
+  	<td><form action='{{ path('intranet_crudForm') }}' method='post'><input type="hidden" name="typeF" value="Home">
+    <input type="hidden" name="id" value="{{f.id}}"> <input type="submit" value="VER" ></form></td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.send }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.date1 }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.reason }}</td>
+    <td style="padding-left: 10px;padding-right: 10px;">{{ f.wholeDay }}</td>
+</tr>
+{% endfor %}
+{% endfor %}
+</table>
+
+{% endblock %}

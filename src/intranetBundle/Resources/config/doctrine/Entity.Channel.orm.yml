@@ -1,0 +1,16 @@
+intranetBundle\Entity\Entity\Channel:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\ChannelRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            unique: true
+    lifecycleCallbacks: {  }

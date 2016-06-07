@@ -1,0 +1,53 @@
+EDITADO:
+
+	DefaultController:
+		-tasksAction()
+            -params -> 'userLogin'=>$_SESSION['userLDAP']
+		-editeTaskAction()
+		metodos agregados:
+			-mainTaskDialogAction()
+
+	Tasks.html.twig
+
+	intranetbundle/resources/config/Routyng.yml
+		-intranet_main_task_dialog
+		-intranet_main_task_dialog2
+
+	composer.json
+		Agregado:
+			"friendsofsymfony/rest-bundle": "dev-master",
+			"jms/serializer-bundle": "dev-master"
+		Eliminado:
+		        "doctrine/mongodb-odm-bundle": "dev-master",
+
+	AppKernel.php
+		agregado:
+			new FOS\RestBundle\FOSRestBundle(),
+            		new JMS\SerializerBundle\JMSSerializerBundle(),
+	
+	app/config/config.yml:
+		agregado: (al final)
+			#Api Rest FOSRESTbundle
+
+	app/config/Routing.yml
+		-#REST
+		
+	app/config/Routing_rest.yml(nuevo fichero)
+
+	intranetBundle/Resources/config/routing_rest.yml (nuevo fichero)
+
+	intranetBundle/Controller/ApiRestController
+
+	Entity/Users
+	Entity/NewFeed
+
+
+
+
+select users.login, name_u, surname_u, date1, type, f_expenses.id from users
+join users_f_expenses on users.login=users_f_expenses.login
+join f_expenses on users_f_expenses.id_form=f_expenses.id;
+
+select * from f_expenses
+join users_f_expenses on f_expenses.id=users_f_expenses.id_form
+where login="gram1i";

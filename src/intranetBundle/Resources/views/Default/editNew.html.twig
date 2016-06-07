@@ -1,0 +1,31 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+<form action="{{ path('intranet_editnew') }}" method="post" style="border: 1px solid;width: 500px;">
+
+      <label>{% trans %}Date{% endtrans %}</label><input type='date' id="date" name="date" value="{{new.date}}"><BR>
+      <label>{% trans %}Time{% endtrans %}</label><input type='text' id="time "name="time" value="{{new.time}}"><BR>
+      <label>{% trans %}Title{% endtrans %}</label><input type='text' id="title" name="title" value="{{new.title}}"><BR>
+      <label>{% trans %}Content{% endtrans %}</label><input type='text' id="content" name="content" value="{{new.content}}"><BR>
+<label>Channels </label>
+
+{% for ch in allChannels %}
+{% set flag=0 %}
+  {% for nc in newschannels %}
+      {% if ch.name==nc.name %}
+        <input type="checkbox" name="{{ch.name}}" id="{{ch.name}}" value="{{ch.name}}" checked> {{ch.name}}
+        {% set flag=1 %}
+        {% endif %}
+  {% endfor %}
+      {% if flag==0 %}
+        <input type="checkbox" name="{{ch.name}}" id="{{ch.name}}" value="{{ch.name}}"> {{ch.name}}
+        {% endif %}
+{% endfor %}
+<br><br>
+                                   <input type="submit" name="update" value="{% trans %}Modify{% endtrans %}">
+                                   <input type="submit" name="delete" value="{% trans %}DELETE{% endtrans %}">
+                                   <input type="hidden" name="id" value="{{new.id}}">
+ </form>
+
+{% endblock %}

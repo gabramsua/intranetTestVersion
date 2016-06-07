@@ -1,0 +1,22 @@
+intranetBundle\Entity\Entity\Tasks:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\TasksRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: '20'
+        content:
+            type: string
+            length: '500'
+            nullable: true
+        whoCreate:
+            type: string
+            length: '20'
+    lifecycleCallbacks: {  }

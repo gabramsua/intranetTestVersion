@@ -1,0 +1,19 @@
+intranetBundle\Entity\Entity\Users_F_Trip:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\Users_F_TripRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        login:
+            type: string
+            length: '9'
+        idForm:
+            type: integer
+            unique: true
+            column: id_form
+    lifecycleCallbacks: {  }

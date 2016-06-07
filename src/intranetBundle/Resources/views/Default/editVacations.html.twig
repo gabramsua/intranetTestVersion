@@ -1,0 +1,16 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+<h3>VACATIONS</h3><br>
+ <form action="{{ path('intranet_editForm') }}" method="post" style="border: 1px solid;width: 500px;">
+        <label>From: </label><input type='date' id="from" name="from" value="{{f.date1}}"><BR>
+        <label>To: </label><input type='date' id="to" name="to" value="{{f.date2}}"><BR>
+        {% if f.isread==0 %}
+                                     <input type="submit" value="Delete" name="delete">
+                                     <input type="hidden" name="typeF" value="vacations">
+                                     <input type="hidden" name="id" value="{{ f.id }}">
+        {% endif %}
+   </form>
+
+
+{% endblock %}

@@ -1,0 +1,38 @@
+intranetBundle\Entity\Entity\F_Expenses:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\F_ExpensesRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        company:
+            type: string
+            length: 255
+        date1:
+            type: string
+            length: '10'
+        concept:
+            type: string
+            length: 255
+            nullable: true
+        amount:
+            type: decimal
+            precision: '65'
+            scale: '3'
+        status:
+            type: integer
+            nullable: true
+        isread:
+            type: integer
+            nullable: true
+        type:
+            type: string
+            length: 8
+        send:
+            type: string
+            length: '10'
+    lifecycleCallbacks: {  }

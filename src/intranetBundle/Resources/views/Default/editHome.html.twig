@@ -1,0 +1,20 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+<h3>WORK AT HOME</h3><br>
+ <form action="{{ path('intranet_editForm') }}" method="post" style="border: 1px solid;width: 500px;">
+       <label>Date:</label><input type='date' id="from" name="date1" value="{{ f.date1 }}"><BR>
+       <label>Reasons: </label><input type='text' id="reasons" name="reasons" value="{{ f.reason }}"><br>
+       <label>{% trans %}Timing{% endtrans %}</label>
+       <input type='radio' id="myTiming" name="myTiming" value="1" {% if f.wholeDay==1 %} checked {% endif %}><label for="myTiming">Whole Day</label>
+       <input type='radio' id="myTiming2" name="myTiming" value="0"  {% if f.wholeDay==0 %} checked {% endif %} ><label for="myTiming2">Half Day</label><br>
+ <BR>
+        {% if f.isread==0 %}
+                                     <input type="submit" value="Delete" name="delete">
+                                     <input type="hidden" name="typeF" value="Home">
+                                     <input type="hidden" name="id" value="{{ f.id }}">
+        {% endif %}
+   </form>
+
+
+{% endblock %}

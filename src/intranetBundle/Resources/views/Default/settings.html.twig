@@ -1,0 +1,152 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<script>
+    var app=angular.module('settingsApp', ['ngMaterial']);
+    app.controller('settingsController', settingsController);
+
+    function settingsController ($scope) { 
+       $scope.languages = ("{{me.lang | json_encode()}}").replace(/&quot;/g, "");
+       $scope.notific = ("{{me.notifications | json_encode()}}");
+       $scope.aux = $scope.notific;
+       $scope.aux2 = $scope.languages;
+       //alert($scope.aux);
+    }    
+    
+    function handleClick(event){
+        alert("Nombre: "+this["myName"].value + 
+            "\nApellidos: "+this["mySurname"].value +
+            "\nIdioma: "+this["hiden2"].value +
+            "\nNotificaciones: "+ this["hiden1"].value +
+            "\nFoto: "+this["myPhoto"].value +
+            "\nEmail: "+this["myEmail"].value
+        );
+    }
+
+    app.config(function($interpolateProvider){
+        $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+    });
+            
+</script>
+
+<div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
+    <form name="settingsForm" id="settingsForm" method="POST" action="javaScript:handleClick()" novalidate>
+    <!--{{ path('intranet_cruduser') }}-->
+    
+    <md-content>
+        <md-list layout="column" ng-cloak="">
+        <div layout="row" layout-sm="column">
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Name{% endtrans %}</label>
+                        <input type='text' name="myName" id="myName" value="{{ me.nameU }}" required="required">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+            <div flex>            
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Surname{% endtrans %}</label>
+                        <input type='text' id="mySurname" name="mySurname" value="{{ me.surnameU }}">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+        </div>
+        <div layout="row" layout-sm="column">
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Language{% endtrans %}</label><br><br>
+                        <md-radio-group ng-model="languages" ng-change="langue()">
+                            <md-radio-button id="myLanguage" name="myLanguage" value="es" class="md-primary">
+                                ES
+                            </md-radio-button>
+                                
+                            <md-radio-button id="myLanguage" name="myLanguage" value="en" class="md-primary">
+                                EN
+                            </md-radio-button>
+                                
+                            <md-radio-button id="myLanguage" name="myLanguage" value="fr" class="md-primary">
+                                FR
+                            </md-radio-button>
+                                
+                            <md-radio-button id="myLanguage" name="myLanguage" value="de" class="md-primary">
+                                DE
+                            </md-radio-button>
+                        </md-radio-group>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Notifications{% endtrans %}</label><br><br>
+                        <md-radio-group ng-model="notific"  ng-change="noti()">
+                            <md-radio-button id="myNotifications" ng-model="myNotifications" name="myNotifications" value="true" class="md-primary">
+                                ON
+                            </md-radio-button>
+                                
+                            <md-radio-button id="myNotifications" ng-model="myNotifications" name="myNotifications" value="false" class="md-primary">
+                                OFF
+                            </md-radio-button>
+                             
+                        </md-radio-group>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+        </div>
+             <md-list-item layout-lg="row" layout-xl="row">
+                <md-input-container class="md-block">
+                    <label>{% trans %}Photo{% endtrans %}</label><br>
+                    <!--<md-button type="file" for="myPhoto" class="md-raised md-primary">AQUI
+                    </md-button>-->
+                    <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}"><!--class="ng-hide"-->
+                </md-input-container>
+            </md-list-item>
+
+        <div layout="row" layout-sm="column">
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Email{% endtrans %}</label>
+                        <input type='text' name="myEmail" id="myEmail" value="{{ me.email }}" required="required" style="width: 250px;">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify an email.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+            </div>
+        </div> 
+
+        <md-list-item>
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid">
+                {% trans %}Modify{% endtrans %}
+            </md-button>
+        </md-list-item>
+            
+        <input type="hidden" value="{{ me.id }}" name="id">
+        <input type="hidden" id="hiden1" value="{[{ notific }]}">
+        <input type="hidden" id="hiden2" value="{[{ languages }]}">
+        </md-list>
+    </form>
+</div>
+
+{% endblock %}

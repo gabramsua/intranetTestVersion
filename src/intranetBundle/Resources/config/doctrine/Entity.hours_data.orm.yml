@@ -1,0 +1,16 @@
+intranetBundle\Entity\Entity\hours_data:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\hours_dataRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idForm:
+            type: integer
+        idData:
+            type: integer
+    lifecycleCallbacks: {  }

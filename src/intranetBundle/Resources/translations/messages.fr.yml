@@ -1,0 +1,32 @@
+#TESTING
+Symfony2 is great: "J'aime Symfony2"
+New User: "Neavuau Useré"
+Welcome: "Bounjour á l'intranet"
+lang: "Francais"
+Hello: "Bonjour!"
+
+#MENU
+Settings: Paramètres
+Forms: Formes
+Overtime Hours: Heures supplémentaires
+Vacation: Fêtes
+Expenses: Dépenses
+Request Business Trip: Demander à un voyage d'affaires
+Book a room: Réserver une chambre
+Task: Tâches
+User Management: Gestion des utilisateurs
+News Feed: Nouvelles
+Form Management: Gestion des utilisateurs
+Incoming Forms: Formes entrantes
+Old Forms: Formes anciennes
+
+#SETTINGS
+Name: Nom
+Surname: nom de famille
+Language: Langue
+Telephone: Téléphone
+Notifications: Activer les Notifications
+Photo: Photo de profil
+Modify: Edit
+
+This is Landing Page: C'est ci la páge d'aterrizage

@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: '192.168.37.26:3306'
+    database_port: null
+    database_name: intranet
+    database_user: intranet
+    database_password: 8k7jpasUQM
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 1849efd057e4a3657198edb754c682a492e79f73

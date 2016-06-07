@@ -1,0 +1,15 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+
+{% block contenido %}
+<h2> LANDING PAGE   </h2>
+{% trans %} This is Landing Page {% endtrans %}
+<hr>
+Menu not visible for all => indicate routes?<br><br>
+	<b>Login	 </b>  /<i>language</i>/intranet_logout<br>
+	<b>Channel</b>  /<i>language</i>/channels<br>
+	<b>News	  </b> /<i>language</i>/news<br>
+	<b>Tasks	 </b>  /<i>language</i>/tasks<br>
+  <b>User Management	 </b>  /<i>language</i>/userManagement<br>
+<br>The language can be /es/, /en/ or /fr/
+{% endblock %}

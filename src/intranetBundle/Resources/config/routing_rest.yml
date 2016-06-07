@@ -1,0 +1,11 @@
+#intranetBundle/Resources/config/routing_rest.yml
+users :
+  type: rest
+  resource:     "intranetBundle:ApiRest"
+  name_prefix:  api_
+
+api_get_task:
+    pattern: /tasks/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getTask"}
+    requirements:
+        _method: DELETE|GET|PATCH

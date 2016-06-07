@@ -1,0 +1,24 @@
+intranetBundle\Entity\Entity\NewFeed:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\NewFeedRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: string
+            length: '10'
+        time:
+            type: string
+            length: '5'
+        title:
+            type: string
+            length: '50'
+        content:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

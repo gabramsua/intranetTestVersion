@@ -1,0 +1,2 @@
+0
+a:2:{i:0;O:36:"JMS\Serializer\Annotation\XmlElement":2:{s:5:"cdata";b:0;s:9:"namespace";N;}i:1;O:40:"JMS\Serializer\Annotation\SerializedName":1:{s:4:"name";s:4:"name";}}

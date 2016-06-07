@@ -1,0 +1,28 @@
+{% extends 'intranetBundle::layout.html.twig' %}
+
+ {% block contenido %}
+
+
+<table border=1>
+<tr>
+    <th style="padding-left: 10px;padding-right: 10px;">{% trans %}Name{% endtrans %}</th>
+</tr>
+{% for c in listChannels %}
+<tr>
+    <td style="padding-left: 10px;padding-right: 10px;">
+    <form action='{{ path('intranet_crudchannel') }}' method='post'>
+          <input type="submit" name="nameChannel" value="{{c.name}}" >
+          <input type="hidden" value="{{ c.id }}" name="id">
+    </form>
+    </td>
+</tr>
+{% endfor %}
+</table>
+<br><br>
+
+<form action="{{ path('intranet_newchannel')}}" method="post" style="border: 1px solid;width: 500px;">
+    <input type="submit" name="newChannel" value="{% trans %}new_channel{% endtrans %}">
+  </form>
+
+
+{% endblock %}

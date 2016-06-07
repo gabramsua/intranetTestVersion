@@ -1,0 +1,18 @@
+{% extends 'intranetBundle::layout2.html.twig' %}
+
+{% block contenido %}
+<!--<h1>Inicio</h1>-->
+<h3> Copyright (c) 2016 Copyright Holder All Rights Reserved.<br>Login de LDAP   </h3>
+<hr>
+<form action="{{ path('intranet_login')}}" method="post">
+  <label>Introduzca su login de LDAP:</label>
+<input type="text" name="login" style="margin-left: 50px;"> <br>
+  <label>Por favor introduzca la contrasena: </label>
+<input type="password" name="pass" style="margin-left: 10px;"><br>
+<input type="submit" value="Click to login">
+</form>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'intranetBundle::layout2.html.twig' %}
+
+ {% block contenido %}
+{% trans %}
+you dont exist
+{% endtrans %}
+<br><br>
+{% trans %}
+creating on database
+{% endtrans %}
+<br><br>
+
+
+<form action="{{ path('intranet_nonExistingUser') }}" method="post" style="border: 1px solid;width: 500px;">
+      <label class="control-label">{% trans %}Hello{% endtrans %} {{name}} {{ surname }}</label><br>
+
+      Login: <input type='text' name="myLogin" id="myLogin" value="{{login}}" class="form-control" readonly>
+      {% trans %}Name{% endtrans %} <input type='text' name="myName" id="myName" value="{{name}}" class="form-control" readonly>
+      {% trans %}Surname{% endtrans %} <input type='text' id="mySurname"name="mySurname" value="{{surname}}" class="form-control" readonly><BR>
+      {% trans %}Email{% endtrans %} <input type='text' id="myEmail"name="myEmail" value="{{email}}" class="form-control" readonly><BR>
+      <label>{% trans %}Language{% endtrans %}</label>
+            <select class="form-control" name="myLang">
+              <option value="es">ES</option>
+              <option value="en">EN</option>
+              <option value="fr">FR</option>
+              <option value="de">DE</option>
+            </select>
+      <BR>
+
+      <label>{% trans %}Photo{% endtrans %}</label><input type='file' id="myPhoto"name="myPhoto"><img src=""><BR>
+      <label class="radio">{% trans %}Notifications{% endtrans %}</label>
+                                  <input type='radio' id="myNotification" name="myNotifications" value="1"><label for="myNotification">ON</label>
+                                  <input type='radio' id="myNotifications" name="myNotifications" value="0"   checked ><label for="myNotifications">OFF</label><br>
+                                  <input type="submit" value="{% trans %}OK{% endtrans %}">
+ </form>
+
+{% endblock %}

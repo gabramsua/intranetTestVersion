@@ -1,0 +1,32 @@
+intranetBundle\Entity\Entity\F_Hours:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\F_HoursRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        numHours:
+            type: integer
+        reasons:
+            type: string
+            length: '255'
+        ticket:
+            type: string
+            length: '20'
+        status:
+            type: integer
+            nullable: true
+        isread:
+            type: integer
+            nullable: true
+        type:
+            type: string
+            length: 8
+        send:
+            type: string
+            length: '10'
+    lifecycleCallbacks: {  }

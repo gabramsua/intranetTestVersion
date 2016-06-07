@@ -1,0 +1,40 @@
+intranetBundle\Entity\Entity\F_Trip:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\F_TripRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date1:
+            type: string
+            length: '10'
+        date2:
+            type: string
+            length: '10'
+        place:
+            type: string
+            length: 255
+        nameCongress:
+            type: string
+            length: 255
+            nullable: true
+        reasons:
+            type: string
+            length: 255
+        status:
+            type: integer
+            nullable: true
+        isread:
+            type: integer
+            nullable: true
+        type:
+            type: string
+            length: 8
+        send:
+            type: string
+            length: '10'
+    lifecycleCallbacks: {  }

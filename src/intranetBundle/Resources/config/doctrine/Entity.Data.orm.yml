@@ -1,0 +1,19 @@
+intranetBundle\Entity\Entity\Data:
+    type: entity
+    table: null
+    repositoryClass: intranetBundle\Repository\Entity\DataRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date1:
+            type: string
+            length: '10'
+        hour:
+            type: integer
+        minutes:
+            type: integer
+    lifecycleCallbacks: {  }

@@ -1,0 +1,43 @@
+#TESTING
+Symfony2 is great: "Te quiero Symfony2"
+New User: "Nuevo Usuario"
+Welcome: "Bienvenido a la intranet"
+lang: "ESPANOL"
+Hello: "Hola!"
+
+#MENU
+Settings: Configuración
+Forms: Formularios
+Overtime Hours: Horas Extra
+Vacation: Vacaciones
+Expenses: Gastos
+Request Business Trip: Pedir Viaje de Negocios
+Book a room: Reservar una habitación
+Task: Tareas
+User Management: Gestión de Usuarios
+News Feed: Noticias
+Form Management: Gestión de Formularios
+Incoming Forms: Formularios Entrantes
+Old Forms: Formularios Antiguos
+
+#SETTINGS
+Name: Nombre
+Surname: Apellidos
+Language: Idioma
+Telephone: Teléfono
+Notifications: Activar Notificaciones
+Photo: Foto de Perfil
+Modify: Modificar
+
+#CHANNEL
+new_channel: "Crear un nuevo Canal"
+message_1: "Debido al gran número de elementos en las Noticias, se decide no relacionarlas con los canales a la hora de crearlos.<br>Sin embargo, es posible hacerlo editando las noticias.<br><br><u>Pero SÍ ES POSIBLE relacionar los usuarios con los canales.</u>"
+create_channel: "Crear el Canal"
+
+#NEWS
+message_2: "No estaría mal poder hacer un filtro por canal <br> o mostrar también los canales en los que se haya y hacer click en el nombre de la columna"
+
+
+
+
+This is Landing Page: Esta es la pagina de aterrizaje
