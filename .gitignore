@@ -1,0 +1,7 @@
+app/cache/*
+app/logs/*
+vendor/*
+we/bundles/*
+webb/css/*
+web/js/*
+web/uploads/*
