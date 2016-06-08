@@ -40,20 +40,45 @@ class ApiRestController extends Controller
     * @return string $user The user data serialized to JSON format
     **/
     public function getUserAction($login){
-
-        $user = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
-
-        if(is_null($user))
-            throw new HttpException(404, "The user $login could not be found.");
-
-        if(!is_object($user)){
-            throw $this->createNotFoundException();
-        }
-
-        $serializer = SerializerBuilder::create()->build();
-        $serializer->serialize($user, 'json');
         
-        return $user;
+        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+            $user = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
+
+            if(is_null($user))
+                throw new HttpException(404, "The user $login could not be found.");
+
+            if(!is_object($user)){
+                throw $this->createNotFoundException();
+            }
+
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($user, 'json');
+
+            return $user;
+            
+        }else if($_SERVER['REQUEST_METHOD'] == 'PATCH'){
+            
+            $post = file_get_contents("php://input");
+            $taskIncoming = json_decode($post, true);
+            
+            $em = $this->getDoctrine()->getEntityManager();;
+            $user = $em->getRepository('intranetBundle:Entity\Users')->find($login);
+
+            $user->setNameU($taskIncoming['name']);
+            $user->setSurnameU($taskIncoming['surname']);
+            $user->setEmail($taskIncoming['email']);
+            $user->setLang($taskIncoming['lang']);
+            $user->setPhoto($taskIncoming['photo']);
+            $user->setOnboard($taskIncoming['onboard']);
+            $user->setNotifications($taskIncoming['notifications']);
+            $em->flush();
+            
+            return "ok";
+            
+        }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+            
+        }
     }
     
     /**
@@ -397,6 +422,33 @@ class ApiRestController extends Controller
         return $list;
     }
     
+    
+    /**
+    * Receives an user ID and returns a list of all channels that the user is suscribed.
+    *
+    * @param string $login user login
+    * @return string $channelsList The list of channels requested in JSON format.
+    **/
+    public function getUserChannelsAction($login){
+
+        //$channelsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\userschannel')->findByLogin($login);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $qb = $em->createQueryBuilder()
+                 ->select('uc.name')
+                 ->from('intranetBundle:Entity\userschannel', 'uc')
+                 ->where('uc.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+
+        $channelsList = $qb->getArrayResult();
+        
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($channelsList, 'json');
+
+        return $channelsList;
+    }
     
 }
 
