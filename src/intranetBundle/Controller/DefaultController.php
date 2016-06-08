@@ -1566,4 +1566,11 @@ class DefaultController extends Controller{
       );
   }
 
+  public function userManagementDialogAction() {
+
+    return $this->render(
+       'intranetBundle:UserTemplates:userManagementDialog.tmpl.html'
+      );
+  }
+
 }

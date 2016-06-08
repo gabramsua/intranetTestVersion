@@ -32,7 +32,7 @@
                 dataFromServer = dataFromServer.replace("]]", "");
                 dataFromServer = dataFromServer.split("],[");
                 
-                $scope.userRol = ({{rol | json_encode()}}").replace(/&quot;/g, "");
+                $scope.userRol = ("{{rol | json_encode()}}").replace(/&quot;/g, "");
                 $scope.userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.tasks = [];
@@ -56,7 +56,7 @@
                         targetEvent: ev,
                         clickOutsideToClose: true,
                         controller: updateTaskDialogController,
-                        onRemoving: $scope.getAllTasks
+                        onRemoving: ($scope.userRol != "developer") ? $scope.getAllTasks : null
                     });
                 }
                 

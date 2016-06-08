@@ -255,3 +255,11 @@ intranet_main_task_dialog2:
     defaults: { _controller: intranetBundle:Default:editeTaskAction, _locale:en }
     requirements:
         _locale: en|fr|es
+
+#USER TEMPLATES
+
+intranet_main_userManagement_dialog:
+    path:     /{_locale}/userManagementDialog
+    defaults: { _controller: intranetBundle:Default:userManagementDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es

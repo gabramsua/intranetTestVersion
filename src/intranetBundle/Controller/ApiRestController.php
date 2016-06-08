@@ -60,20 +60,20 @@ class ApiRestController extends Controller
         }else if($_SERVER['REQUEST_METHOD'] == 'PATCH'){
             
             $post = file_get_contents("php://input");
-            $taskIncoming = json_decode($post, true);
+            $userIncoming = json_decode($post, true);
             
             $em = $this->getDoctrine()->getEntityManager();;
-            $user = $em->getRepository('intranetBundle:Entity\Users')->find($login);
+            $user = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
 
-            $user->setNameU($taskIncoming['name']);
-            $user->setSurnameU($taskIncoming['surname']);
-            $user->setEmail($taskIncoming['email']);
-            $user->setLang($taskIncoming['lang']);
-            $user->setPhoto($taskIncoming['photo']);
-            $user->setOnboard($taskIncoming['onboard']);
-            $user->setNotifications($taskIncoming['notifications']);
+            $user->setNameU($userIncoming['name']);
+            $user->setSurnameU($userIncoming['surname']);
+            $user->setEmail($userIncoming['email']);
+            $user->setLang($userIncoming['lang']);
+            $user->setPhoto($userIncoming['photo']);
+            $user->setOnboard($userIncoming['onboard']);
+            $user->setNotifications($userIncoming['notifications']);
             $em->flush();
-            
+           
             return "ok";
             
         }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){

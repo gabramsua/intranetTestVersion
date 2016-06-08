@@ -2,6 +2,239 @@
 
  {% block contenido %}
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<script src="moment.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+<script src="http:////ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+
+<script>
+            var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
+            app.config(function($interpolateProvider){
+                $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+            });
+
+            app.controller('userManagementController', userManagementController);
+            app.controller('updateUserDialogController', updateUserDialogController);
+            
+            
+            function userManagementController($scope, $mdDialog, $http){
+                $scope.getAllUsers = function(){
+                    $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/users',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        $scope.usersList = response.data;
+                        console.log($scope.usersList);
+                    }, function error(response){
+                        console.log("Errror:" +response.statusText);
+                    });
+                }
+
+                $scope.showUpdateUserDialog = function(ev, user) {
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_main_userManagement_dialog')}}",
+                        locals: {
+                            currentUser: user
+                        }, 
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: updateUserDialogController,
+                        onRemoving: $scope.getAllUsers
+                    });
+                    //alert(user.name);
+                }
+            }
+
+
+            function updateUserDialogController($scope, $mdDialog, $http, currentUser){
+                $scope.user = currentUser;
+                
+                $scope.getInfo = function(){
+                    
+                    $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/user/'+$scope.user.login,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        
+                        $scope.allData = {
+                            "userData": response.data.userData
+                        };
+                        console.log($scope.allData.userData);
+                       
+                        
+                    }, function error(response){
+                        console.log("Error =( line:84:" +response.statusText);
+                    });
+
+
+
+                };
+                
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+                      
+                
+
+                $scope.updateUser=function(id){
+                //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+                    alert($scope.user.name);
+                    $http({
+                            method: 'PATCH',
+                            url: window.location.pathname+'/../../api/user/'+$scope.user.login,
+                            data: {
+                                name: $scope.user.name,
+                                surname: $scope.user.surname,
+                                email: $scope.user.email,
+                                lang: $scope.user.lang,
+                                photo: $scope.user.photo,
+                                onboard: $scope.user.onboard,
+                                notifications: $scope.user.notifications
+                            },
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        })
+                        .then(function success(response){
+                            console.log("PArty time");
+                            $scope.closeDialog();
+                        }, function error(response){
+                            console.log("Error:" +response.statusText);
+                        });
+                    
+                    }
+            }
+
+            
+            
+</script>
+
+
+<script>    
+    var prueba = "{{listUsers | json_encode()}}";
+    prueba = prueba.replace(/&quot;/g, "");
+    console.log(prueba);
+</script>
+
+
+
+
+
+
+
+<div ng-cloak ng-app="MyApp" ng-controller="userManagementController" layout-align="center start" style="width: 80%;">
+    
+    <md-list ng-init="getAllUsers()">
+        <md-button class="md-raised md-primary" ng-click="" ng-if="userRol != developer">New User</md-button><!--showCreateUsersDialog($event)-->
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+
+        <md-list-item style="font-size: large" ng-model="prueba">
+            <span style="width: 50%">User</span>
+            <span style="width: 50%">Login</span>
+        </md-list-item>
+
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+
+        <div ng-repeat="user in usersList">
+            <md-list-item ng-click="showUpdateUserDialog($event, user)">
+    
+                <span style="width: 50%">{[{user.name}]} {[{user.surname}]}</span>
+                <span style="width: 50%">{[{user.login}]}</span>
+                <div>
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="">
+                        Delete
+                    </md-button> 
+                </div>
+            
+            </md-list-item>
+            <md-divider></md-divider>
+        </div>
+    </md-list>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <table border=1>
 <tr >
     <th>name</th>

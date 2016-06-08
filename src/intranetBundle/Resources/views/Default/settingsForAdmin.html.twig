@@ -13,16 +13,25 @@
     var app=angular.module('settingsApp', ['ngMaterial']);
     app.controller('settingsController', settingsController);
 
-    function settingsController ($scope) { 
-       $scope.languages = ("{{me.lang | json_encode()}}").replace(/&quot;/g, "");
-       $scope.notific = ("{{me.notifications | json_encode()}}");
-       $scope.onboar = ({{me.onboard | json_encode()}});
-       $scope.aux = $scope.notific;
-       $scope.aux2 = $scope.languages;
-       //alert($scope.onboar);
-       $scope.isOnboard = function () {
-        return ("{{me.onboard | json_encode()}}");
-      };
+    function settingsController ($scope,$http ) { 
+       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");       
+
+       $scope.getCurrentUser = function(){
+                    
+                    $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/user/'+userLogin,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        
+                        $scope.user = response.data;
+                        console.log($scope.user);
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });
+                }
     }    
     
     function handleClick(event){
@@ -41,18 +50,18 @@
             
 </script>
 
-<div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
+<div ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
     <form name="settingsForm" id="settingsForm" method="POST" action="javaScript:handleClick()" novalidate>
     <!--{{ path('intranet_cruduser') }}-->
     
-    <md-content>
+    <md-content ng-init="getCurrentUser()">
         <md-list layout="column" ng-cloak="">
         <div layout="row" layout-sm="column">
             <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Name{% endtrans %}</label>
-                        <input type='text' name="myName" id="myName" value="{{ me.nameU }}" required="required">
+                        <input type='text' name="myName" id="myName" ng-model="user.name" required="required">
 
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify a seller.</div>
@@ -64,7 +73,7 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Surname{% endtrans %}</label>
-                        <input type='text' id="mySurname" name="mySurname" value="{{ me.surnameU }}">
+                        <input type='text' id="mySurname" name="mySurname" ng-model="user.surname">
 
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify a seller.</div>
@@ -78,7 +87,7 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Language{% endtrans %}</label><br><br>
-                        <md-radio-group ng-model="languages" ng-change="langue()">
+                        <md-radio-group ng-model="user.lang" >
                             <md-radio-button id="myLanguage" name="myLanguage" value="es" class="md-primary">
                                 ES
                             </md-radio-button>
@@ -102,22 +111,15 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Notifications{% endtrans %}</label><br><br>
-                        <md-radio-group ng-model="notific"  ng-change="noti()">
-                            <md-radio-button id="myNotifications" ng-model="myNotifications" name="myNotifications" value="true" class="md-primary">
-                                ON
-                            </md-radio-button>
-                                
-                            <md-radio-button id="myNotifications" ng-model="myNotifications" name="myNotifications" value="false" class="md-primary">
-                                OFF
-                            </md-radio-button>
-                             
-                        </md-radio-group>
+                        <md-checkbox ng-model="user.notifications" id="myNotifications" aria-label="Checkbox 1" class="md-primary">
+                            {% trans %}Recibir Notificaciones{% endtrans %}
+                        </md-checkbox>
                     </md-input-container>
                 </md-list-item>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>Onboard</label><br><br>
-                        <md-checkbox ng-model="onboar" id="onb" aria-label="Checkbox 1">
+                        <md-checkbox ng-model="user.onboard" id="onb" aria-label="Checkbox 2" class="md-primary">
                             {% trans %}Usuario nuevo{% endtrans %}
                         </md-checkbox>
                     </md-input-container>
@@ -125,38 +127,21 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-             <md-list-item layout-lg="row" layout-xl="row">
-                <md-input-container class="md-block">
-                    <label>{% trans %}Photo{% endtrans %}</label><br>
-                    <!--<md-button type="file" for="myPhoto" class="md-raised md-primary">AQUI
-                    </md-button>-->
-                    <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}"><!--class="ng-hide"-->
-                </md-input-container>
-            </md-list-item>
+        <md-list-item layout-lg="row" layout-xl="row">
+            <md-input-container class="md-block">
+                <label>{% trans %}Photo{% endtrans %}</label><br>
+                <!--<md-button type="file" for="myPhoto" class="md-raised md-primary">AQUI
+                </md-button>-->
+                <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}"><!--class="ng-hide"-->
+            </md-input-container>
+        </md-list-item>
 
         <div layout="row" layout-sm="column">
             <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Email{% endtrans %}</label>
-                        <input type='text' name="myEmail" id="myEmail" value="{{ me.email }}" required="required" style="width: 250px;" readonly>
+                        <input type='text' name="myEmail" id="myEmail" ng-model="user.email" required="required" style="width: 250px;" readonly>
 
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify an email.</div>
@@ -192,30 +177,5 @@
         </md-list>
     </form>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-<form action="{{ path('intranet_cruduser') }}" method="post" style="border: 1px solid;width: 500px;margin: 0 auto;">
-  
-
-
-      <label>{% trans %}Onboard{% endtrans %}</label>
-          <input type='checkbox' id="myOnboard" name="myOnboard" value="{{ me.onboard }}"{% if me.onboard==1 %} checked {% endif %}><BR>
-
-      
-
-
-                                   
- </form>
-
-
 
 {% endblock %}
