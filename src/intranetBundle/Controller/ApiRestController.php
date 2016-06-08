@@ -370,6 +370,34 @@ class ApiRestController extends Controller
 
         return $newsList;
     }
+    
+    /**
+    * Receives a cunter number which means the point from where it need to take news.
+    * It makes the query of news from this number of row and takes and returns exactly another 10 rows.
+    * It's used in the news dialog to get more news as the user scrolls down.
+    *
+    * @param int $offset offset number to make the query
+    * @return string $list The list of the news requested in JSON format.
+    **/
+    public function getNewschannelAction($offset){
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $qb = $em->createQueryBuilder()
+                 ->select('cnf')
+                 ->from('intranetBundle:Entity\channelnew_feed', 'cnf')
+                 ->setMaxResults(10)
+                 ->setFirstResult($offset)
+                 ->getQuery();
+
+        $list = $qb->getArrayResult();
+        
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($list, 'json');
+
+        return $list;
+    }
+    
+    
 }
 
 ?>
