@@ -39,7 +39,7 @@
                         $scope.usersList = response.data;
                         console.log($scope.usersList);
                     }, function error(response){
-                        console.log("Errror:" +response.statusText);
+                        console.log("Error:" +response.statusText);
                     });
                 }
 
@@ -56,6 +56,21 @@
                         onRemoving: $scope.getAllUsers
                     });
                     //alert(user.name);
+                }
+
+                $scope.deleteUser = function(login){
+                    
+                     $http({
+                        method: 'DELETE',
+                        url: window.location.pathname+'/../../api/user/'+login,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                         $scope.getAllUsers();
+                    }, function error(response){
+                        console.log("Errorr al borrar:" +response.statusText);
+                    });
                 }
             }
 
@@ -121,18 +136,8 @@
                     
                     }
             }
-
-            
-            
+   
 </script>
-
-
-<script>    
-    var prueba = "{{listUsers | json_encode()}}";
-    prueba = prueba.replace(/&quot;/g, "");
-    console.log(prueba);
-</script>
-
 
 
 
@@ -142,7 +147,7 @@
 <div ng-cloak ng-app="MyApp" ng-controller="userManagementController" layout-align="center start" style="width: 80%;">
     
     <md-list ng-init="getAllUsers()">
-        <md-button class="md-raised md-primary" ng-click="" ng-if="userRol != developer">New User</md-button><!--showCreateUsersDialog($event)-->
+        <md-button class="md-raised md-primary" ng-click="">New User</md-button><!--showCreateUsersDialog($event)-->
         <md-divider></md-divider>
         <md-divider></md-divider>
 
@@ -160,7 +165,7 @@
                 <span style="width: 50%">{[{user.name}]} {[{user.surname}]}</span>
                 <span style="width: 50%">{[{user.login}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="">
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteUser(user.login)">
                         Delete
                     </md-button> 
                 </div>

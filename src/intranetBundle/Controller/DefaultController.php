@@ -183,7 +183,7 @@ class DefaultController extends Controller{
   }
 
   public function channelsAction(){
-    if($_SESSION['rol']!='developer'){
+    if($_SESSION['rol']=='developer'){
        $channels = $this->getDoctrine()
                         ->getRepository('intranetBundle:Entity\Channel')
                         ->findAll();

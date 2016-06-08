@@ -77,6 +77,24 @@ class ApiRestController extends Controller
             return "ok";
             
         }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+            $em = $this->getDoctrine()->getManager();
+            $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
+            $em->remove($product);
+            $em->flush();
+
+            $intermediate = $em->getRepository('intranetBundle:Entity\userschannel')->findByLogin($login);
+            //For each element in the intermediate table, it is necessary to delete all of them
+            foreach ($intermediate as $index => $object) {
+                $em->remove($object);
+                $em->flush();
+            }
+
+            $intermediate = $em->getRepository('intranetBundle:Entity\userstasks')->findByLogin($login);
+            //For each element in the intermediate table, it is necessary to delete all of them
+            foreach ($intermediate as $index => $object) {
+              $em->remove($object);
+              $em->flush();
+            }
             
         }
     }
