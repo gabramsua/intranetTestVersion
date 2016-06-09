@@ -15,3 +15,9 @@ api_get_task:
     defaults: { _controller: "intranetBundle:ApiRest:getTask"}
     requirements:
         _method: DELETE|GET|PATCH
+        
+api_get_news:
+    pattern: /news/{channelName}
+    defaults: { _controller: "intranetBundle:ApiRest:getNews"}
+    requirements:
+        _method: POST|GET
