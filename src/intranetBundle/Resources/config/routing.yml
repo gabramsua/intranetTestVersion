@@ -263,3 +263,11 @@ intranet_main_userManagement_dialog:
     defaults: { _controller: intranetBundle:Default:userManagementDialog, _locale:en }
     requirements:
         _locale: en|fr|es
+
+#CHANNEL TEMPLATES
+
+intranet_main_channel_dialog:
+    path:     /{_locale}/channelDialog
+    defaults: { _controller: intranetBundle:Default:channelDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es

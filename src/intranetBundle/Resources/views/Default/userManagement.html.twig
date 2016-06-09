@@ -147,7 +147,6 @@
 <div ng-cloak ng-app="MyApp" ng-controller="userManagementController" layout-align="center start" style="width: 80%;">
     
     <md-list ng-init="getAllUsers()">
-        <md-button class="md-raised md-primary" ng-click="">New User</md-button><!--showCreateUsersDialog($event)-->
         <md-divider></md-divider>
         <md-divider></md-divider>
 
@@ -165,7 +164,7 @@
                 <span style="width: 50%">{[{user.name}]} {[{user.surname}]}</span>
                 <span style="width: 50%">{[{user.login}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteUser(user.login)">
+                    <md-button style="width: 10%" class="md-raised md-warn" ng-click="deleteUser(user.login)">
                         Delete
                     </md-button> 
                 </div>
@@ -175,95 +174,5 @@
         </div>
     </md-list>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table border=1>
-<tr >
-    <th>name</th>
-    <th>surname</th>
-    <th>LOGIN</th>
-    <th>photo</th>
-</tr>
-{% for intrauser in listUsers %}
-<tr>
-    <td style="padding-left: 10px;padding-right: 10px;">
-        <form action='{{ path('intranet_settings') }}' method='post'>
-              <input type="submit" value="{{ intrauser.login }}" name="login">
-              <input type="hidden" value="webCuisine" name="isAdmin">
-        </form>
-    </td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ intrauser.nameU }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ intrauser.surnameu }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;"><img src="{{ intrauser.photo }}"></td>
-</tr>
-{% endfor %}
-</table>
-<br><hr><br>
-<form action="{{ path('intranet_newuser')}}" method="post" style="border: 1px solid;width: 500px;">
-    <input type="submit" name="newUser" value="NEW USER">
-  </form>
 
 {% endblock %}

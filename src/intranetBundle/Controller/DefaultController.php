@@ -1557,7 +1557,7 @@ class DefaultController extends Controller{
         return $this->render( 'intranetBundle:Default:translate.html.twig');
       }
 
-#*****************Template task controllers*****************#
+#*****************Template controllers*****************#
 
   public function mainTaskDialogAction() {
 
@@ -1570,6 +1570,13 @@ class DefaultController extends Controller{
 
     return $this->render(
        'intranetBundle:UserTemplates:userManagementDialog.tmpl.html'
+      );
+  }
+
+  public function channelDialogAction() {
+
+    return $this->render(
+       'intranetBundle:ChannelTemplates:channelDialog.tmpl.html'
       );
   }
 

@@ -1,0 +1,55 @@
+<md-dialog ng-app="MyApp" ng-cloak flex="40" ng-init="getInfo()">
+    <form name="channelForm" id="channelForm" method="POST" novalidate>
+        <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>Channel: {[{channel.name}]}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeDialog()">
+                  <md-icon aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+        </md-toolbar>
+    <md-dialog-content ng-init="getCurrentChannel()"  class="md-dialog-content">
+        <md-list layout="column" ng-cloak="">
+        <div layout="row" layout-sm="column">
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Name{% endtrans %}</label>
+                        <input type='text' name="nameChannel" id="nameChannel" ng-model="channel.name" required="required">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+
+                 <md-list-item>
+                        <div layout-wrap layout="row">
+                            <div flex="50" ng-repeat="user in allUsers">
+                                <md-checkbox ng-checked="alreadyIn(user)" ng-click="toggle(user)" name="{[{user.login}]}">
+                                    {[{user.nameU}]} {[{user.surnameU}]}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                        <div layout-wrap layout="column" ng-if="userRol == 'developer'" style="margin-bottom: 15px">
+                            <span style="font-weight: bold">Users in this task:</span><br>
+                            <div flex="50" ng-repeat="user in usersInTaskShownToDeveloper" style="margin-left: 10px">
+                                    {[{user.nameU}]} {[{user.surnameU}]}
+                            </div>
+                        </div>
+                    </md-list-item>
+            </div>
+            
+
+        <md-list-item>
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="update"  ng-click="update(channel.id)"><!--ng-disabled="settingsForm.$invalid"-->
+                {% trans %}Modify{% endtrans %}
+            </md-button>
+        </md-list-item>
+            
+        </div>
+        </md-list>
+        </md-dialog-content>
+    </form>
+</md-dialog>
