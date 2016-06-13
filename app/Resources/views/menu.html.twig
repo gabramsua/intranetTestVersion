@@ -25,9 +25,7 @@
             <li><a href="{{ path('intranet_formHome')}}">{% trans %}Work at Home{% endtrans %}</a></li>
           </ul>
         </li>
-        <!-- BOOKING ROOM PART
-            <li><a href="{# path('intranet_bookRoom')#}">{% trans %}Book a room{% endtrans %}</a></li>
-        -->
+        
       {% if user.onboard==1 %}
               <li><a href='{{ path('intranet_tasks')}}'>{% trans %}Task {% endtrans %}-<i> internships</i></a></li>"
       {% endif %}

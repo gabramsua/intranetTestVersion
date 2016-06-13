@@ -12,6 +12,8 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use intranetBundle\Entity\Entity\userstasks;
+use intranetBundle\Entity\Entity\userschannel;
+use intranetBundle\Entity\Entity\Channel;
 
 class ApiRestController extends Controller
 {
@@ -27,7 +29,7 @@ class ApiRestController extends Controller
 
         $serializer = SerializerBuilder::create()->build();
         $serializer->serialize($usersList, 'json');
-
+        
         return $usersList;
     }
     
@@ -566,15 +568,13 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $channelIncoming = json_decode($post, true);
             
-            $em = $this->getDoctrine()->getEntityManager();;
+            $em = $this->getDoctrine()->getEntityManager();
             $channel = $em->getRepository('intranetBundle:Entity\Channel')->findOneById($id);
-
+            $oldname=$channel->getName();
             $channel->setName($channelIncoming['name']);
             $em->flush();
             
             /*INTERMEDIATE TABLE 1*/
-            $intermediate = $em->getRepository('intranetBundle:Entity\userschannel')->findOneByName($channelIncoming['name']);
-
             //For each user, I see if his checkbox is sent. In case of YES, insert the row with all the users marked.
             $allUsers = $this->getDoctrine()
                              ->getRepository('intranetBundle:Entity\Users')
@@ -585,91 +585,95 @@ class ApiRestController extends Controller
             foreach ($allUsers as $index => $user) {
                 
                 if(in_array($user->getLogin(), $channelIncoming['usersInChannel'])){
-                    
-                    $userAux = $em->getRepository('intranetBundle:Entity\userschannel')->findBy(['name' => $channelIncoming['name'], 'login' => $user->getLogin()]);
+                    $userAux = $em->getRepository('intranetBundle:Entity\userschannel')->findBy(['name' => $oldname, 'login' => $user->getLogin()]);
                     
                     if(sizeof($userAux)==0){
                         $intermediate = new userschannel();
                         $intermediate->setName($channelIncoming['name']);
                         $intermediate->setLogin($user->getLogin());
-                        $em = $this->getDoctrine()->getManager();
+                        $em = $this->getDoctrine()->getManager(); 
                         $em->persist($intermediate);
                         $em->flush();
+                    }else{
+                        foreach ($userAux as $index => $ob) {
+                            $ob->setName($channelIncoming['name']);
+                            $em->persist($ob);
+                            $em->flush();
+                        }
                     }
                }else {
                    
                     $em = $this->getDoctrine()->getEntityManager();
-                    $userAux = $em->getRepository('intranetBundle:Entity\userschannel')->findBy(['name' => $channelIncoming['name'], 'login' => $user->getLogin()]);
+                    $userAux = $em->getRepository('intranetBundle:Entity\userschannel')->findBy(['name' => $oldname, 'login' => $user->getLogin()]);
                    
                     foreach ($userAux as $index => $ob) {
                         $em->remove($ob);
                         $em->flush();
                     }
-               }
-
-               /*INTERMEDIATE TABLE 2*/
-               $intermediate = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findOneByName($channelIncoming['name']);
-
-                //For each user, I see if his checkbox is sent. In case of YES, insert the row with all the users marked.
-                $allNews = $this->getDoctrine()
-                                 ->getRepository('intranetBundle:Entity\NewFeed')
-                                 ->findAll();
-                
-                $em = $this->getDoctrine();
-                
-                foreach ($allNews as $index => $new) {
-                    
-                    if(in_array($new->getId(), $channelIncoming['usersInChannel'])){
-                        
-                        $newAux = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['name' => $channelIncoming['name'], 'idNew' => $new->getIdNew()]);
-                        
-                        if(sizeof($newAux)==0){
-                            $intermediate = new channelnew_feed();
-                            $intermediate->setName($channelIncoming['name']);
-                            $intermediate->setIdNew($new->getId());
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($intermediate);
-                            $em->flush();
-                        }
-                   }else {
-                       
-                        $em = $this->getDoctrine()->getEntityManager();
-                        $userAux = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['name' => $channelIncoming['name'], 'idNew' => $new->getIdNew()]);
-                       
-                        foreach ($userAux as $index => $ob) {
-                            $em->remove($ob);
-                            $em->flush();
-                        }
-                   }
-                 }
-             
-               }
-
+                }
+            }
+           /*INTERMEDIATE TABLE 2*/
+            $channelsWithName = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['name' => $oldname]);
+            //For each element in the intermediate table, it is necessary to update all of them
+            foreach ($channelsWithName as $index => $object) {
+                $object->setName($channelIncoming['name']);
+                $em->persist($object);
+                $em->flush();
+            }   
+               
         }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
             
             $post = file_get_contents("php://input");
             $channelIncoming = json_decode($post, true);
 
             $em = $this->getDoctrine()->getManager();
-            $product = $em->getRepository('intranetBundle:Entity\Channel')->findOneByName($name);
+            $product = $em->getRepository('intranetBundle:Entity\Channel')->findOneById($id);
+            $oldname=$product->getName();
             $em->remove($product);
             $em->flush();
 
-            $intermediate = $em->getRepository('intranetBundle:Entity\userschannel')->findByName($name);
+            $intermediate = $em->getRepository('intranetBundle:Entity\userschannel')->findByName($oldname);
             //For each element in the intermediate table, it is necessary to delete all of them
             foreach ($intermediate as $index => $object) {
                 $em->remove($object);
                 $em->flush();
             }
 
-            $intermediate2 = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findByName($name);
+            $intermediate2 = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findByName($oldname);
             //For each element in the intermediate table, it is necessary to delete all of them
             foreach ($intermediate2 as $index => $object) {
                 $em->remove($object);
                 $em->flush();
             }
 
-           
+        }else if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            
+            $post = file_get_contents("php://input");
+            $channelIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getManager();
+            $channel = new Channel();
+            $channel->setName($channelIncoming['name']);
+            $em->persist($channel);
+            $em->flush();
+
+            //For each user, I see if his checkbox is sent. In case of YES, insert the row with all the users marked.
+            $allUsers = $this->getDoctrine()
+                             ->getRepository('intranetBundle:Entity\Users')
+                             ->findAll();
+                foreach ($allUsers as $index => $object) {
+                    foreach ($channelIncoming['usersInChannel'] as $key => $value) {
+                        if($object->getLogin()==$value){   //isset($_REQUEST[$object->getLogin()])
+                           $usta = new userschannel();
+                           $usta->setName($channelIncoming['name']);
+                           $usta->setLogin($object->getLogin());
+                           $em = $this->getDoctrine()->getManager();
+                           $em->persist($usta);
+                           $em->flush();
+                         }
+                    }
+                }
+          
             
         }return $id;
     }
