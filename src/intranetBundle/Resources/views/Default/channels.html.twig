@@ -9,6 +9,7 @@
 
             app.controller('channelController', channelController);
             app.controller('updateChannelDialogController', updateChannelDialogController);
+            app.controller('createChannelDialogController', createChannelDialogController);
             
             
             function channelController($scope, $mdDialog, $http){
@@ -44,7 +45,7 @@
 
                 $scope.deleteChannel = function(name){
                     
-                     $http({
+                    $http({
                         method: 'DELETE',
                         url: window.location.pathname+'/../../api/channel/'+name,
                         dataType: 'json',
@@ -56,12 +57,91 @@
                         console.log("Error al delete:" +response.statusText);
                     });
                 }
+
+                $scope.showCreateChannelDialog = function(ev) {
+                    
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_main_create_channel_dialog')}}",
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: createChannelDialogController,
+                        onRemoving: $scope.getAllChannels
+                    });
+                }
+            }
+
+
+            function createChannelDialogController($scope, $mdDialog, $http){
+
+                $listChecked=[];
+
+                $scope.getInfo = function(){
+                    
+                    $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/users',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        $scope.allUsers = response.data;
+                        console.log($scope.allUsers);
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });
+                }
+                
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.alreadyIn = function(user){
+                
+                    return ($listChecked).indexOf(user.login) > -1;
+                };
+                
+                $scope.toggle = function(user){
+                    //console.log(user.login);
+                    var index = ($listChecked).indexOf(user.login);
+
+                    if (index > -1){
+                        ($listChecked).splice(index, 1);
+                    }
+                    else{
+                        ($listChecked).push(user.login);
+                    }
+                    //console.log($listChecked);
+
+                };  
+
+                $scope.create=function(){
+                    
+                    $notID=-1;
+                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+                    $http({
+                        method: 'POST',
+                        url: window.location.pathname+'/../../api/channel/'+$notID,
+                        data: {
+                            name: $scope.channel.name,
+                            usersInChannel: $listChecked
+                        },
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        console.log("Party time");
+                        $scope.closeDialog();
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });   
+                };     
             }
 
 
             function updateChannelDialogController($scope, $mdDialog, $http, currentChannel){
                 $scope.channel = currentChannel;
-                var oldname=$scope.channel.name;
                 $scope.getInfo = function(){
                     
                     $http({
@@ -78,7 +158,7 @@
                             "allUsers": response.data.allUsers
                         };
                         
-                        console.log($scope.allData.channelData);
+                        console.log($scope.allData.allUsers);
 
                         $scope.allUsers = $scope.allData.allUsers;
                         $scope.usersInChannel = $scope.allData.allUsers.filter(function(user){
@@ -89,18 +169,15 @@
                        
                         
                     }, function error(response){
-                        console.log("Error =( line:84:" +response.statusText);
+                        console.log("Error:" +response.statusText);
                     });
-
-
-
                 };
                 
-                $scope.closeDialog = function() {
+                $scope.closeDialog = function(){
                     $mdDialog.hide();
-                };
+                 };
 
-                 $scope.alreadyIn = function(user){
+                $scope.alreadyIn = function(user){
                     
                     return ($scope.allData.channelUsers).indexOf(user.login) > -1;
                 };
@@ -114,18 +191,16 @@
                     else
                         ($scope.allData.channelUsers).push(user.login);
                 };
-                      
-               
 
-                $scope.update=function(id){
-                alert($scope.allData.channelUsers);
-                //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+               $scope.update=function(id){
+                    //alert($scope.allData.channelUsers);
+                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
                     $http({
                             method: 'PATCH',
                             url: window.location.pathname+'/../../api/channel/'+$scope.channel.id,
                             data: {
                                 name: $scope.channel.name,
-                            	usersInChannel: $scope.allData.channelUsers
+                                usersInChannel: $scope.allData.channelUsers
                             },
                             contentType: 'application/json',
                             dataType: 'json',
@@ -136,28 +211,12 @@
                             $scope.closeDialog();
                         }, function error(response){
                             console.log("Error:" +response.statusText);
-                        });                    
-                    }/*
-                    $http({
-                        method: 'PATCH',
-                        url: window.location.pathname+'/../../api/tasks/'+$id,
-                        data: {
-                            title: $scope.allData.taskData[0].title,
-                            content: $scope.allData.taskData[0].content,
-                            usersInTask: $scope.allData.taskUsers
-                        },
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        
-                        $scope.closeDialog();
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });*/
-            }
-   
+                        }
+                    );   
+                 }   
+            };      
+        
+
 </script>
 
 
@@ -178,6 +237,7 @@
 <div ng-cloak ng-app="MyApp" ng-controller="channelController" layout-align="center start" style="width: 80%;">
     
     <md-list ng-init="getAllChannels()">
+    <md-button class="md-raised md-primary" ng-click="showCreateChannelDialog($event)">New Channel</md-button>
         <md-divider></md-divider>
         <md-divider></md-divider>
 
@@ -195,7 +255,7 @@
                 <span style="width: 100%">{[{channel.name}]}</span>
                 <!--<span style="width: 50%">{[{user.login}]}</span>-->
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn" ng-click="deleteChannel(channel.name)">
+                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteChannel(channel.id)">
                         Delete <!--{[{channel.name}]}-->
                     </md-button> 
                 </div>
@@ -207,43 +267,6 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table border=1>
-<tr>
-    <th style="padding-left: 10px;padding-right: 10px;">{% trans %}Name{% endtrans %}</th>
-</tr>
-{% for c in listChannels %}
-<tr>
-    <td style="padding-left: 10px;padding-right: 10px;">
-    <form action='{{ path('intranet_crudchannel') }}' method='post'>
-          <input type="submit" name="nameChannel" value="{{c.name}}" >
-          <input type="hidden" value="{{ c.id }}" name="id">
-    </form>
-    </td>
-</tr>
-{% endfor %}
-</table>
-<br><br>
-
-<form action="{{ path('intranet_newchannel')}}" method="post" style="border: 1px solid;width: 500px;">
-    <input type="submit" name="newChannel" value="{% trans %}new_channel{% endtrans %}">
-  </form>
 
 
 {% endblock %}

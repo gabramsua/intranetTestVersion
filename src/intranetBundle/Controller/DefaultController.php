@@ -1580,4 +1580,10 @@ class DefaultController extends Controller{
       );
   }
 
+  public function createChannelDialogAction(){
+    return $this->render(
+       'intranetBundle:ChannelTemplates:createChannelDialog.tmpl.html'
+      );
+  }
+
 }
