@@ -9,7 +9,27 @@ use Symfony\Component\HttpFoundation\Response;
 class NewsController extends Controller{
 
   public function newsAction(){
+      
+      //agregado nacho
+      $userLogin = $_SESSION['userLDAP'];
+      
+      $em = $this->getDoctrine()->getEntityManager();
+        
+        $qb = $em->createQueryBuilder()
+                 ->select('uc.name')
+                 ->from('intranetBundle:Entity\userschannel', 'uc')
+                 ->where('uc.login = :login')
+                 ->setParameter('login', $userLogin)
+                 ->getQuery();
 
+        $channelsList = $qb->getArrayResult();
+      
+      $news = $this->getDoctrine()
+                      ->getRepository('intranetBundle:Entity\NewFeed')
+                      ->findAll();
+      
+      //fin agregado nacho
+      
       $news = $this->getDoctrine()
                       ->getRepository('intranetBundle:Entity\NewFeed')
                       ->findAll();
@@ -33,7 +53,8 @@ class NewsController extends Controller{
           }
       }
 
-      $params=array('new'=>$newschannel);
+      $params=array('new'=>$newschannel, 'channels'=>$channelsList);
+      //array_push($params, );
       return $this->render('::news.html.twig', $params);
    }
 

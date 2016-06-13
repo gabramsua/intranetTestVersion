@@ -2,33 +2,164 @@
 
  {% block contenido %}
 
-<i>{% trans %}message_2{% endtrans %}</i><hr>
-<table border=1>
-<tr>
-    <th>DATE</th>
-    <th>HOUR</th>
-    <th>TITLE</th>
-    <th>CONTENT</th>
-</tr>
-{% for n in new %}
-<tr>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ n.date|date('Y-m-d')  }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ n.time|date('H:i') }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ n.title }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">
-          <form action='{{ path('intranet_crudnew') }}' method='post'>
-                <input type="submit" value="VER" >
-                <input type="hidden" value="{{ n.content }}" name="content">
-          </form>
-    </td>
-</tr>
-{% endfor %}
-</table>
+<link rel="stylesheet" type="text/css" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc.5/angular-material.css">
+<link rel="stylesheet" type="text/css" href="https://material.angularjs.org/1.1.0-rc.5/docs.css">
+<style>
 
-<br><br>
+.virtualRepeatdemoInfiniteScroll #vertical-container {
+  height: 292px;
+  //height: 500px;
+  width: 100%;
+  max-width: 400px; }
 
-<form action="{{ path('intranet_newnew')}}" method="post" style="border: 1px solid;width: 500px;">
-    <input type="submit" name="newNew" value="NEW NEW">
-  </form>
+.virtualRepeatdemoInfiniteScroll .repeated-item {
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  height: 40px;
+  padding-top: 10px; }
 
+.virtualRepeatdemoInfiniteScroll md-content {
+ // margin: 16px; 
+    }
+
+.virtualRepeatdemoInfiniteScroll md-virtual-repeat-container {
+  border: solid 1px grey; }
+
+.virtualRepeatdemoInfiniteScroll .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
+  padding-left: 16px; }
+    
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
+<script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc.5/angular-material.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+<script>
+    
+    var app = angular.module('infiniteScrolling',['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+    app.controller('feedsController', feedsController);
+    
+    function feedsController($scope, $http) {
+        
+        $scope.flag = null;
+        $scope.channelSelected = "";
+        $scope.userChannels = [];
+        $scope.populateChannelsList = function(){
+
+            $http({
+                method: 'GET',
+                url: 'http://localhost/intranettestversion/web/app_dev.php/api/users/imar1i/channels',
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                $.each(response.data, function(key, elem){
+                    $scope.userChannels.push(elem.name);
+                });
+                $scope.channelSelected =  $scope.userChannels[0];
+                console.log($scope.userChannels);
+            },function error(response){
+                console.log(response.statusText);
+            });
+        }
+        
+        // In this example, we set up our model using a plain object.
+        // Using a class works too. All that matters is that we implement
+        // getItemAtIndex and getLength.
+        $scope.infiniteItems = {
+            //flag: false,
+            numLoaded_: 0,
+            toLoad_: 0,
+            items: [],
+
+            // Required.
+            getItemAtIndex: function (index) {
+                var that = this;
+                if (index > that.numLoaded_) {
+                    that.fetchMoreItems_(index);
+                    return null;
+                }
+                    return that.items[index];
+                },
+
+            // Required.
+            getLength: function () {
+                var that = this;
+                return that.numLoaded_ + 2;
+            },
+
+            fetchMoreItems_: function (index) {
+                
+                if (!$scope.flag)
+                    
+                    $http({
+                        method: 'GET',
+                        url: 'http://localhost/intranettestversion/web/app_dev.php/api/users/imar1i/channels',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        $.each(response.data, function(key, elem){
+                            $scope.userChannels.push(elem.name);
+                        });
+                        $scope.channelSelected =  $scope.userChannels[0];
+                        console.log($scope.userChannels);
+                        $scope.flag = true;
+                    },function error(response){
+                        console.log(response.statusText);
+                    });
+                
+                var that = this;
+                
+                /*if(!that.flag){
+                    $scope.populateChannelsList();
+                    var channelSelected = $scope.channelSelected;
+                    that.flag = true;
+                }*/
+                if (that.toLoad_ < index) {
+                    that.toLoad_ += 10;
+                    $http({
+                        method: 'POST',
+                        url: 'http://localhost/intranetTestVersion/web/app_dev.php/api/channel/'+$scope.channelSelected,
+                        data: {offset: that.toLoad_},
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        that.items = that.items.concat(response.data);
+                        that.numLoaded_ = that.toLoad_;
+                    },function error(response){
+                        console.log(response.statusText);
+                    });
+                }
+            }
+        }
+    };
+</script>
+
+<div ng-app="infiniteScrolling" class="virtualRepeatdemoInfiniteScroll">
+ <div ng-controller="feedsController"><!-- ng-init="populateChannelsList()"-->
+    <md-input-container class="md-block" flex-gt-sm style="width: 400px;">
+        <md-select ng-model="channelSelected">
+            <md-option ng-repeat="channel in userChannels" value="{{channel}}">
+                {{channel}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <div ng-cloak>
+        <md-content layout="column">
+          <md-virtual-repeat-container id="vertical-container" flex>
+                <div md-virtual-repeat="item in infiniteItems" md-on-demand
+                     class="repeated-item" flex>
+                    {{item.id}}
+                    {{ctrl.prueba}}
+                </div>
+            </md-virtual-repeat-container>
+        </md-content>
+    </div>
+     </div>
+</div>
 {% endblock %}

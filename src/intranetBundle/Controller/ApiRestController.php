@@ -472,21 +472,24 @@ class ApiRestController extends Controller
     //hacer que además de un string (nombrecanal) pueda aceptar también un array(varios nombres) por si se hace una pestaña ALL canales
     public function getNewsAction($channelName){
         
+        if (strpos($channelName, ',') != false)
+            $channels = split(',', $channelName);
+        
         $post = file_get_contents("php://input");
         $data = json_decode($post, true);
         
         $em = $this->getDoctrine()->getEntityManager();
         
         $qb = $em->createQueryBuilder();
-                 $qb->select('cnf.idNew');
-                 $qb->from('intranetBundle:Entity\channelnew_feed', 'cnf');
-                 $qb->where('cnf.name = :name');
-                 $qb->setParameter('name', $channelName);
+        $qb->select('cnf.idNew');
+        $qb->from('intranetBundle:Entity\channelnew_feed', 'cnf');
         
-        if(isset($data['offset']) && isset($data['numResults'])){
-            
-            $qb->setMaxResults(intval($data['numResults']));
-            $qb->setFirstResult(intval($data['offset']));
+        if (isset($channels)){
+            $qb->where('cnf.name IN (:name)');
+            $qb->setParameter('name', $channels);
+        }else{
+            $qb->where('cnf.name = :name');
+            $qb->setParameter('name', $channelName);
         }
         
         $query = $qb->getQuery();
@@ -497,13 +500,22 @@ class ApiRestController extends Controller
                  ->from('intranetBundle:Entity\NewFeed', 'nf')
                  ->where('nf.id IN (:ids)')
                  ->setParameter('ids', $idNewsList)
+                 ->addOrderBy('nf.date', 'DESC')
+                 ->addOrderBy('nf.time', 'DESC')
                  ->getQuery();
+        
+        if(isset($data['offset']) && isset($data['numResults'])){
+            
+            $qb->setMaxResults(intval($data['numResults']));
+            $qb->setFirstResult(intval($data['offset']));
+        }
         
         $newsList = $qb->getArrayResult();
         
         $serializer = SerializerBuilder::create()->build();
         $serializer->serialize($newsList, 'json');
 
+        //return $channelName;
         return $newsList;
     }
 
