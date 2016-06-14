@@ -1585,5 +1585,24 @@ class DefaultController extends Controller{
        'intranetBundle:ChannelTemplates:createChannelDialog.tmpl.html'
       );
   }
+    
+    
+    //FORMS
+    public function formsAction(){
+        
+        $params = ['login' => $_SESSION['userLDAP'], 'rol' => $_SESSION['rol']];
+        
+        return $this->render(
+           'intranetBundle:Default:forms.html.twig',
+            $params
+          );
+    }
+    
+    public function formsHistoricAction(){
+        
+        return $this->render(
+           'intranetBundle:Forms:historic.html'
+          );
+    }
 
 }

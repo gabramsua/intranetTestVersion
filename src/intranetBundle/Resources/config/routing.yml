@@ -105,6 +105,12 @@ intranet_settings:
     defaults: { _controller: intranetBundle:Default:settings, _locale:en }
     requirements:
         _locale: en|fr|es
+        
+intranet_forms:
+    path:     /{_locale}/forms
+    defaults: { _controller: intranetBundle:Default:forms, _locale:en }
+    requirements:
+        _locale: en|fr|es
 
 #CRUD OPERATIONS
 intranet_cruduser:
@@ -277,3 +283,5 @@ intranet_main_create_channel_dialog:
     defaults: { _controller: intranetBundle:Default:createChannelDialog, _locale:en }
     requirements:
         _locale: en|fr|es
+        
+#FORMS
