@@ -18,31 +18,48 @@
 
        $scope.getCurrentUser = function(){
                     
-                    $http({
-                        method: 'GET',
-                        url: window.location.pathname+'/../../api/user/'+userLogin,
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        
-                        $scope.user = response.data;
-                        console.log($scope.user);
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });
+            $http({
+                method: 'GET',
+                url: window.location.pathname+'/../../api/user/'+userLogin,
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                
+                $scope.user = response.data;
+                console.log($scope.user);
+            }, function error(response){
+                console.log("Error:" +response.statusText);
+            });
+        }
+        
+        $scope.updateUser=function(login){
+        
+            $http({
+                    method: 'PATCH',
+                    url: window.location.pathname+'/../../api/user/'+login,
+                    data: {
+                        name: $scope.user.name,
+                        surname: $scope.user.surname,
+                        email: $scope.user.email,
+                        lang: $scope.user.lang,
+                        photo: $scope.user.photo,
+                        onboard: $scope.user.onboard,
+                        notifications: $scope.user.notifications
+                    },
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(function success(response){
+                    console.log("Party time");
+                    //$scope.closeDialog();
+                }, function error(response){
+                    console.log("Error:" +response.statusText);
                 }
+            );   
+        }
     }    
-    
-    function handleClick(event){
-        alert("Nombre: "+this["myName"].value + 
-            "\nApellidos: "+this["mySurname"].value +
-            "\nIdioma: "+this["hiden2"].value +
-            "\nNotificaciones: "+ this["hiden1"].value +
-            "\nFoto: "+this["myPhoto"].value +
-            "\nEmail: "+this["myEmail"].value
-        );
-    }
 
     app.config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
@@ -129,9 +146,8 @@
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
                     <label>{% trans %}Photo{% endtrans %}</label><br>
-                    <!--<md-button type="file" for="myPhoto" class="md-raised md-primary">AQUI
                     </md-button>-->
-                    <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}"><!--class="ng-hide"-->
+                    <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}">
                 </md-input-container>
             </md-list-item>
 
@@ -151,14 +167,10 @@
         </div> 
 
         <md-list-item>
-            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid">
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" ng-click="updateUser(user.login)">
                 {% trans %}Modify{% endtrans %}
             </md-button>
         </md-list-item>
-            
-        <input type="hidden" value="{{ me.id }}" name="id">
-        <input type="hidden" id="hiden1" value="{[{ notific }]}">
-        <input type="hidden" id="hiden2" value="{[{ languages }]}">
         </md-list>
     </form>
 </div>
