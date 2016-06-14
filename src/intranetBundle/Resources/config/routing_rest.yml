@@ -33,3 +33,9 @@ api_get_channel_users:
     defaults: { _controller: "intranetBundle:ApiRest:getChannelUsers"}
     requirements:
         _method: DELETE|GET|PATCH
+        
+api_get_user_forms:
+    pattern: /user/{login}/forms
+    defaults: { _controller: "intranetBundle:ApiRest:getUserForms"}
+    requirements:
+        _method: GET

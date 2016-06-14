@@ -1582,7 +1582,7 @@ class DefaultController extends Controller{
     //FORMS
     public function formsAction(){
         
-        $params = ['login' => $_SESSION['userLDAP'], 'rol' => $_SESSION['rol']];
+        $params = ['userLogin' => $_SESSION['userLDAP'], 'rol' => $_SESSION['rol']];
         
         return $this->render(
            'intranetBundle:Default:forms.html.twig',
@@ -1592,9 +1592,7 @@ class DefaultController extends Controller{
     
     public function formsHistoricAction(){
         
-        return $this->render(
-           'intranetBundle:Forms:historic.html'
-          );
+        return $this->render('intranetBundle:Forms:historic.tmpl.html');
     }
 
 }

@@ -273,3 +273,9 @@ intranet_main_create_channel_dialog:
         _locale: en|fr|es
         
 #FORMS
+
+intranet_forms_historic:
+    path:     /{_locale}/formsHistoric
+    defaults: { _controller: intranetBundle:Default:formsHistoric, _locale:en }
+    requirements:
+        _locale: en|fr|es

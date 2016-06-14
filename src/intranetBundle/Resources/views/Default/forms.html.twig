@@ -28,6 +28,9 @@
             app.controller('workAtHomeController', workAtHomeController);
             app.controller('submitController', submitController);
             app.controller('historicController', historicController);
+            app.config(function($interpolateProvider){
+                $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+            });
             app.directive('zeroTimeDirective', function(){
                 
                 //https://blog.umur.io/2013/07/02/angularjs-directives-using-isolated-scope-with-attributes/
@@ -525,25 +528,27 @@
                 //2 -> Pending
                 //3 -> All
                 
+                var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                
                 $scope.fillList = function(){
                     
                     $http({
-                        method: 'POST',
-                        url: 'model.php',
-                        data: null,
+                        method: 'GET',
+                        //url: 'window.location.pathname/../../api/user/'+userLogin+'/forms',
+                        url: 'window.location.pathname/../../api/user/gram1i/forms',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){
                         
                         $scope.formsList = response.data;
-                        $scope.filteredFormsList = response.data;
+                        $scope.filteredFormsList = groupAllFormsInOneArray(response.data);
                     }, function error(response){
                         //manage error
                         console.log("ERROR: "+response.statusText);
                     });
                 }
                 
-                $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
+                /*$scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
                     
                     $scope.filteredFormsList = [];
                     if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
@@ -564,7 +569,102 @@
                         });
                     }
                     
+                });*/
+                
+                $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
+                    
+                    $scope.filteredFormsList = [];
+                    if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
+                        $scope.filteredFormsList = groupAllFormsInOneArray($scope.formsList);
+                    }else if($scope.filters.formType === "All" && $scope.filters.formStatus != 3){
+                        $scope.filteredFormsList = groupAllFormsInOneArray($scope.formsList);
+                        $scope.filteredFormsList = filterFormsByStatus($scope.filteredFormsList, $scope.filters.formStatus);
+                    }else{
+                        
+                        switch($scope.filters.formType){
+                            case 'Vacation':
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.vacationFormsList, $scope.filters.formStatus);
+                                break;
+                            case 'Expenses':
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.expensesFormsList, $scope.filters.formStatus);
+                                break;
+                            case 'BusinessTrip':
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.businessTripFormsList, $scope.filters.formStatus);
+                                break;
+                            case 'OvertimeHours':
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.overtimeHoursFormsList, $scope.filters.formStatus);
+                                break;
+                            case 'WorkAtHome':
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.WorkAtHomeFormsList, $scope.filters.formStatus);
+                                break;
+                            default:
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
+                                break;
+                        }
+                        
+                        if ($scope.filters.formType === 'Vacation'){
+                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.vacationFormsList, $scope.filters.formStatus);
+                            /*if ($scope.filters.formStatus == 3)
+                                $scope.filteredFormsList = $scope.formsList.vacationFormsList;
+                            else{
+                                $scope.filteredFormsList.push($.each($scope.formsList.vacationFormsList, function(index, currentForm){
+                                    if (currentForm.type == $scope.filters.formStatus)
+                                        return currentForm;
+                                }));
+                            }*/
+                                //$scope.filteredFormsList.push($.each($scope.formsList.vacationFormsList, function(index, currentForm){}));
+                        }else if ($scope.filters.formType === 'Expenses'){
+                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.expensesFormsList, $scope.filters.formStatus);
+                            /*if ($scope.filters.formStatus == 3)
+                                $scope.filteredFormsList = $scope.formsList.expensesFormsList;*/
+                        }else if ($scope.filters.formType === 'BusinessTrip'){
+                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.businessTripFormsList, $scope.filters.formStatus);
+                            /*if ($scope.filters.formStatus == 3)
+                                $scope.filteredFormsList = $scope.formsList.businessTripFormsList;*/
+                        }else if ($scope.filters.formType === 'OvertimeHours'){
+                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.overtimeHoursFormsList, $scope.filters.formStatus);
+                            /*if ($scope.filters.formStatus == 3)
+                                $scope.filteredFormsList = $scope.formsList.overtimeHoursFormsList;*/
+                        }else if ($scope.filters.formType === 'WorkAtHome'){
+                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.WorkAtHomeFormsList, $scope.filters.formStatus);
+                            /*if ($scope.filters.formStatus == 3)
+                                $scope.filteredFormsList = $scope.formsList.WorkAtHomeFormsList;*/
+                        }else{
+                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
+                        }
+                    }
+                    
                 });
+                
+                function filterFormsByStatus(currentTypeFormList, status){
+                    
+                    var formsListOutput = [];
+                    
+                    if (status == 3)
+                        formsListOutput = currentTypeFormList;
+                    else{
+                        formsListOutput.push($.each(currentTypeFormList, function(index, currentForm){
+                            if (currentForm.type == status)
+                                return currentForm;
+                        }));
+                    }
+                    
+                    return formsListOutput;
+                }
+                
+                function groupAllFormsInOneArray(formsList){
+                    
+                    var formsListOutput = [];
+                    
+                    $.each(formsList, function(index, currentList){
+                        
+                        $.each(currentList, function(index, currentForm){
+                            formsListOutput.push(currentForm);
+                        });
+                    });
+                    
+                    return formsListOutput;
+                }
                 
                 $scope.showFormDetails = function(ev, form) {
                     
@@ -621,8 +721,7 @@
                     <md-tab id="tab0">
                         <md-tab-label>Historico</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'historic.html'"></div>
-                            <div ng-include="'historic.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_historic')}}'"></div>
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab1">

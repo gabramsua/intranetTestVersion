@@ -377,42 +377,6 @@ class ApiRestController extends Controller
         return $allForms;
     }
     
-    /**
-    * Returns all forms in the database.
-    *
-    * @throws \HttpException
-    * @return string $allForms Contains all forms in the database (and their data) serialized to JSON format
-    **/
-    public function getFormsAction($login){
-
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $qb = $em->createQueryBuilder()
-                 ->select('fe')
-                 ->from('intranetBundle:Entity\F_Expenses', 'fe')
-                 //->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
-                 ->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
-                 ->where('ufe.login = :login')
-                 ->setParameter('login', $login)
-                 ->getQuery();
-        
-        
-        $formsOfTheUser = $qb->getArrayResult();
-        
-        /*$allForms = [
-            "expensesForms" => $expensesForms,
-            "overtimeHoursForms" => $overtimeHoursForms,
-            "businessTripForms" => $businessTripForms,
-            "vacationForms" => $vacationForms,
-            "workAtHomeForms" => $workAtHomeForms
-        ];*/
-        
-        $serializer = SerializerBuilder::create()->build();
-        $serializer->serialize($formsOfTheUser, 'json');
-        
-        return $formsOfTheUser;
-    }
-    
     
     //DEPRECATED?
     /*public function getNewsAction(){
@@ -734,6 +698,149 @@ class ApiRestController extends Controller
         $serializer->serialize($data, 'json');
         
         return $data;
+    }
+    
+    
+   /**
+    * Receives a login and returns every forms of that user.
+    *
+    * @return string $allForms Contains all forms of the user in the database (and their data) serialized to JSON format
+    **/
+    public function getUserFormsAction($login){
+
+        /*$em = $this->getDoctrine()->getEntityManager();
+        
+        $qb = $em->createQueryBuilder()
+                 ->select('fe')
+                 ->from('intranetBundle:Entity\F_Expenses', 'fe')
+                 //->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
+                 ->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
+                 ->where('ufe.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        
+        $formsOfTheUser = $qb->getArrayResult();*/
+        
+        
+        //GETTING IDS FORMS
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        //getting Expenses Forms ids of the user
+        $qb = $em->createQueryBuilder()
+                 ->select('ufe.idForm')
+                 ->from('intranetBundle:Entity\Users_F_Expenses', 'ufe')
+                 ->where('ufe.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        $idsExpensesFormsList = $qb->getArrayResult();
+        
+        //getting WorkAtHome Forms ids of the user
+        $qb = $em->createQueryBuilder()
+                 ->select('ufhom.idForm')
+                 ->from('intranetBundle:Entity\Users_F_Home', 'ufhom')
+                 ->where('ufhom.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        $idsWorkAtHomeFormsList = $qb->getArrayResult();
+        
+        //getting OvertimeHours Forms ids of the user
+        $qb = $em->createQueryBuilder()
+                 ->select('ufhou.idForm')
+                 ->from('intranetBundle:Entity\Users_F_Hours', 'ufhou')
+                 ->where('ufhou.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        $idsOvertimeHoursFormLists = $qb->getArrayResult();
+        
+        //getting BusinessTrips Forms ids of the user
+        $qb = $em->createQueryBuilder()
+                 ->select('uft.idForm')
+                 ->from('intranetBundle:Entity\Users_F_Trip', 'uft')
+                 ->where('uft.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        $idsBusinessTripFormsList = $qb->getArrayResult();
+        
+        //getting Vacation Forms ids of the user
+        $qb = $em->createQueryBuilder()
+                 ->select('ufv.idForm')
+                 ->from('intranetBundle:Entity\Users_F_Vacation', 'ufv')
+                 ->where('ufv.login = :login')
+                 ->setParameter('login', $login)
+                 ->getQuery();
+        
+        $idsVacationFormsList = $qb->getArrayResult();
+        
+        
+        //GETTING FORMS
+        
+        //getting Expenses Forms
+        $qb = $em->createQueryBuilder()
+                 ->select('fe')
+                 ->from('intranetBundle:Entity\F_Expenses', 'fe')
+                 ->where('fe.id IN (:ids)')
+                 ->setParameter('ids', $idsExpensesFormsList)
+                 ->getQuery();
+        
+        $expensesFormsList = $qb->getArrayResult();
+        
+        //getting WorkAtHome Forms
+        $qb = $em->createQueryBuilder()
+                 ->select('fhom')
+                 ->from('intranetBundle:Entity\F_Home', 'fhom')
+                 ->where('fhom.id IN (:ids)')
+                 ->setParameter('ids', $idsWorkAtHomeFormsList)
+                 ->getQuery();
+        
+        $WorkAtHomeFormsList = $qb->getArrayResult();
+        
+        //getting OvertimeHours Forms
+        $qb = $em->createQueryBuilder()
+                 ->select('fhou')
+                 ->from('intranetBundle:Entity\F_Hours', 'fhou')
+                 ->where('fhou.id IN (:ids)')
+                 ->setParameter('ids', $idsOvertimeHoursFormLists)
+                 ->getQuery();
+        
+        $overtimeHoursFormsList = $qb->getArrayResult();
+        
+        //getting BusinessTrip Forms
+        $qb = $em->createQueryBuilder()
+                 ->select('ft')
+                 ->from('intranetBundle:Entity\F_Trip', 'ft')
+                 ->where('ft.id IN (:ids)')
+                 ->setParameter('ids', $idsBusinessTripFormsList)
+                 ->getQuery();
+        
+        $businessTripFormsList = $qb->getArrayResult();
+        
+        //getting Vacation Forms
+        $qb = $em->createQueryBuilder()
+                 ->select('fv')
+                 ->from('intranetBundle:Entity\F_Vacation', 'fv')
+                 ->where('fv.id IN (:ids)')
+                 ->setParameter('ids', $idsVacationFormsList)
+                 ->getQuery();
+        
+        $vacationFormsList = $qb->getArrayResult();
+        
+        $allForms = [
+            'expensesFormsList' => $expensesFormsList,
+            'WorkAtHomeFormsList' => $WorkAtHomeFormsList,
+            'overtimeHoursFormsList' => $overtimeHoursFormsList,
+            'businessTripFormsList' => $businessTripFormsList,
+            'vacationFormsList' => $vacationFormsList
+        ];
+        
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($allForms, 'json');
+        
+        return $allForms;
     }
     
 }
