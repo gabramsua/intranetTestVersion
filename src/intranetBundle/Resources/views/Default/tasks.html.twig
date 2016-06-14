@@ -5,8 +5,9 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
         <link rel="stylesheet" href="taskStyles.css">
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<!--        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script> this librariy is loaded in the header (layout.html.twig), so is not needed here -->
         <script src="moment.min.js"></script>
+<!--
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
@@ -17,6 +18,7 @@
         <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+-->
         <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
             app.config(function($interpolateProvider){
@@ -32,7 +34,7 @@
                 dataFromServer = dataFromServer.replace("]]", "");
                 dataFromServer = dataFromServer.split("],[");
                 
-                $scope.userRol = ("{{rol | json_encode()}}").replace(/&quot;/g, "");
+                $scope.userRol = "asd";//("{{rol | json_encode()}}").replace(/&quot;/g, "");
                 $scope.userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.tasks = [];
@@ -151,7 +153,7 @@
                 
                 $scope.userRol = rol;
                 $scope.task = currentTask;
-                $scope.infoLoaded = false
+                $scope.loading = false;
                 
                 $scope.getInfo = function(){
                     
@@ -176,8 +178,6 @@
                             if (($scope.allData.taskUsers).indexOf(user.login) > -1)
                                 return user;
                         });
-                        
-                        $scope.infoLoaded = true;
                         
                     }, function error(response){
                         console.log("Error:" +response.statusText);
@@ -204,6 +204,8 @@
                 };
                 
                 $scope.update = function($id){
+                        
+                    $scope.loading = true;
                     
                     $http({
                         method: 'PATCH',
@@ -219,7 +221,11 @@
                     })
                     .then(function success(response){
                         
-                        $scope.closeDialog();
+                        //TODO
+                        /*if("error de validación")
+                            //toast informando del error
+                        else*/
+                            $scope.closeDialog();
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });

@@ -224,6 +224,15 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $taskIncoming = json_decode($post, true);
             
+            if ($taskIncoming['title'] == "")
+                return new Response(json_encode("The field Title cannot be blank."));
+                /*return new Response(
+                                    'Content',
+                                    Response::HTTP_NO_CONTENT,
+                                    array('content-type' => 'text/html',
+                                         'mensajemio' => 'no hay titulo'));*/
+                //header("The field Title cannot be blank.", true, 204);
+            
             $em = $this->getDoctrine()->getEntityManager();;
             $task = $em->getRepository('intranetBundle:Entity\Tasks')->find($id);
 
