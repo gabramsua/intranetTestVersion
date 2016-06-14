@@ -271,11 +271,52 @@ intranet_main_create_channel_dialog:
     defaults: { _controller: intranetBundle:Default:createChannelDialog, _locale:en }
     requirements:
         _locale: en|fr|es
-        
-#FORMS
+      
+      
+#FORMS SUBPAGES
 
 intranet_forms_historic:
     path:     /{_locale}/formsHistoric
     defaults: { _controller: intranetBundle:Default:formsHistoric, _locale:en }
+    requirements:
+        _locale: en|fr|es
+ 
+ 
+#FORMS DIALOGS TEMPLATES
+
+
+intranet_forms_main_dialog:
+    path:     /{_locale}/mainDialog
+    defaults: { _controller: intranetBundle:Default:mainDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_dialog_business_trip:
+    path:     /{_locale}/businessTripDialog
+    defaults: { _controller: intranetBundle:Default:businessTripDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_dialog_expenses:
+    path:     /{_locale}/expensesDialog
+    defaults: { _controller: intranetBundle:Default:expensesDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_dialog_overtime_hours:
+    path:     /{_locale}/overtimeHoursDialog
+    defaults: { _controller: intranetBundle:Default:overtimeHoursDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_dialog_vacation:
+    path:     /{_locale}/vacationDialog
+    defaults: { _controller: intranetBundle:Default:vacationDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_dialog_work_at_home:
+    path:     /{_locale}/workAtHomeDialog
+    defaults: { _controller: intranetBundle:Default:workAtHomeDialog, _locale:en }
     requirements:
         _locale: en|fr|es

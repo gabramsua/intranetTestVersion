@@ -1,0 +1,28 @@
+<md-dialog ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{[{form.type}]} Form</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="closeDialog()">
+          <md-icon md-svg-src="icons/ic_close_white.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <md-list>
+                <md-list-item>
+                    <md-input-container>
+                        <label>User</label>
+                        <input value="USERNAME" disabled="">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Submission Date</label>
+                        <input disabled="" value="{[{form.send | date:'dd/MM/yyyy'}]}">
+                    </md-input-container>
+                </md-list-item>
+                <div ng-include="currentTemplateForm"></div>
+            </md-list>
+        </div>
+    </md-dialog-content>
+</md-dialog>

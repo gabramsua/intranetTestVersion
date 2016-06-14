@@ -1,0 +1,18 @@
+<md-list-item>
+    <md-input-container>
+        <label>Date</label>
+        <input value="{[{form.date1}]}" disabled="">
+    </md-input-container>
+    <md-input-container>
+        <label>Modality</label>
+<!--        <input ng-value="form.wholeDay ? 'Whole day' : 'Half day'" value="" disabled=""> -->
+        <input value="Whole day" ng-if="form.wholeDay" disabled=""><!--the whole day or just a half-->
+        <input value="Half day" ng-if="!form.wholeDay" disabled="">
+    </md-input-container>
+</md-list-item>
+<md-list-item>
+    <md-input-container flex-gt-xs>
+        <label>Reasons</label>
+        <textarea class="dialogTextarea" rows="4" disabled="">{[{form.reason}]}</textarea>
+    </md-input-container>
+</md-list-item>

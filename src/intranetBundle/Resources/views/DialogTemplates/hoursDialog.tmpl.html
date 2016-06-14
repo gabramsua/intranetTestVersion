@@ -1,0 +1,26 @@
+<md-list-item>
+    <md-input-container>
+        <label>JIRA ticked ID</label>
+        <input value="TICKED ID (pending field)" disabled="">
+    </md-input-container>
+</md-list-item>
+<md-list-item ng-repeat="day in days">
+    <md-input-container>
+        <label>Date</label>
+        <input value="day.THEDATE" disabled="">
+    </md-input-container>
+    <md-input-container>
+        <label>Hours</label>
+        <input value="day.THEHOURS" disabled="">
+    </md-input-container>
+    <md-input-container>
+        <label>Minutes</label>
+        <input value="day.THEMINUTES" disabled="">
+    </md-input-container>
+</md-list-item>
+<md-list-item>
+    <md-input-container flex-gt-xs>
+        <label>Reasons</label>
+        <textarea class="dialogTextarea" rows="4" disabled="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ornare fringilla arcu, congue tristique mi ultrices vel. Phasellus at efficitur lacus, quis rutrum tortor. Mauris magna velit, malesuada pellentesque elit sed, iaculis pulvinar lectus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras vitae imperdiet augue, et luctus libero. Vestibulum congue magna eu ligula varius rhoncus. Donec a tempus dolor, et tincidunt eros. Donec sed congue velit. Phasellus a mauris et massa commodo euismod at vitae sem. Vestibulum mattis odio id enim blandit pharetra. Nullam pellentesque interdum quam et vulputate. Praesent condimentum turpis ac posuere interdum.</textarea>
+    </md-input-container>
+</md-list-item>

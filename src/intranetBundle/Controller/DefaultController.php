@@ -1605,4 +1605,37 @@ class DefaultController extends Controller{
         return $this->render('intranetBundle:Forms:historic.tmpl.html');
     }
 
+    
+    //FORMS DIALOGS
+    
+    public function mainDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html');
+    }
+    
+    public function businessTripDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:businessTripDialog.tmpl.html');
+    }
+    
+    public function expensesDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:expensesDialog.tmpl.html');
+    }
+    
+    public function overtimeHoursDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:hoursDialog.tmpl.html');
+    }
+    
+    public function vacationDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:vacationDialog.tmpl.html');
+    }
+    
+    public function workAtHomeDialogAction(){
+        
+        return $this->render('intranetBundle:DialogTemplates:workAtHomeDialog.tmpl.html');
+    }
+    
 }

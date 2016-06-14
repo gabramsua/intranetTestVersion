@@ -523,9 +523,9 @@
                 };
                 
                 //form filter status legend
-                //0 -> Rejected
+                //0 -> Pending
                 //1 -> Accepted
-                //2 -> Pending
+                //2 -> Rejected
                 //3 -> All
                 
                 var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
@@ -534,8 +534,8 @@
                     
                     $http({
                         method: 'GET',
-                        //url: 'window.location.pathname/../../api/user/'+userLogin+'/forms',
-                        url: 'window.location.pathname/../../api/user/gram1i/forms',
+                        url: 'window.location.pathname/../../api/user/'+userLogin+'/forms',
+                        //url: 'window.location.pathname/../../api/user/gram1i/forms',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){
@@ -601,37 +601,6 @@
                                 $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
                                 break;
                         }
-                        
-                        if ($scope.filters.formType === 'Vacation'){
-                                $scope.filteredFormsList = filterFormsByStatus($scope.formsList.vacationFormsList, $scope.filters.formStatus);
-                            /*if ($scope.filters.formStatus == 3)
-                                $scope.filteredFormsList = $scope.formsList.vacationFormsList;
-                            else{
-                                $scope.filteredFormsList.push($.each($scope.formsList.vacationFormsList, function(index, currentForm){
-                                    if (currentForm.type == $scope.filters.formStatus)
-                                        return currentForm;
-                                }));
-                            }*/
-                                //$scope.filteredFormsList.push($.each($scope.formsList.vacationFormsList, function(index, currentForm){}));
-                        }else if ($scope.filters.formType === 'Expenses'){
-                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.expensesFormsList, $scope.filters.formStatus);
-                            /*if ($scope.filters.formStatus == 3)
-                                $scope.filteredFormsList = $scope.formsList.expensesFormsList;*/
-                        }else if ($scope.filters.formType === 'BusinessTrip'){
-                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.businessTripFormsList, $scope.filters.formStatus);
-                            /*if ($scope.filters.formStatus == 3)
-                                $scope.filteredFormsList = $scope.formsList.businessTripFormsList;*/
-                        }else if ($scope.filters.formType === 'OvertimeHours'){
-                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.overtimeHoursFormsList, $scope.filters.formStatus);
-                            /*if ($scope.filters.formStatus == 3)
-                                $scope.filteredFormsList = $scope.formsList.overtimeHoursFormsList;*/
-                        }else if ($scope.filters.formType === 'WorkAtHome'){
-                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList.WorkAtHomeFormsList, $scope.filters.formStatus);
-                            /*if ($scope.filters.formStatus == 3)
-                                $scope.filteredFormsList = $scope.formsList.WorkAtHomeFormsList;*/
-                        }else{
-                            $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
-                        }
                     }
                     
                 });
@@ -643,10 +612,10 @@
                     if (status == 3)
                         formsListOutput = currentTypeFormList;
                     else{
-                        formsListOutput.push($.each(currentTypeFormList, function(index, currentForm){
-                            if (currentForm.type == status)
-                                return currentForm;
-                        }));
+                        $.each(currentTypeFormList, function(index, currentForm){
+                            if (currentForm.status == status)
+                                formsListOutput.push(currentForm);
+                        });
                     }
                     
                     return formsListOutput;
@@ -669,7 +638,7 @@
                 $scope.showFormDetails = function(ev, form) {
                     
                     $mdDialog.show({
-                        templateUrl: 'dialogTemplates/mainDialogTemplate.tmpl.html',
+                        templateUrl: "{{ path('intranet_forms_main_dialog')}}",
                         locals: {
                             currentForm: form
                         }, 
@@ -687,19 +656,19 @@
                 
                 switch($scope.form.type){
                     case "Expenses":
-                        $scope.currentTemplateForm = "dialogTemplates/expensesDialog.tmpl.html";
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_expenses')}}";
                         break;
                     case "OvertimeHours":
-                        $scope.currentTemplateForm = "dialogTemplates/hoursDialog.tmpl.html";
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_overtime_hours')}}";
                         break;
                     case "Vacation":
-                        $scope.currentTemplateForm = "dialogTemplates/vacationDialog.tmpl.html";
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_vacation')}}";
                         break;
                     case "BusinessTrip":
-                        $scope.currentTemplateForm = "dialogTemplates/businessTripDialog.tmpl.html";
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_business_trip')}}";
                         break;
                     case "WorkAtHome":
-                        $scope.currentTemplateForm = "dialogTemplates/workHomeDialog.tmpl.html";
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_work_at_home')}}";
                         break;
                 }
                 
