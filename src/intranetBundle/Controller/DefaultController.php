@@ -1545,14 +1545,6 @@ class DefaultController extends Controller{
     }
 
     //TODELETE
-    public function usarDoctrineAction(){
-      $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']); #findAll
-      $params=array('user'=>$usuario, 'role'=>$_SESSION['rol']);
-
-      return $this->render('intranetBundle:Default:bd.html.twig', $params);
-    }
-
-    //TODELETE
       public function translationAction(){
         return $this->render( 'intranetBundle:Default:translate.html.twig');
       }

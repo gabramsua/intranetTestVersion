@@ -18,31 +18,23 @@
 
        $scope.getCurrentUser = function(){
                     
-                    $http({
-                        method: 'GET',
-                        url: window.location.pathname+'/../../api/user/'+userLogin,
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        
-                        $scope.user = response.data;
-                        console.log($scope.user);
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });
-                }
+            $http({
+                method: 'GET',
+                url: window.location.pathname+'/../../api/user/'+userLogin,
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                
+                $scope.user = response.data;
+                console.log($scope.user);
+            }, function error(response){
+                console.log("Error:" +response.statusText);
+            });
+        }
+
+        
     }    
-    
-    function handleClick(event){
-        alert("Nombre: "+this["myName"].value + 
-            "\nApellidos: "+this["mySurname"].value +
-            "\nIdioma: "+this["hiden2"].value +
-            "\nNotificaciones: "+ this["hiden1"].value +
-            "\nFoto: "+this["myPhoto"].value +
-            "\nEmail: "+this["myEmail"].value
-        );
-    }
 
     app.config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');

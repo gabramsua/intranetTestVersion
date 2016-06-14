@@ -36,19 +36,18 @@
               <li><a href='{{ path('intranet_news')}}'{% trans %}>News Feed {% endtrans %}-<i> BÜOs</i></a></li>
               <li><a href='{{ path('intranet_channels')}}'{% trans %}>Channels {% endtrans %}-<i> BÜOs</i></a></li>
       {% endif %}
-      {% if role=="buo"%}
+      {% if role!="buo"%}
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Form Management {% endtrans %}-<i> BÜOs</i><span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href='{{ path('intranet_incomingForms')}}'>{% trans %}Incoming Forms{% endtrans %}</a></li>
-              <li><a href="{{ path('intranet_oldForms')}}">{% trans %}Old Forms{% endtrans %}</a></li>
+              <li><a href='../../../Forms/'> FORMS AJS</a></li>
             </ul>
           </li>{% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="{{ path('intranet_testBD')}}"><b>{% trans %}TEST PAGE{% endtrans %}</b></a></li>
         <li><a href="{{ path('intranet_translation')}}"><b>{% trans %}Lang{% endtrans %}</b></a></li>
-        <li><a href="#"><b>{% trans %}Hello{% endtrans %} <?php echo $_SESSION["usuario"]; ?></b></a></li>
+        <li><a href="#"><b>{% trans %}Hello{% endtrans %}</b></a></li>
         <li><a href="{{ path('intranet_settings')}}"><span class="glyphicon glyphicon-user"></span> {% trans %}Settings{% endtrans %}</a></li>
         <li><a href="{{ path('intranet_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
       </ul>

@@ -82,12 +82,6 @@ intranet_incomingForms:
     requirements:
         _locale: en|fr|es
 
-intranet_oldForms:
-    path:     /{_locale}/oldForms
-    defaults: { _controller: intranetBundle:Default:oldForms, _locale:en }
-    requirements:
-        _locale: en|fr|es
-
 intranet_tasks:
     path:     /{_locale}/tasks
     defaults: { _controller: intranetBundle:Default:tasks, _locale:en }
@@ -228,12 +222,6 @@ intranet_editForm:
 intranet_translation:
     path:     /{_locale}/translation
     defaults: { _controller: intranetBundle:Default:translation, _locale:en }
-    requirements:
-        _locale: en|fr|es
-
-intranet_testBD:
-    path:     /{_locale}/testDoctrine
-    defaults: { _controller: intranetBundle:Default:usarDoctrine, _locale:en }
     requirements:
         _locale: en|fr|es
 
