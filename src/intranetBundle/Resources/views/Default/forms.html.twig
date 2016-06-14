@@ -614,14 +614,14 @@
             
             
         </script>
-    </head>
-    <body>
+
         <div ng-cloak="" class="tabsdemoStaticTabs" ng-app="MyApp" ng-controller="tabsController">
             <md-content class="md-padding">
                 <md-tabs id="tabs" class="md-accent" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
                     <md-tab id="tab0">
                         <md-tab-label>Historico</md-tab-label>
                         <md-tab-body>
+                            <div ng-include="'historic.html'"></div>
                             <div ng-include="'historic.html'"></div>
                         </md-tab-body>
                     </md-tab>

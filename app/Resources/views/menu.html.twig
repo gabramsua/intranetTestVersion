@@ -36,12 +36,8 @@
               <li><a href='{{ path('intranet_news')}}'{% trans %}>News Feed {% endtrans %}-<i> BÜOs</i></a></li>
               <li><a href='{{ path('intranet_channels')}}'{% trans %}>Channels {% endtrans %}-<i> BÜOs</i></a></li>
       {% endif %}
-<<<<<<< HEAD
           <li><a href='{{ path('intranet_forms')}}'{% trans %}>Forms {% endtrans %}-<i> BÜOs</i></a></li>
       {% if role=="buo"%}
-=======
-      {% if role!="buo"%}
->>>>>>> 3c98cc25ca4b15384ae076aaadf61dca9adfa7af
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Form Management {% endtrans %}-<i> BÜOs</i><span class="caret"></span></a>
             <ul class="dropdown-menu">
