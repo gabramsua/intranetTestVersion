@@ -33,7 +33,7 @@ intranetBundle\Entity\Entity\F_Trip:
             nullable: true
         type:
             type: string
-            length: 8
+            length: 15
         send:
             type: string
             length: '10'

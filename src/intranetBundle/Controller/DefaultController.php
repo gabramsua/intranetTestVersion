@@ -38,41 +38,51 @@ class DefaultController extends Controller{
 
     //Once found the user in the LDAP Directory, Store his credentials in variables
     $userLDAP=json_decode(json_encode($params), true);
-    $logged=$userLDAP['user'][0]['samaccountname'][0];
-    $rol=$userLDAP['user'][0]['memberof'][0];
-    $name=$userLDAP['user'][0]['givenname'][0];
-    $surname=$userLDAP['user'][0]['sn'][0];
-    $email=$userLDAP['user'][0]['mail'][0];
+    
+    if (sizeof($userLDAP['user'])>1) {
+      //var_dump($userLDAP);
+      
 
-    //Method which split the whole role returned from LDAP used to know if the user is admin or not
-    $m = new Model();
-    $r = $m->getSplitRole($rol);
+      $logged=$userLDAP['user'][0]['samaccountname'][0];
+      $rol=$userLDAP['user'][0]['memberof'][0];
+      $name=$userLDAP['user'][0]['givenname'][0];
+      $surname=$userLDAP['user'][0]['sn'][0];
+      $email=$userLDAP['user'][0]['mail'][0];
 
-    $_SESSION['name']=$name;         //NAME
-    $_SESSION['surname']=$surname;   //SURNAME
-    $_SESSION['userLDAP']=$logged;   //LOGIN
-    $_SESSION['rol']=$r[1];          //Admin, Buo, User
-    $_SESSION['email']=$email;
+      //Method which split the whole role returned from LDAP used to know if the user is admin or not
+      $m = new Model();
+      $r = $m->getSplitRole($rol);
 
-    //Search the user in the local database with the credentials introduced before
-    $user = $this->getDoctrine()
-                 ->getRepository('intranetBundle:Entity\Users')
-                 ->findOneByLogin($logged);
+      $_SESSION['name']=$name;         //NAME
+      $_SESSION['surname']=$surname;   //SURNAME
+      $_SESSION['userLDAP']=$logged;   //LOGIN
+      $_SESSION['rol']=$r[1];          //Admin, Buo, User
+      $_SESSION['email']=$email;
 
-    $params=array(
-      'login'=>$logged,
-      'name'=>$name,
-      'surname'=>$surname,
-      'rol'=>$rol[1]
-    );
+      //Search the user in the local database with the credentials introduced before
+      $user = $this->getDoctrine()
+                   ->getRepository('intranetBundle:Entity\Users')
+                   ->findOneByLogin($logged);
 
-    if (!$user) {
-      //If the user doesn't exists, redirect to another routing path to create one
-      return $this->redirect($this->generateUrl('intranet_nonExistingUserA'));
+      $params=array(
+        'login'=>$logged,
+        'name'=>$name,
+        'surname'=>$surname,
+        'rol'=>$rol[1]
+      );
+
+      if (!$user) {
+        //If the user doesn't exists, redirect to another routing path to create one
+        return $this->redirect($this->generateUrl('intranet_nonExistingUserA'));
+      }else{
+        //The user exists and store it to use on the template
+        $params=array('user'=>$user);
+        return $this->render('intranetBundle:Default:landinga.html.twig', $params);
+      }
     }else{
-      //The user exists and store it to use on the template
-      $params=array('user'=>$user);
-      return $this->render('intranetBundle:Default:landinga.html.twig', $params);
+
+      return $this->render('intranetBundle:Default:index.html.twig', ['flag'=>false]);//index_error
+      
     }
   }
 

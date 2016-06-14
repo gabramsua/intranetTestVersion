@@ -14,12 +14,16 @@
       // conexión al servidor LDAP
       $ldapconn = ldap_connect($ldapDomainName, 3268) or die("Could not connect to LDAP server.");
       if ($ldapconn) {
-          // realizando la autenticación
-          $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+          // realizando la autenticación && Suppress the warning with @ as already doing
+          $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
           // verificación del enlace
           if ($ldapbind) {
               //echo "<b>LDAP bind successful...</b><br><br>";
-          } else {echo "LDAP bind failed...";}
+          } else {
+            //echo "LDAP bind failed...<br>";
+            return new Response("A problem occurred during the submit of your credentials");
+            //return $this->redirect($this->generateUrl('intranet_logout'));
+          }
       }else{echo "no connection =(";}
 
       $baseDN ="dc=cuisine, dc=lan";
