@@ -9,8 +9,6 @@ intranetBundle\Entity\Entity\F_Hours:
             generator:
                 strategy: AUTO
     fields:
-        numHours:
-            type: integer
         reasons:
             type: string
             length: '255'

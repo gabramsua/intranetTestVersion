@@ -15,6 +15,9 @@ intranetBundle\Entity\Entity\F_Vacation:
         date2:
             type: string
             length: '10'
+        surrogate:
+            type: string
+            length: '30'
         status:
             type: integer
             nullable: true
