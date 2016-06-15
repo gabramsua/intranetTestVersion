@@ -814,7 +814,7 @@ class DefaultController extends Controller{
         case 'expenses':
               $formtype='Expenses';
               break;
-        case 'trip':
+        case 'BusinessTrip':
               $formtype='Trip';
               break;
         case 'Home':
@@ -1466,91 +1466,92 @@ class DefaultController extends Controller{
     public function sendEmailAction($login,$formtype,$id,$status){
 
       $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
+      if($usuario->getNotifications()==1){
+        require("class.phpmailer.php");
+        require("class.smtp.php");
 
-      require("class.phpmailer.php");
-      require("class.smtp.php");
+        $mail = new PHPMailer();
+        $mail->PluginDir = "includes/";
 
-      $mail = new PHPMailer();
-      $mail->PluginDir = "includes/";
+        //Con la propiedad Mailer le indicamos que vamos a usar un servidor smtp
+        $mail->Mailer = "smtp";
 
-      //Con la propiedad Mailer le indicamos que vamos a usar un servidor smtp
-      $mail->Mailer = "smtp";
+        //Asignamos a Host el nombre de nuestro servidor smtp
+        $mail->Host = "webcity10.code-labs.net";
 
-      //Asignamos a Host el nombre de nuestro servidor smtp
-      $mail->Host = "webcity10.code-labs.net";
+        //Le indicamos que el servidor smtp requiere autenticación
+        $mail->SMTPAuth = true;
+        $mail->Username = "relay@appcuisine.de";
+        $mail->Password = "U41jLVpuROD0";
 
-      //Le indicamos que el servidor smtp requiere autenticación
-      $mail->SMTPAuth = true;
-      $mail->Username = "relay@appcuisine.de";
-      $mail->Password = "U41jLVpuROD0";
+        $mail->From = "intranet@appcuisine.de";
+        $mail->FromName = "webCuisine";
 
-      $mail->From = "intranet@appcuisine.de";
-      $mail->FromName = "webCuisine";
+        $mail->Timeout=40;
 
-      $mail->Timeout=40;
+        //Indicamos cual es la dirección de destino del correo
+        $mail->AddAddress($usuario->getEmail());
+        /*echo $login;
+        var_dump($usuario);
+        echo ("<br>************<br>".$usuario->getEmail()."<br>************");
+        var_dump($usuario->getEmail());*/
 
-      //Indicamos cual es la dirección de destino del correo
-      $mail->AddAddress($usuario->getEmail());
-      echo $login;
-      var_dump($usuario);
-      echo ("<br>************<br>".$usuario->getEmail()."<br>************");
-      var_dump($usuario->getEmail());
+        //Asignamos asunto y cuerpo del mensaje
+        //El cuerpo del mensaje lo ponemos en formato html, haciendo
+        //que se vea en negrita
 
-      //Asignamos asunto y cuerpo del mensaje
-      //El cuerpo del mensaje lo ponemos en formato html, haciendo
-      //que se vea en negrita
+        switch ($usuario->getLang()) {
+          case 'es':
+              if ($status==1){
+                  $mail->Subject = "Su formulario ha sido aceptado.";
+              }else{
+                  $mail->Subject = "Su formulario ha sido rechazado.";
+              }
+                $mail->Body = "El formulario que mandaste del tipo ". $formtype.", por favor chequea que es correcto <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
+              break;
+          case 'en':
+              if ($status==1){
+                $mail->Subject = "Your form has been accepted.";
+              }else{
+                $mail->Subject = "Your form has been rejected.";
+              }
+              $mail->Body = "You send a ". $formtype." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
+              break;
+          case 'fr':
+              if ($status==1){
+                  $mail->Subject = "Sa forme a été acceptée.";
+              }else{
+                  $mail->Subject = "Sa forme a été rejetée.";
+              }
+                $mail->Body = "La forme que vous avez envoyé le gars ". $formtype.", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
+              break;
 
-      switch ($usuario->getLang()) {
-        case 'es':
-            if ($status==1){
-                $mail->Subject = "Su formulario ha sido aceptado.";
-            }else{
-                $mail->Subject = "Su formulario ha sido rechazado.";
-            }
-              $mail->Body = "El formulario que mandaste del tipo ". $formtype.", por favor chequea que es correcto <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
+          default:
+            # code...
             break;
-        case 'en':
-            if ($status==1){
-              $mail->Subject = "Your form has been accepted.";
-            }else{
-              $mail->Subject = "Your form has been rejected.";
-            }
-            $mail->Body = "You send a ". $formtype." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
-            break;
-        case 'fr':
-            if ($status==1){
-                $mail->Subject = "Sa forme a été acceptée.";
-            }else{
-                $mail->Subject = "Sa forme a été rejetée.";
-            }
-              $mail->Body = "La forme que vous avez envoyé le gars ". $formtype.", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
-            break;
+        }
 
-        default:
-          # code...
-          break;
+        //Definimos AltBody por si el destinatario del correo no admite email con formato html
+         $mail->AltBody = "Only text format.";
+
+        $exito = $mail->Send();
+        //Si el mensaje no ha podido ser enviado se realizaran 4 intentos más como mucho
+        //para intentar enviar el mensaje, cada intento se hará 5 segundos después
+        //del anterior, para ello se usa la funcion sleep
+        $intentos=1;
+        while ((!$exito) && ($intentos < 5)) {
+        sleep(5);
+            $exito = $mail->Send();
+            $intentos=$intentos+1;
+         }
+
+         if(!$exito){
+            echo "<br>A problem was found while sending the email notification.";
+            echo "<br/>".$mail->ErrorInfo;
+         }else{
+            echo "<br><b><u>Mensaje enviado correctamente</u></b>";
+         }
       }
-
-      //Definimos AltBody por si el destinatario del correo no admite email con formato html
-       $mail->AltBody = "Only text format.";
-
-      $exito = $mail->Send();
-      //Si el mensaje no ha podido ser enviado se realizaran 4 intentos más como mucho
-      //para intentar enviar el mensaje, cada intento se hará 5 segundos después
-      //del anterior, para ello se usa la funcion sleep
-      $intentos=1;
-      while ((!$exito) && ($intentos < 5)) {
-      sleep(5);
-          $exito = $mail->Send();
-          $intentos=$intentos+1;
-       }
-
-       if(!$exito){
-          echo "<br>A problem was found while sending the email notification.";
-          echo "<br/>".$mail->ErrorInfo;
-       }else{
-          echo "<br><b><u>Mensaje enviado correctamente</u></b>";
-       }
      return $this->render('intranetBundle:Default:landing.html.twig');
     }
 
