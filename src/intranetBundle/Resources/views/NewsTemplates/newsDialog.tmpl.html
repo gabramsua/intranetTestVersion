@@ -2,7 +2,7 @@
     <form name="newForm" id="newForm" method="POST" novalidate>
         <md-toolbar>
               <div class="md-toolbar-tools">
-                <h2>New: {[{New.title}]}</h2>
+                <h2>New: {[{new.title}]}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="closeDialog()">
                   <md-icon aria-label="Close dialog"></md-icon>
@@ -24,9 +24,20 @@
                     </md-input-container>
                 </md-list-item>
 
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Content{% endtrans %}</label>
+                        <input type='text' name="content" id="content" ng-model="new.content" required="required">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+
                  <md-list-item>
                         <div layout-wrap layout="row">
-                            <div flex="50" ng-repeat="channel in allChannel">
+                            <div flex="50" ng-repeat="channel in allChannels">
                                 <md-checkbox ng-checked="alreadyIn(channel)" ng-click="toggle(channel)" name="{[{channel.name}]}">
                                     {[{channel.name}]}
                                 </md-checkbox>

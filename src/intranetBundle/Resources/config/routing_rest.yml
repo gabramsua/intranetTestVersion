@@ -22,6 +22,18 @@ api_get_news:
     requirements:
         _method: POST|GET
 
+api_get_new:
+    pattern: /new/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getNew"}
+    requirements:
+        _method: DELETE|GET|PATCH|POST
+
+api_get_new_channel:
+    pattern: /new/{id}/channels
+    defaults: { _controller: "intranetBundle:ApiRest:getNewChannels"}
+    requirements:
+        _method: DELETE|GET|PATCH
+
 api_get_channel:
     pattern: /channel/{id}
     defaults: { _controller: "intranetBundle:ApiRest:getChannel"}

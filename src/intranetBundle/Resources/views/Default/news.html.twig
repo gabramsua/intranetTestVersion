@@ -8,9 +8,10 @@
             });
 
             app.controller('newsController', newsController);
+            app.controller('updateNewDialogController ', updateNewDialogController );
             
             
-            function newsController($scope, $http){
+            function newsController($scope, $mdDialog, $http){
 
                 $scope.getAllNews = function(){
                     $http({
@@ -43,11 +44,11 @@
                     });
                 }
 
-                $scope.readNewDialog = function(ev, new) {
+                $scope.readNewDialog = function(ev, n) {
                     $mdDialog.show({
                         templateUrl: "{{path('intranet_main_new_dialog')}}",
                         locals: {
-                            currentNew: new
+                            currentNew: n
                         }, 
                         parent: angular.element(document.body),
                         targetEvent: ev,
@@ -71,6 +72,82 @@
                 }
             }
 
+            function updateNewDialogController($scope, $mdDialog, $http, currentNew){
+                $scope.new = currentNew;
+                $scope.getInfo = function(){
+                    
+                    $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/new/'+$scope.new.id+'/channels',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        
+                        $scope.allData = {
+                            "newData": response.data.channelData,
+                            "channelsInNew": $.map(response.data.channelsInNew, function(elem){return elem.name}),
+                            "allChannels": response.data.allChannels
+                        };
+                        
+                        console.log("ALL CHANNELS: "+$scope.allData.allChannels);
+                        console.log("CHANNELS in new: "+$scope.allData.channelsInNew);
+
+                        $scope.allChannels = $scope.allData.allChannels;
+                        $scope.channelsInNew = $scope.allData.allChannels.filter(function(channel){
+                            
+                            if (($scope.allData.channelsInNew).indexOf(channel.name) > -1)
+                                return channel;
+                        });
+                       
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });
+                };
+                
+                $scope.closeDialog = function(){
+                    $mdDialog.hide();
+                 };
+
+                $scope.alreadyIn = function(channel){
+                    
+                    return ($scope.allData.channelsInNew).indexOf(channel.name) > -1;
+                };
+                
+                $scope.toggle = function(channel){
+                 
+                    var index = ($scope.allData.channelsInNew).indexOf(channel.name);
+                    
+                    if (index > -1)
+                        ($scope.allData.channelsInNew).splice(index, 1);
+                    else
+                        ($scope.allData.channelsInNew).push(channel.name);
+                };
+
+               $scope.update=function(id){
+                    //alert($scope.allData.channelsInNew);
+                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+                    $http({
+                            method: 'PATCH',
+                            url: window.location.pathname+'/../../api/new/'+id,
+                            data: {
+                                title: $scope.new.title,
+                                content: $scope.new.content,
+                                channelsInNew: $scope.allData.channelsInNew
+                            },
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        })
+                        .then(function success(response){
+                            console.log("Party time at update");
+                            $scope.closeDialog();
+                        }, function error(response){
+                            console.log("Error:" +response.statusText);
+                        }
+                    );   
+                 };   
+            }
 
             function createNewDialogController($scope, $mdDialog, $http){
 
@@ -163,13 +240,13 @@
         <md-divider></md-divider>
         <md-divider></md-divider>
 
-        <div ng-repeat="new in newsList">
-            <md-list-item ng-click="readNewDialog($event, new)">
+        <div ng-repeat="n in newsList">
+            <md-list-item ng-click="readNewDialog($event, n)">
     
-                <span style="width: 100%">{[{ new.title }]}</span>
-                <!--<span style="width: 50%">{[{ new.content }]}</span>-->
+                <span style="width: 100%">{[{ n.title }]}</span>
+                <!--<span style="width: 50%">{[{ n.content }]}</span>-->
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew(new.id)">
+                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew(n.id)">
                         Delete
                     </md-button> 
                 </div>

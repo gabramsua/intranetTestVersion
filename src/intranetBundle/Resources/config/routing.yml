@@ -258,6 +258,14 @@ intranet_main_userManagement_dialog:
     requirements:
         _locale: en|fr|es
 
+#NEWS TEMPLATES
+
+intranet_main_new_dialog:
+    path:     /{_locale}/mainNewsDialog
+    defaults: { _controller: intranetBundle:Default:mainNewsDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
 #CHANNEL TEMPLATES
 
 intranet_main_channel_dialog:
