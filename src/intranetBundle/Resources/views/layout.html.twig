@@ -41,21 +41,20 @@
 {% endblock %}
 
 {% block menu %}
-  {#{% include '::menu.html.twig' %}#}
-  {# {{ uROL('buo') }} #}
-  {{ render(controller('intranetBundle:Menu:menu')) }}
+    {# {{ uROL('buo') }} #}
+    <div style="height:100%;">
+    {{ render(controller('intranetBundle:Menu:menu')) }}
+    </div>
 {% endblock %}
 
-
 {% block body %}
-
-<div id="newsfeed" style="width: 200px; float: right; margin-top: 100px; margin-right: 100px;">
+    <div id="newsfeed" style="width: 200px; float: right; margin-top: 100px; margin-right: 100px;">
         {% block newsfeed %}
             {{ render(controller('intranetBundle:News:news')) }}
         {% endblock %}
     </div>
 
-    <div id="contenido">
+    <div id="contenido" style="position: relative;margin-top:-47%;margin-left:17%;width: 80%;">
         {% block contenido %}
         {% endblock %}
     </div>
