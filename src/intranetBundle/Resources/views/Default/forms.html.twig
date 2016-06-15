@@ -540,8 +540,9 @@
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){
                         
-                        $scope.formsList = response.data;
-                        $scope.filteredFormsList = groupAllFormsInOneArray(response.data);
+                        $scope.formsList = response.data.allForms;
+                        $scope.filteredFormsList = groupAllFormsInOneArray(response.data.allForms);
+                        $scope.daysOnOvertimeHoursForms = response.data.daysOnOvertimeHoursForms;
                     }, function error(response){
                         //manage error
                         console.log("ERROR: "+response.statusText);
@@ -637,10 +638,16 @@
                 
                 $scope.showFormDetails = function(ev, form) {
                     
+                    var daysOnOvertimeHoursForm = null
+                    
+                    if (form.type == "OvertimeHours")
+                        daysOnOvertimeHoursForm = $scope.daysOnOvertimeHoursForms[form.id];
+                    
                     $mdDialog.show({
                         templateUrl: "{{ path('intranet_forms_main_dialog')}}",
                         locals: {
-                            currentForm: form
+                            currentForm: form,
+                            daysOnOvertimeHoursForm: daysOnOvertimeHoursForm
                         }, 
                         parent: angular.element(document.body),
                         targetEvent: ev,
@@ -650,7 +657,7 @@
                 }
             }
             
-            function dialogController($scope, $mdDialog, currentForm){
+            function dialogController($scope, $mdDialog, currentForm, daysOnOvertimeHoursForm){
                 
                 $scope.form = currentForm;
                 
@@ -660,6 +667,7 @@
                         break;
                     case "OvertimeHours":
                         $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_overtime_hours')}}";
+                        $scope.daysList = daysOnOvertimeHoursForm;
                         break;
                     case "Vacation":
                         $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_vacation')}}";

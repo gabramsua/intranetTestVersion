@@ -4,18 +4,18 @@
         <input value="TICKED ID (pending field)" disabled="">
     </md-input-container>
 </md-list-item>
-<md-list-item ng-repeat="day in days">
+<md-list-item ng-repeat="day in daysList">
     <md-input-container>
         <label>Date</label>
-        <input value="day.THEDATE" disabled="">
+        <input value="{[{day.date1}]}" disabled="">
     </md-input-container>
     <md-input-container>
         <label>Hours</label>
-        <input value="day.THEHOURS" disabled="">
+        <input value="{[{day.hour}]}" disabled="">
     </md-input-container>
     <md-input-container>
         <label>Minutes</label>
-        <input value="day.THEMINUTES" disabled="">
+        <input value="{[{day.minutes}]}" disabled="">
     </md-input-container>
 </md-list-item>
 <md-list-item>

@@ -702,26 +702,17 @@ class ApiRestController extends Controller
     
     
    /**
-    * Receives a login and returns every forms of that user.
+    * Receives a login and returns every forms (and their contents) of that user.
     *
-    * @return string $allForms Contains all forms of the user in the database (and their data) serialized to JSON format
+    * @return string $allData Contains all forms of the user in the database (and their data) and a list of days instances for each "OvertimeHoursForm" serialized to JSON format.
+    * Its schema is:
+    * allData
+    *   {
+    *   "allForms": all the forms of the user
+    *   "daysOnOvertimeHoursForms": list of days contained in "OvertimeHours" forms.
+    *   }
     **/
     public function getUserFormsAction($login){
-
-        /*$em = $this->getDoctrine()->getEntityManager();
-        
-        $qb = $em->createQueryBuilder()
-                 ->select('fe')
-                 ->from('intranetBundle:Entity\F_Expenses', 'fe')
-                 //->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
-                 ->innerJoin('fe', 'intranetBundle:Entity\Users_F_Expenses', 'ufe', 'fe.id = ufe.idForm')
-                 ->where('ufe.login = :login')
-                 ->setParameter('login', $login)
-                 ->getQuery();
-        
-        
-        $formsOfTheUser = $qb->getArrayResult();*/
-        
         
         //GETTING IDS FORMS
         $em = $this->getDoctrine()->getEntityManager();
@@ -829,6 +820,41 @@ class ApiRestController extends Controller
         
         $vacationFormsList = $qb->getArrayResult();
         
+        
+        //filling OvertimeHours forms of moments (rows in table data, which means each day in the form)
+        
+        //getting day instances for the OvertimeHours forms retrieved
+        $qb = $em->createQueryBuilder()
+                 ->select('hd.idForm', 'hd.idData')
+                 //->distinct('hd.idData')
+                 ->from('intranetBundle:Entity\hours_data', 'hd')
+                 ->where('hd.idForm IN (:ids)')
+                 ->setParameter('ids', $idsOvertimeHoursFormLists)
+                 ->getQuery();
+        
+        $allDayInstancesNeededForOvertimeHoursForms = $qb->getArrayResult();
+        
+        $daysGroupedByIdForm = [];
+        
+        foreach($allDayInstancesNeededForOvertimeHoursForms as $day){
+            
+            $daysGroupedByIdForm[$day['idForm']][] = $day['idData'];
+        }
+        
+        $dayInstancesOrderedByIdForm = [];
+        
+        foreach ($daysGroupedByIdForm as $index => $idDataGroup){
+            $qb = $em->createQueryBuilder()
+                 ->select('d')
+                 //->distinct('hd.idData')
+                 ->from('intranetBundle:Entity\Data', 'd')
+                 ->where('d.id IN (:ids)')
+                 ->setParameter('ids', $idDataGroup)
+                 ->getQuery();
+            
+            $dayInstancesOrderedByIdForm[$index] = $qb->getArrayResult();
+        }
+        
         $allForms = [
             'expensesFormsList' => $expensesFormsList,
             'WorkAtHomeFormsList' => $WorkAtHomeFormsList,
@@ -837,10 +863,15 @@ class ApiRestController extends Controller
             'vacationFormsList' => $vacationFormsList
         ];
         
-        $serializer = SerializerBuilder::create()->build();
-        $serializer->serialize($allForms, 'json');
+        $allData = [
+            "allForms" => $allForms,
+            "daysOnOvertimeHoursForms" => $dayInstancesOrderedByIdForm
+        ];
         
-        return $allForms;
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($allData, 'json');
+        
+        return $allData;
     }
     
 }
