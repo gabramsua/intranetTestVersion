@@ -56,16 +56,6 @@
                 .hideDelay(10000)
             );
           };
-
-          $scope.remember = function() {//this.showSimpleToast
-            var pinTo = $scope.getToastPosition();
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Please remember entering name and surname')
-                .position(pinTo )
-                .hideDelay(10000)
-            );
-          };
       }
 </script>
 {% endif %}
@@ -82,8 +72,7 @@
 	                    Sign in
 	                </button>
 	                
-	                <button ng-click="remember()" class="md-raised">Need help? </md-button><span class="clearfix"></span><!--pull-right need-help-->
-	                <button ng-click="remember()">Show Simple</button>
+	                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span><!--pull-right need-help-->
                 </form>
 
     		<h6 class="text-center login-title">Copyright (c) 2016 Copyright Holder All Rights Reserved.</h6>
