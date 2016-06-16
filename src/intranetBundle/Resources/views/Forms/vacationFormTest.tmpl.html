@@ -1,0 +1,38 @@
+<div ng-form name="vacationForm" action="respuesta.php" method="POST" layout="row" layout-align="center start">
+    <table>
+        <tr ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController">
+        </tr>
+        <tr>
+            <td>
+                <label style="font-size: small; color: grey;">Fecha comienzo</label>
+            </td>
+            <td class="rightCellSeparator">
+                <label style="font-size: small; color: grey;">Fecha comienzo</label>
+            </td>
+        </tr>
+        <tr ng-controller="dateRangeController">
+            <td>
+                <md-datepicker ng-model="startDate" md-placeholder="From" md-min-date="today" class="dtNoSpaceAtLeft"></md-datepicker>
+            </td>
+            <td class="rightCellSeparator">
+                <md-datepicker ng-model="finishDate" md-placeholder="To" md-min-date="minFinishDate" class="dtNoSpaceAtLeft"></md-datepicker> <!--se le puede aplicar padding para separarlo del anterior, pero al aplicarse el responsive para dispositivos más pequeños queda feo ya que no se alinean.  -->
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <md-input-container class="md-block">
+                    <label>Surrogate*</label>
+                    <input type="text" name="surrogate" ng-model="surrogate" required>
+                    <div ng-messages="vacationForm.surrogate.$error">
+                        <div ng-message="required">You must specify a surrogate.</div>
+                    </div>
+                </md-input-container>
+            </td>
+        </tr>
+        <tr ng-controller="submitController">
+            <td>
+                <md-button class="md-raised md-primary" style="margin-top: 40px" ng-disabled="vacationForm.$invalid" ng-click="submitting(vacationForm, vacationForm)">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            </td>
+        </tr>
+    </table>
+</div>

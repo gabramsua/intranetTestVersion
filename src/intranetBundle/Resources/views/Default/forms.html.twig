@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
         <script src="moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/momentjs/2.13.0/moment.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
@@ -704,43 +705,50 @@
                     <md-tab id="tab1">
                         <md-tab-label>Vacation</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'vacationForm.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_vacation')}}'"></div>
+<!--                            <div ng-include="'vacationForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab1">
                         <md-tab-label>VacationTest</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'vacationFormTest.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_vacation_test')}}'"></div>
+<!--                            <div ng-include="'vacationFormTest.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab2">
                         <md-tab-label>Expenses</md-tab-label>
-                            <md-tab-body>
-                                <div ng-include="'expensesForm.html'"></div>
-                            </md-tab-body>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_expenses')}}'"></div>
+<!--                            <div ng-include="'expensesForm.html'"></div>-->
+                        </md-tab-body>
                     </md-tab>
                     <md-tab id="tab3">
                         <md-tab-label>business trip</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'businessTripForm.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_business_trip')}}'"></div>
+<!--                            <div ng-include="'businessTripForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
-                    <md-tab id="tab0">
+                    <md-tab id="tab7">
                         <md-tab-label>Overtime hoursCool</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'overtimeHoursForm2.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'"></div>
+<!--                            <div ng-include="'overtimeHoursForm2.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab4">
                         <md-tab-label>Overtime hours</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'overtimeHoursForm.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_overtime_hours')}}'"></div>
+<!--                            <div ng-include="'overtimeHoursForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab5">
                         <md-tab-label>Work at home</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'workAtHomeForm.html'"></div>
+                            <div ng-include="'{{ path('intranet_forms_work_at_home')}}'"></div>
+<!--                            <div ng-include="'workAtHomeForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                 </md-tabs>

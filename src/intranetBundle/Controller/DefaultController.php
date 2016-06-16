@@ -1616,7 +1616,47 @@ class DefaultController extends Controller{
         
         return $this->render('intranetBundle:Forms:historic.tmpl.html');
     }
-
+    
+    public function vacationAction(){
+        
+        return $this->render('intranetBundle:Forms:vacationForm.tmpl.html');
+    }
+    
+    public function vacationTestAction(){
+        
+        return $this->render('intranetBundle:Forms:vacationFormTest.tmpl.html');
+    }
+    
+    public function expensesAction(){
+        
+        return $this->render('intranetBundle:Forms:expensesForm.tmpl.html');
+    }
+    
+    public function businessTripAction(){
+        
+        return $this->render('intranetBundle:Forms:businessTripForm.tmpl.html');
+    }
+    
+    public function overtimeHours2Action(){
+        
+        return $this->render('intranetBundle:Forms:overtimeHoursForm2.tmpl.html');
+    }
+    
+    public function overtimeHoursAction(){
+        
+        return $this->render('intranetBundle:Forms:overtimeHoursForm.tmpl.html');
+    }
+    
+    public function workAtHomeAction(){
+        
+        return $this->render('intranetBundle:Forms:workAtHomeForm.tmpl.html');
+    }
+    
+    public function formHeaderDataAction(){
+        
+        return $this->render('intranetBundle:Forms:formHeaderDataTemplate.tmpl.html');
+    }
+    
     
     //FORMS DIALOGS
     
@@ -1631,7 +1671,7 @@ class DefaultController extends Controller{
     }
     
     public function expensesDialogAction(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:expensesDialog.tmpl.html');
     }
     
