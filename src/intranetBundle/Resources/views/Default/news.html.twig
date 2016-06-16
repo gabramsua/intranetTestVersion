@@ -15,17 +15,39 @@
 
                 $scope.getAllNews = function(){
                     $http({
-                        method: 'GET',
-                        url: window.location.pathname+'/../../api/news/Canal1',
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        $scope.newsList = response.data;
-                        console.log($scope.newsList);
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });
+                            method: 'GET',
+                            url: window.location.pathname+'/../../api/channels',
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        })
+                        .then(function success(response){
+                            $scope.items = response.data;
+                            //$scope.items.unshift('ALL');
+                        }, function error(response){
+                            console.log("Error:" +response.statusText);
+                        });
+
+                    $scope.selectedItem;
+                    $scope.selected = function($ch){
+                        if($ch==null){
+                            var urlapi=window.location.pathname+'/../../api/news';
+
+                        }else{
+                            var urlapi=window.location.pathname+'/../../api/news/'+$ch;
+                         }  
+                        $http({
+                            method: 'GET',
+                            url: urlapi,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        })
+                        .then(function success(response){
+                            $scope.newsList = response.data;
+                            console.log($scope.newsList);
+                        }, function error(response){
+                            console.log("Error:" +response.statusText);
+                        });
+                    }
                 }
 
 
@@ -70,6 +92,24 @@
                         onRemoving: $scope.getAllNews
                     });
                 }
+
+                /*//Cargar aquí los nombres de canales
+                $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/channels',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        $scope.items = response.data;
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });
+
+                $scope.selectedItem;
+                $scope.selected = function($v){
+                  alert($v);
+                }*/
             }
 
             function updateNewDialogController($scope, $mdDialog, $http, currentNew){
@@ -226,16 +266,27 @@
 
 
 
-
+    {% set flag=0 %}
     <div ng-cloak ng-app="MyApp" ng-controller="newsController" layout-align="center start">
     
     <md-list ng-init="getAllNews()">
     <md-button class="md-raised md-primary" ng-click="showCreateNewDialog($event)">Create New</md-button>
+    <md-input-container>
+        <label>Channels</label>
+        <md-select ng-model="selectedItem">
+          <md-optgroup label="Channels">
+            <md-option ng-value="item" ng-click="selected(item.name)">ALL</md-option>
+            <md-option ng-value="item" ng-repeat="item in items" ng-click="selected(item.name)">
+                {[{item.name}]}
+            </md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
         <md-divider></md-divider>
         <md-divider></md-divider>
 
         <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 100%">Title</span>
+            <span style="width: 30%">Title</span>
             <span style="width: 50%">Content</span>
         </md-list-item>
 
@@ -245,8 +296,8 @@
         <div ng-repeat="n in newsList">
             <md-list-item ng-click="readNewDialog($event, n)">
     
-                <span style="width: 100%">{[{ n.title }]}</span>
-                <!--<span style="width: 50%">{[{ n.content }]}</span>-->
+                <span style="width: 30%">{[{ n.title }]}</span>
+                <span style="width: 50%">{[{ n.content }]}</span>
                 <div>
                     <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew(n.id)">
                         Delete

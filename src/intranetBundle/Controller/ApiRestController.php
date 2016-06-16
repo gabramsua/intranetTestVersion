@@ -498,6 +498,15 @@ class ApiRestController extends Controller
         return $newsList;
     }
 
+    public function getNewsallAction(){
+        $allNews = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findAll();
+
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($allNews, 'json');
+
+        return $allNews;
+    }
+
     /**
     * Receive a channel name and returns the channel data as JSON
     *
