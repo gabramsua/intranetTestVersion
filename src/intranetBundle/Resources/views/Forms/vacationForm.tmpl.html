@@ -1,11 +1,11 @@
-<div ng-form name="vacationForm" action="respuesta.php" method="POST" layout="row" layout-align="center start">
-    <md-list layout="column" ng-cloak="" ng-controller="dateRangeController">
+<div ng-form name="vacationForm" action="respuesta.php" method="POST" layout="row" layout-align="center start" ng-controller="vacationController">
+    <md-list layout="column" ng-cloak="">
         <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
         <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0">
             <label style="font-size: small;">Fecha comienzo</label>
             <label style="font-size: small; margin-left: 100px; color:lightgrey;">Fecha comienzo</label>
         </md-list-item>
-        <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0">
+        <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0" ng-controller="dateRangeController">
             <md-datepicker ng-model="startDate" md-placeholder="From" md-min-date="today" class="dtNoSpaceAtLeft"></md-datepicker>
             <md-datepicker ng-model="finishDate" md-placeholder="To" md-min-date="minFinishDate"></md-datepicker> <!--se le puede aplicar padding para separarlo del anterior, pero al aplicarse el responsive para dispositivos más pequeños queda feo ya que no se alinean.  -->
         </md-list-item>
@@ -18,8 +18,9 @@
                 </div>
             </md-input-container>
         </md-list-item>
-        <md-list-item ng-controller="submitController">
-            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-disabled="vacationForm.$invalid" ng-click="submitting(vacationForm, vacationForm)">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+        <md-list-item>
+            <!--<md-button class="md-raised md-primary" style="margin-top: 40px" ng-disabled="vacationForm.$invalid" ng-click="submitting(vacationForm, vacationForm)">Send</md-button>si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()">Send</md-button>
         </md-list-item>
     </md-list>
 </div>

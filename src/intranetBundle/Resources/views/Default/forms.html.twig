@@ -22,13 +22,13 @@
             app.controller('tabsController', tabsController);
             app.controller('formHeaderController', formHeaderController);
             app.controller('dateRangeController', dateRangeController);
-            app.controller('vacationController', dateRangeController);
+            app.controller('vacationController', vacationController);
             app.controller('expensesController', expensesController);
             app.controller('overtimeHoursController', overtimeHoursController);
             app.controller('overtimeHoursController2', overtimeHoursController2);
             app.controller('workAtHomeController', workAtHomeController);
-            app.controller('submitController', submitController);
             app.controller('historicController', historicController);
+            app.factory('submitForm', submitForm);
             app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
@@ -136,6 +136,34 @@
                 };
             });
             
+            function submitForm($window, $http){
+                var root = {};
+                
+                root.submitThisForm = function(form, url, dataToUpload, scope){
+                    
+                    form.$setSubmitted();
+                    
+                    if (form.$valid){
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/'+url,
+                            data: dataToUpload,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+                            alert("submitted");
+                        }, function error(response){
+                            //manage error
+                            console.log("ERROR: "+response.statusText);
+                        });
+                    }
+                    else
+                        $window.alert("NOvalido");
+                }
+                
+                return root;
+            }
+            
             function tabsController($scope){
                 $scope.returnToHistory = function() {
                     $scope.selectedIndex = 0; 
@@ -144,21 +172,27 @@
             
             function formHeaderController($scope, $filter){
                 $scope.auxDate = new Date();
-                $scope.name = "Rigoberto, un tío despierto";
+                $scope.name = ("{{name | json_encode()}}").replace(/&quot;/g, "")+ " " +
+                    ("{{surname | json_encode()}}").replace(/&quot;/g, "");;
             }
             
-            function dateRangeController ( $scope, $filter ) {
+            
+            
+            function vacationController($scope, $http, submitForm){
                 
+                var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                $scope.surrogate = "";
+                
+                //DATES FUNCTIONALITY
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var. TODO: HAY QUE RESTAR UN DÍA a esta fecha para que permita seleccionar el día actual.
                 $scope.startDate = new Date();
                 $scope.finishDate = new Date();
                 $scope.minFinishDate = $scope.startDate;
-                
                 //$WATCH ---> https://quizzpot.com/courses/introduccion-a-angular-js/articles/escuchando-cambios-en-el-scope-usando-el-watch
                 //https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=como+usar+%24watch
                 $scope.$watch("startDate", function(data){
                     
-                    if ($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
+                    if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
                         $scope.finishDate = $scope.startDate;
                     
                     $scope.minFinishDate = $scope.startDate;    
@@ -170,9 +204,17 @@
                     console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
-            }
-            
-            function vacationController($scope, $http){
+                //DATES FUNCTIONALITY
+                
+                $scope.forming = function(){
+                    var data = {startdate: $scope.startDate.getDate()+'/'+($scope.startDate.getMonth()+1)+'/'+$scope.startDate.getFullYear(),
+                                finishdate: $scope.finishDate.getDate()+'/'+($scope.finishDate.getMonth()+1)+'/'+$scope.finishDate.getFullYear(),
+                                surrogate: $scope.surrogate
+                                };
+                    
+                    $scope.factorySubmit = submitForm;
+                    $scope.factorySubmit.submitThisForm($scope.vacationForm, 'vacationform/'+userLogin, data);
+                };
                 
                 $scope.sub = function(){
                     $http({
@@ -529,13 +571,14 @@
                 //2 -> Rejected
                 //3 -> All
                 
+                //var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.fillList = function(){
                     
                     $http({
                         method: 'GET',
-                        url: 'window.location.pathname/../../api/user/'+userLogin+'/forms',
+                        url: window.location.pathname+'/../../api/user/'+userLogin+'/forms',
                         //url: 'window.location.pathname/../../api/user/gram1i/forms',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
@@ -652,7 +695,7 @@
                         }, 
                         parent: angular.element(document.body),
                         targetEvent: ev,
-                        clickOutsideToClose:true,
+                        clickOutsideToClose: true,
                         controller: dialogController
                     });
                 }
@@ -686,8 +729,30 @@
                 }
             }
             
-            function submitController($scope){
+            //TODO:DEPRECATED (ASK IF IT'S POSSIBLE TO CREATE A FACTORY WITH THIS GIVEN THAT IT'S A FUNCTIONALITY THAT EVERY FORMS SHARE)
+            function dateRangeController ( $scope, $filter ) {
                 
+                $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var. TODO: HAY QUE RESTAR UN DÍA a esta fecha para que permita seleccionar el día actual.
+                $scope.startDate = new Date();
+                $scope.finishDate = new Date();
+                $scope.minFinishDate = $scope.startDate;
+                
+                //$WATCH ---> https://quizzpot.com/courses/introduccion-a-angular-js/articles/escuchando-cambios-en-el-scope-usando-el-watch
+                //https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=como+usar+%24watch
+                $scope.$watch("startDate", function(data){
+                    
+                    if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
+                        $scope.finishDate = $scope.startDate;
+                    
+                    $scope.minFinishDate = $scope.startDate;    
+                    
+                });
+                
+                $scope.$watch("minFinishDate", function(data){
+                    
+                    console.log(data);
+                    $scope.minFinishDate = $scope.startDate;
+                });
             }
             
             
