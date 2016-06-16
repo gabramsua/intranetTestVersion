@@ -1,0 +1,59 @@
+<md-dialog ng-app="MyApp" ng-cloak flex="40" ng-init="getInfo()">
+    <form name="newForm" id="newForm" method="POST" novalidate>
+        <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>New: {[{new.title}]}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeDialog()">
+                  <md-icon aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+        </md-toolbar>
+    <md-dialog-content ng-init="getCurrentNew()"  class="md-dialog-content">
+        <md-list layout="column" ng-cloak="">
+        <div layout="row" layout-sm="column">
+            <div flex>
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Title{% endtrans %}</label>
+                        <input type='text' name="title" id="title" ng-model="new.title" required="required">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+
+                <md-list-item layout-lg="row" layout-xl="row">
+                    <md-input-container class="md-block">
+                        <label>{% trans %}Content{% endtrans %}</label>
+                        <input type='text' name="content" id="content" ng-model="new.content" required="required">
+
+                        <div ng-messages="expensesForm.seller.$error">
+                            <div ng-message="required">You have to specify a seller.</div>
+                        </div>
+                    </md-input-container>
+                </md-list-item>
+
+                 <md-list-item>
+                        <div layout-wrap layout="row">
+                            <div flex="50" ng-repeat="channel in allChannels">
+                                <md-checkbox ng-checked="alreadyIn(channel)" ng-click="toggle(channel)" name="{[{channel.name}]}">
+                                    {[{channel.name}]}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </md-list-item>
+            </div>
+            
+
+        <md-list-item>
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-click="update(new.id)">
+                {% trans %}Modify{% endtrans %}
+            </md-button>
+        </md-list-item>
+        </div>
+        </md-list>
+        </md-dialog-content>
+    </form>
+</md-dialog>

@@ -13,7 +13,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use intranetBundle\Entity\Entity\userstasks;
 use intranetBundle\Entity\Entity\userschannel;
+use intranetBundle\Entity\Entity\channelnew_feed;
 use intranetBundle\Entity\Entity\Channel;
+use intranetBundle\Entity\Entity\NewFeed;
 
 class ApiRestController extends Controller
 {
@@ -494,7 +496,177 @@ class ApiRestController extends Controller
         return $newsList;
     }
 
+    /**
+    * Receive a channel name and returns the channel data as JSON
+    *
+    * @param string $name of the channel being search
+    * @throws \HttpException
+    * @return string $channel The channel data serialized to JSON format
+    **/
+    public function getNewAction($id){
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 
+            $new = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findOneById($id);
+
+            if(is_null($new))
+                throw new HttpException(404, "The new $id could not be found.");
+
+            if(!is_object($new)){
+                throw $this->createNotFoundException();
+            }
+
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($new, 'json');
+
+            return $new;
+            
+        }else if($_SERVER['REQUEST_METHOD'] == 'PATCH'){
+        
+            $post = file_get_contents("php://input");
+            $newIncoming = json_decode($post, true);
+            
+            $em = $this->getDoctrine()->getEntityManager();
+            $new = $em->getRepository('intranetBundle:Entity\NewFeed')->findOneById($id);
+            $oldtitle=$new->getTitle();
+            $oldcontent=$new->getContent();
+            $new->setTitle($newIncoming['title']);
+            $new->setContent($newIncoming['content']);
+            $em->flush();
+            
+            /*INTERMEDIATE TABLE 1*/
+            //For each channel, I see if its checkbox is sent. In case of YES, insert the row with all the channel marked.
+            $allChannels = $this->getDoctrine()
+                             ->getRepository('intranetBundle:Entity\Channel')
+                             ->findAll();
+            
+            $em = $this->getDoctrine();
+            
+            foreach ($allChannels as $index => $channel) {
+                
+                if(in_array($channel->getName(), $newIncoming['channelsInNew'])){
+                    $channelAux = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['idNew' => $id, 'name' => $channel->getName()]);
+                    
+                    if(sizeof($channelAux)==0){
+                        $intermediate = new channelnew_feed();
+                        $intermediate->setName($channel->getName());
+                        $intermediate->setIdNew($id);
+                        $em = $this->getDoctrine()->getManager(); 
+                        $em->persist($intermediate);
+                        $em->flush();
+                    }
+               }else {
+                   
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $channelAux = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['idNew' => $id, 'name' => $channel->getName()]);
+                   
+                    foreach ($channelAux as $index => $ob) {
+                        $em->remove($ob);
+                        $em->flush();
+                    }
+                }
+            }
+
+        }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+            
+            $post = file_get_contents("php://input");
+            $newIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getManager();
+            $product = $em->getRepository('intranetBundle:Entity\NewFeed')->findOneById($id);
+            $em->remove($product);
+            $em->flush();
+
+            $intermediate = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findById($id);
+            //For each element in the intermediate table, it is necessary to delete all of them
+            foreach ($intermediate as $index => $object) {
+                $em->remove($object);
+                $em->flush();
+            }
+
+        }else if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            
+            $post = file_get_contents("php://input");
+            $newIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getManager();
+            $new = new NewFeed();
+            $new->setTitle($newIncoming['title']);
+            $new->setContent($newIncoming['content']);
+            $new->setDate(date("Y/m/d"));
+            $new->setTime(date("H:i"));
+            $em->persist($new);
+            $em->flush();
+
+            $lastNew = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findBy([], ['id' => 'DESC'], 1);
+
+            //For each channel, I see if its checkbox is sent. In case of YES, insert the row with all the channel marked.
+            $allChannels = $this->getDoctrine()
+                             ->getRepository('intranetBundle:Entity\Channel')
+                             ->findAll();
+                foreach ($allChannels as $index => $object) {
+                    foreach ($newIncoming['channelsInNew'] as $key => $value) {
+                        if($object->getName()==$value){   //isset($_REQUEST[$object->getLogin()])
+                           $usta = new channelnew_feed();
+                           $usta->setName($object->getName());
+                           $usta->setIdNew($lastNew[0]->getId());
+                           $em = $this->getDoctrine()->getManager();
+                           $em->persist($usta);
+                           $em->flush();
+                         }
+                    }
+                }
+          
+            
+        }return $id;
+    }
+
+    /**
+    * Receive a channel name and returns the channel data, the users assigned to it, and all users in the database as JSON
+    * It's used when some BÜO clicks over a Channel to see its details and is able to modify the list of users assigned to the Channel.
+    *
+    * @param int $id Channel of the task being seen in detail.
+    * @throws \HttpException
+    * @return string $data It's a JSON array with the following schema:
+    *   {
+    *       "channelData": response.data.channelData,
+    *       "channelUsers": $.map(response.data.usersInChannel, function(elem){return elem.login}),
+    *       "allUsers": response.data.allUsers
+    *   }
+    **/
+    public function getNewChannelsAction($id){
+
+        $new = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findById($id);
+
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $qb = $em->createQueryBuilder()
+                 ->select('nc.name')
+                 ->from('intranetBundle:Entity\channelnew_feed', 'nc')
+                 ->where('nc.idNew = :id')
+                 ->setParameter('id', $id)
+                 ->getQuery();
+        
+        $channelsInNew = $qb->getArrayResult();
+        
+        $qb = $em->createQueryBuilder()
+                 ->select('c.name')
+                 ->from('intranetBundle:Entity\Channel', 'c')
+                 ->getQuery();
+        
+        $channelsList = $qb->getArrayResult();
+        
+        $data = [
+            "newData" => $new,
+            "allChannels" => $channelsList,
+            "channelsInNew" => $channelsInNew
+        ];
+        
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($data, 'json');
+        
+        return $data;
+    }
     
     /**
     * Returns all the channels stored in the database and their data

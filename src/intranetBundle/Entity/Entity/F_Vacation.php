@@ -25,6 +25,11 @@ class F_Vacation
     private $date2;
 
     /**
+     * @var string
+     */
+    private $surrogate;
+
+    /**
      * @var int
      */
     private $status;
@@ -99,6 +104,29 @@ class F_Vacation
     public function getDate2()
     {
         return $this->date2;
+    }
+
+    /**
+     * Set surrogate
+     *
+     * @param string $surrogate
+     * @return F_Vacation
+     */
+    public function setSurrogate($surrogate)
+    {
+        $this->surrogate = $surrogate;
+
+        return $this;
+    }
+
+    /**
+     * Get surrogate
+     *
+     * @return string
+     */
+    public function getSurrogate()
+    {
+        return $this->surrogate;
     }
 
     /**

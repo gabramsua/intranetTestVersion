@@ -17,12 +17,6 @@ class F_Hours
     /**
      * @var int
      */
-    private $numHours;
-
-
-    /**
-     * @var int
-     */
     private $status;
 
     /**
@@ -62,29 +56,6 @@ class F_Hours
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set numHours
-     *
-     * @param integer $numHours
-     * @return F_Hours
-     */
-    public function setNumHours($numHours)
-    {
-        $this->numHours = $numHours;
-
-        return $this;
-    }
-
-    /**
-     * Get numHours
-     *
-     * @return integer
-     */
-    public function getNumHours()
-    {
-        return $this->numHours;
     }
 
     /**
