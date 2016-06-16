@@ -47,7 +47,7 @@ intranet_formVacations:
         _locale: en|fr|es
 
 intranet_formExpenses:
-    path:     /{_locale}/formExpenses
+    path:     /{_locale}/formExpensesOld
     defaults: { _controller: intranetBundle:Default:formExpenses, _locale:en }
     requirements:
         _locale: en|fr|es
@@ -280,10 +280,60 @@ intranet_forms_historic:
     defaults: { _controller: intranetBundle:Default:formsHistoric, _locale:en }
     requirements:
         _locale: en|fr|es
- 
+       
+#TODO: this route is provisional
+intranet_forms_vacation:
+    path:     /{_locale}/formVacation
+    defaults: { _controller: intranetBundle:Default:vacation, _locale:en }
+    requirements:
+        _locale: en|fr|es
+                
+#TODO: this route is provisional
+intranet_forms_vacation_test:
+    path:     /{_locale}/formVacationTest
+    defaults: { _controller: intranetBundle:Default:vacationTest, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
+intranet_forms_expenses:
+    path:     /{_locale}/formExpenses
+    defaults: { _controller: intranetBundle:Default:expenses, _locale:en }
+    requirements:
+        _locale: en|fr|es
+         
+intranet_forms_business_trip:
+    path:     /{_locale}/formBusinessTrip
+    defaults: { _controller: intranetBundle:Default:businessTrip, _locale:en }
+    requirements:
+        _locale: en|fr|es
+                
+intranet_forms_overtime_hours2:
+    path:     /{_locale}/formOvertimeHours2
+    defaults: { _controller: intranetBundle:Default:overtimeHours2, _locale:en }
+    requirements:
+        _locale: en|fr|es
+                
+#TODO: this route is provisional  
+intranet_forms_overtime_hours:
+    path:     /{_locale}/formOvertimeHours
+    defaults: { _controller: intranetBundle:Default:overtimeHours, _locale:en }
+    requirements:
+        _locale: en|fr|es
+                      
+intranet_forms_work_at_home:
+    path:     /{_locale}/formWorkAtHome
+    defaults: { _controller: intranetBundle:Default:workAtHome, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
+intranet_forms_header_data:
+    path:     /{_locale}/formHeaderData
+    defaults: { _controller: intranetBundle:Default:formHeaderData, _locale:en }
+    requirements:
+        _locale: en|fr|es
+        
  
 #FORMS DIALOGS TEMPLATES
-
 
 intranet_forms_main_dialog:
     path:     /{_locale}/mainDialog

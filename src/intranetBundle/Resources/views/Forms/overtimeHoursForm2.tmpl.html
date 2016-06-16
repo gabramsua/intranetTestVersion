@@ -1,0 +1,69 @@
+<div name="overtimeHoursForm" id="overtimeHoursForm" ng-form layout="row" layout-align="center start" novalidate>
+    <md-list layout="column" ng-cloak="" ng-controller="overtimeHoursController2">
+        <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController">
+        </md-list-item>
+        <md-list-item style="padding-left: 16px">
+            <md-input-container class="md-block">
+                <label>JIRA ticket ID*</label>
+                <input type="text" name="jiraTicketdID" ng-model="jiraTicketdID" required>
+                <div ng-messages="overtimeHoursForm.jiraTicketdID.$error">
+                    <div ng-message="required">You must specify a JIRA ticket ID.</div>
+                </div>
+            </md-input-container>
+        </md-list-item>
+        <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0; padding-bottom: 15px">
+            <md-datepicker class="dtNoSpaceAtLeft" ng-model="dateSelected" md-min-date="today" ng-change="addDateField2()" md-placeholder="Before to" style="padding-top: 1px;" name="OTdate" md-date-filter="alreadySelectedDatesDates" ng-disabled="timeFlag"></md-datepicker>
+            <md-input-container style="margin-left: 30px">
+                <label>Hours*</label> <!--{[{day.minutes}]}-->
+                <md-select ng-model="hoursSelected" ng-change="timeValidation(hoursSelected, minutesSelected)" name="hours" zero-time-directive the-other-time-value="overtimeList[$index].minutes"><!--overtimeList[$index].minutes-->
+                    <md-option ng-repeat="hour in time.hours" value="{[{hour}]}">
+                        {[{hour}]}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container style="margin-left: 30px;">
+                <label>Minutes*</label><!--{[{day.hours}]}-->
+                <md-select ng-model="minutesSelected" ng-change="timeValidation(hoursSelected, minutesSelected)" name="minutes"><!--overtimeList[$index].hours-->
+                    <md-option ng-repeat="minute in time.minutes" value="{[{minute}]}">
+                        {[{minute}]}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <span ng-show="timeFlag" style="color: rgb(221,44,0); font-size: 12px; margin-left: 10px">Both values cannot be zero</span>
+        </md-list-item>
+        <div ng-repeat="day in overtimeList">
+            <md-list-item style="padding-left: 16px;">
+                <md-input-container>
+                    <label>Day {[{$index+1}]}</label>
+                    <input type="date" ng-model="day.date" disabled="">
+                </md-input-container>
+                <md-input-container style="width: 85px;">
+                    <label>Hours</label>
+                    <label>Hours</label>
+                    <input type="text" ng-model="day.hours" disabled="">
+                </md-input-container>
+                <md-input-container style="width: 98px;">
+                    <label>Minutes</label>
+                    <input type="text" ng-model="day.minutes" disabled="">
+                </md-input-container>
+                <md-button class="md-icon-button" ng-click="removeElement($index)">
+                    <md-icon md-svg-src="icons/ic_delete_black_24px.svg" aria-label="android "></md-icon>
+                </md-button>
+            </md-list-item>
+        </div>
+        <md-list-item layout-lg="row" layout-xl="row">
+            <md-input-container class="md-block" style="width: 100%;">
+                <label>Reasons*</label>
+                <textarea ng-model="reasons" name="overtimeHoursReasons" md-maxlength="250" rows="3" style="overflow-y: scroll;" md-select-on-focus required></textarea>
+                <div ng-messages="overtimeHoursForm.overtimeHoursReasons.$error">
+                    <div ng-message="required">You have to specify a reason to justify the trip</div>
+                </div>
+            </md-input-container>
+        </md-list-item>
+        <md-list-item ng-controller="submitController">
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="submitting(vacationForm, vacationForm)">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="showData()">Show data</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-disabled="overtimeHoursForm.$invalid">Valid</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+        </md-list-item>
+    </md-list>
+</div>
