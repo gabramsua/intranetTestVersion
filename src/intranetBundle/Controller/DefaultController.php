@@ -1594,6 +1594,12 @@ class DefaultController extends Controller{
        'intranetBundle:NewsTemplates:newsDialog.tmpl.html'
       );
   }  
+   
+  public function createNewDialogAction(){
+    return $this->render(
+       'intranetBundle:NewsTemplates:createNewDialog.tmpl.html'
+      );
+  }
     
     //FORMS
     public function formsAction(){

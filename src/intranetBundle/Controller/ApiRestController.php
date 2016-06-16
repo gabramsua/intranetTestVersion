@@ -15,6 +15,7 @@ use intranetBundle\Entity\Entity\userstasks;
 use intranetBundle\Entity\Entity\userschannel;
 use intranetBundle\Entity\Entity\channelnew_feed;
 use intranetBundle\Entity\Entity\Channel;
+use intranetBundle\Entity\Entity\NewFeed;
 
 class ApiRestController extends Controller
 {
@@ -592,8 +593,12 @@ class ApiRestController extends Controller
             $new = new NewFeed();
             $new->setTitle($newIncoming['title']);
             $new->setContent($newIncoming['content']);
+            $new->setDate(date("Y/m/d"));
+            $new->setTime(date("H:i"));
             $em->persist($new);
             $em->flush();
+
+            $lastNew = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findBy([], ['id' => 'DESC'], 1);
 
             //For each channel, I see if its checkbox is sent. In case of YES, insert the row with all the channel marked.
             $allChannels = $this->getDoctrine()
@@ -604,7 +609,7 @@ class ApiRestController extends Controller
                         if($object->getName()==$value){   //isset($_REQUEST[$object->getLogin()])
                            $usta = new channelnew_feed();
                            $usta->setName($object->getName());
-                           $usta->setIdNew($id);
+                           $usta->setIdNew($lastNew[0]->getId());
                            $em = $this->getDoctrine()->getManager();
                            $em->persist($usta);
                            $em->flush();

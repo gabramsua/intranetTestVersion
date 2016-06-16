@@ -62,7 +62,7 @@
                 $scope.showCreateNewDialog = function(ev) {
                     
                     $mdDialog.show({
-                        templateUrl: "{{path('intranet_main_create_channel_dialog')}}",
+                        templateUrl: "{{path('intranet_main_create_new_dialog')}}",
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -192,28 +192,30 @@
 
                 };  
 
-/*                $scope.create=function(){
-                    
+                $scope.create=function(){
+
                     $notID=-1;
                     //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
                     $http({
                         method: 'POST',
                         url: window.location.pathname+'/../../api/new/'+$notID,
                         data: {
-                            name: $scope.channel.name,
-                            usersInChannel: $listChecked
+                            title: $scope.new.title,
+                            content: $scope.new.content,
+                            //channelsInNew: $scope.allData.channelsInNew
+                            channelsInNew: $listChecked
                         },
                         contentType: 'application/json',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        console.log("Party time");
+                        console.log("Party time at creating");
                         $scope.closeDialog();
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });   
-                };   */  
+                };    
             }
 
 </script>

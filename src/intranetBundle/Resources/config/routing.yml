@@ -266,6 +266,12 @@ intranet_main_new_dialog:
     requirements:
         _locale: en|fr|es
 
+intranet_main_create_new_dialog:
+    path:     /{_locale}/createNewDialog
+    defaults: { _controller: intranetBundle:Default:createNewDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es
+
 #CHANNEL TEMPLATES
 
 intranet_main_channel_dialog:
