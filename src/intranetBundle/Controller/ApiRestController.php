@@ -17,7 +17,17 @@ use intranetBundle\Entity\Entity\channelnew_feed;
 use intranetBundle\Entity\Entity\Channel;
 use intranetBundle\Entity\Entity\NewFeed;
 use intranetBundle\Entity\Entity\F_Vacation;
+use intranetBundle\Entity\Entity\F_Expenses;
+use intranetBundle\Entity\Entity\F_Home;
+use intranetBundle\Entity\Entity\F_Hours;
+use intranetBundle\Entity\Entity\F_Trip;
 use intranetBundle\Entity\Entity\Users_F_Vacation;
+use intranetBundle\Entity\Entity\Users_F_Expenses;
+use intranetBundle\Entity\Entity\Users_F_Home;
+use intranetBundle\Entity\Entity\Users_F_Hours;
+use intranetBundle\Entity\Entity\Users_F_Trip;
+use intranetBundle\Entity\Entity\Data;
+use intranetBundle\Entity\Entity\hours_data;
 
 class ApiRestController extends Controller
 {
@@ -1038,6 +1048,12 @@ class ApiRestController extends Controller
             $dayInstancesOrderedByIdForm[$index] = $qb->getArrayResult();
         }
         
+        //formatting the currency
+        /*foreach($expensesFormsList as $form){
+            //return array_keys($form);
+            $form['amount'] = (number_format(floatval($form['amount']), 2, ',', '.'));
+        }*/
+            
         $allForms = [
             'expensesFormsList' => $expensesFormsList,
             'WorkAtHomeFormsList' => $WorkAtHomeFormsList,
@@ -1045,6 +1061,7 @@ class ApiRestController extends Controller
             'businessTripFormsList' => $businessTripFormsList,
             'vacationFormsList' => $vacationFormsList
         ];
+        
         
         $allData = [
             "allForms" => $allForms,
@@ -1087,6 +1104,181 @@ class ApiRestController extends Controller
 
 
         $em = $this->getDoctrine()->getManager();
+        $em->persist($usform);
+        $em->flush();
+        
+        return "ok";
+    }
+    
+    
+    public function postExpensesformAction($login){
+        
+        $post = file_get_contents("php://input");
+        $data = json_decode($post, true);
+        
+        $form = new F_Expenses();
+        $form->setCompany($data['seller']);
+        $form->setDate1($data['beforeToDate']);
+        $form->setConcept($data['concept']);
+        $form->setAmount(number_format(floatval($data['amount']), 2, ',', '.'));
+        $form->setStatus(0);
+        $form->setType("Expenses");
+        $form->setSend(date("d/m/Y"));
+        $form->setIsRead(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($form);
+        $em->flush();
+
+        //But it is also needed to insert in the intermediate table
+        //login, id_form => I need to take the ID of the last form inserted
+        $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Expenses')->findBy([], ['id' => 'DESC'], 1);
+
+        $usform = new Users_F_Expenses();
+        //$usform->setLogin($_SESSION['userLDAP']);
+        $usform->setLogin($login);
+        $usform->setIdForm($lastForm[0]->getId());
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($usform);
+        $em->flush();
+        
+        return "ok";
+    }
+    
+    
+    public function postBusinessTripformAction($login){
+        
+        $post = file_get_contents("php://input");
+        $data = json_decode($post, true);
+        
+        $form = new F_Trip();
+        $form->setPlace($data['location']);
+        $form->setNameCongress($data['congressName']);
+        $form->setReasons($data['reasons']);
+        $form->setDate1($data['startDate']);
+        $form->setDate2($data['finishDate']);
+        $form->setStatus(0);
+        $form->setType("BusinessTrip");
+        $form->setSend(date("d/m/Y"));
+        $form->setIsRead(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($form);
+        $em->flush();
+
+        //But it is also needed to insert in the intermediate table
+        //login, id_form => I need to take the ID of the last form inserted
+        $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Trip')->findBy([], ['id' => 'DESC'], 1);
+
+        $usform = new Users_F_Trip();
+        //$usform->setLogin($_SESSION['userLDAP']);
+        $usform->setLogin($login);
+        $usform->setIdForm($lastForm[0]->getId());
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($usform);
+        $em->flush();
+        
+        return "ok";
+    }
+    
+    
+    public function postOvertimeHoursformAction($login){
+        
+        $dayAlreadyExists = false;
+        $dayId = null;
+        
+        $post = file_get_contents("php://input");
+        $data = json_decode($post, true);
+        $incomingDatesList = $data['datesList'];
+        $storedDatesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Data')->findAll();
+        
+        //insert the form
+        $form = new F_Hours();
+        $form->setTicket($data['jiraTicketID']);
+        $form->setReasons($data['reasons']);
+        $form->setStatus(0);
+        $form->setType("OvertimeHours");
+        $form->setSend(date("d/m/Y"));
+        $form->setIsRead(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($form);
+        $em->flush();
+        $form->getId();
+        
+        foreach($incomingDatesList as $incomingDate){
+            
+            foreach($storedDatesList as $storedDate){
+            
+                //return "|".$incomingDate['date']."|".$storedDate->getDate1()."|".$incomingDate['hours']."|".$storedDate->getHour()."|".$incomingDate['minutes']."|".$storedDate->getMinutes()."|";
+                if (strcmp($incomingDate['date'], $storedDate->getDate1()) == 0 &&
+                   $incomingDate['hours'] == $storedDate->getHour() &&
+                   $incomingDate['minutes'] == $storedDate->getMinutes())
+                {
+                    $dayAlreadyExists = true;
+                    $dayId = $storedDate->getId();
+                    break;
+                }
+            }
+            
+            if (!$dayAlreadyExists){
+                $day = new Data();
+                $day->setDate1($incomingDate['date']);
+                $day->setHour($incomingDate['hours']);
+                $day->setMinutes($incomingDate['minutes']);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($day);
+                $em->flush();
+                $dayId = $day->getId();
+            }
+            
+            $dayForm = new hours_data();
+            $dayForm->setIdForm($form->getId());
+            $dayForm->setIdData($dayId);
+            
+            $em->persist($dayForm);
+            $em->flush();
+            $dayAlreadyExists = false;
+            
+        }
+        
+        $usform = new Users_F_Hours();
+        $usform->setLogin($login);
+        $usform->setIdForm($form->getId());
+        //$em = $this->getDoctrine()->getManager();
+        $em->persist($usform);
+        $em->flush();
+        
+        return "ok";
+    }
+    
+    public function postWorkAtHomeformAction($login){
+        
+        $post = file_get_contents("php://input");
+        $data = json_decode($post, true);
+        
+        $form = new F_Home();
+        $form->setDate1($data['date']);
+        $form->setReason($data['reasons']);
+        $form->setWholeDay($data['wholeOrHalfDay']);
+        $form->setStatus(0);
+        $form->setType("WorkAtHome");
+        $form->setSend(date("d/m/Y"));
+        $form->setIsRead(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($form);
+        $em->flush();
+
+        $usform = new Users_F_Home();
+        $usform->setLogin($login);
+        $usform->setIdForm($form->getId());
+        //$em = $this->getDoctrine()->getManager();
         $em->persist($usform);
         $em->flush();
         

@@ -12,7 +12,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
             <md-list-item class="md-2-line secondary-button-padding listFormElement" ng-click="showFormDetails($event, form)" ng-repeat="form in filteredFormsList" ng-style="form.status==0 ? {'background-color': '#FF5E5C'} : form.status==1 ? {'background-color': '#68FF64'} : {'background-color': '#C3F8F7'}">
                 <div class="md-list-item-text" layout="column">
                     <h3>Type: {[{ form.type }]}</h3>
-                    <h4>Date sent: {[{ form.send }]}</h4>
+                    <h4>Date sent: {[{ form.send | date:'dd/MM/yyyy'}]}</h4>
                     <h4>Date sent: {[{ form.status }]}</h4>
                 </div>
                     <md-button ng-if="form.status == 2" class="md-secondary" ng-click="">

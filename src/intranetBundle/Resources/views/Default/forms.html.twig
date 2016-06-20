@@ -26,9 +26,9 @@
             app.controller('expensesController', expensesController);
             app.controller('overtimeHoursController', overtimeHoursController);
             app.controller('overtimeHoursController2', overtimeHoursController2);
+            app.controller('businessTripController', businessTripController);
             app.controller('workAtHomeController', workAtHomeController);
             app.controller('historicController', historicController);
-            app.factory('submitForm', submitForm);
             app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
@@ -59,7 +59,7 @@
                 };
             });
             
-            app.directive('noMatchingDates', function(){
+            /*app.directive('noMatchingDates', function(){
                 
                 return{
                     restrict: 'A',
@@ -79,9 +79,6 @@
                             
                             arrayOfDates.forEach(function(currentDate, index){
                                 
-                                /*if (value.getDay() == currentDate.date.getDay())
-                                    if(value.getMonth() == currentDate.date.getMonth())
-                                        if(value.getFullYear() == currentDate.date.getFullYear())*/
                                 
                                 if(moment(value).isSame(currentDate.date, 'day')){
                                     ctrl.$setValidity('matchingDates', false);
@@ -94,7 +91,7 @@
                         });
                     }
                 };
-            });
+            });*/
             
             app.config(function($mdThemingProvider) {
 
@@ -136,34 +133,6 @@
                 };
             });
             
-            function submitForm($window, $http){
-                var root = {};
-                
-                root.submitThisForm = function(form, url, dataToUpload, scope){
-                    
-                    form.$setSubmitted();
-                    
-                    if (form.$valid){
-                        $http({
-                            method: 'POST',
-                            url: window.location.pathname+'/../../api/'+url,
-                            data: dataToUpload,
-                            dataType: 'json',
-                            headers: {'Content-Type': 'application/json'}
-                        }).then(function success(response){
-                            alert("submitted");
-                        }, function error(response){
-                            //manage error
-                            console.log("ERROR: "+response.statusText);
-                        });
-                    }
-                    else
-                        $window.alert("NOvalido");
-                }
-                
-                return root;
-            }
-            
             function tabsController($scope){
                 $scope.returnToHistory = function() {
                     $scope.selectedIndex = 0; 
@@ -176,15 +145,33 @@
                     ("{{surname | json_encode()}}").replace(/&quot;/g, "");;
             }
             
-            
-            
-            function vacationController($scope, $http, submitForm){
+            function formatDate(date){
                 
-                var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                if (typeof date != "string"){
+                
+                    var dateFormatted = "";
+                    
+                    if (date.getDate() < 10)
+                        dateFormatted += '0';
+
+                    dateFormatted += date.getDate()+'/';
+
+                    if ((date.getMonth()+1) < 10)
+                        dateFormatted += '0';
+
+                    dateFormatted += (date.getMonth()+1)+'/'+date.getFullYear();
+
+                    return dateFormatted;
+                }else
+                    return date;
+            }
+            
+            function vacationController($scope, $http){
+                
                 $scope.surrogate = "";
                 
                 //DATES FUNCTIONALITY
-                $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var. TODO: HAY QUE RESTAR UN DÍA a esta fecha para que permita seleccionar el día actual.
+                $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var.
                 $scope.startDate = new Date();
                 $scope.finishDate = new Date();
                 $scope.minFinishDate = $scope.startDate;
@@ -207,30 +194,34 @@
                 //DATES FUNCTIONALITY
                 
                 $scope.forming = function(){
-                    var data = {startdate: $scope.startDate.getDate()+'/'+($scope.startDate.getMonth()+1)+'/'+$scope.startDate.getFullYear(),
-                                finishdate: $scope.finishDate.getDate()+'/'+($scope.finishDate.getMonth()+1)+'/'+$scope.finishDate.getFullYear(),
+                    
+                    //alert($scope.startDate+$scope.finishDate);
+                    
+                    $scope.vacationForm.$setSubmitted();
+                    
+                    if ($scope.vacationForm.$valid){
+                        
+                        var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                        var data = {startdate: formatDate($scope.startDate),
+                                finishdate: formatDate($scope.finishDate),
                                 surrogate: $scope.surrogate
                                 };
                     
-                    $scope.factorySubmit = submitForm;
-                    $scope.factorySubmit.submitThisForm($scope.vacationForm, 'vacationform/'+userLogin, data);
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/vacationform/'+userLogin,
+                            data: data,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+
+                            $scope.returnToHistory();
+
+                        }, function error(response){
+                            alert("Error:" +response.statusText);
+                        });
+                    }
                 };
-                
-                $scope.sub = function(){
-                    $http({
-                        method: 'POST',
-                        url: 'respuesta.php',
-                       
-                    })
-                    .then(function success(response){
-                        
-                        $scope.returnToHistory();
-                        alert("asd");
-                        
-                    }, function error(response){
-                        alert("Error:" +response.statusText);
-                    });
-                }
             }
             
             function expensesController($scope, $http){
@@ -239,10 +230,41 @@
                     seller: "",
                     amount: null,
                     concept: "",
-                    today: moment(new Date()).subtract(1, "days").toDate() //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
+                    dateSelected: new Date() // this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
                 }
                 
-                $scope.dateSelected = new Date(); // this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
+                $scope.forming = function(){
+                    
+                    $scope.expensesForm.$setSubmitted();
+                    
+                    if ($scope.expensesForm.$valid){
+                        
+                        var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                        var data = {
+                            seller: $scope.data.seller,
+                            amount: $scope.data.amount, 
+                            concept: $scope.data.concept,
+                            beforeToDate: formatDate($scope.data.dateSelected)
+                        };
+                    
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/expensesform/'+userLogin,
+                            data: data,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+
+                            $scope.returnToHistory();
+
+                        }, function error(response){
+                            alert("Error:" +response.statusText);
+                        });
+                    }
+                };
+                
+                $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
+                
                 
                 $scope.sub = function(){
                     $http({
@@ -257,39 +279,72 @@
                     }, function error(response){
                         alert("Error:" +response.statusText);
                     });
-                    
-                    $.each($('#tab0').siblings(), function(i, val){
-                        $(this).attr('md-active', 'false');
-                    });
-                    $('#tab0').attr('md-active', 'true');
-                    $('md-tabs').attr('md-selected', '0');
-                    
                 }
             }
             
-            function businessTripController($scope, $mdSelectOnFocus, $http){
+            function businessTripController($scope, $http){
                 
-                $scope.auxData = "";
+                $scope.location = "";
+                $scope.congressName = "";
+                $scope.reasons = "";
                 
-                $scope.sub = function(){
-                    $http({
-                        method: 'POST',
-                        url: 'respuesta.php',
-                       
-                    })
-                    .then(function success(response){
+                //DATES FUNCTIONALITY
+                $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var
+                $scope.startDate = new Date();
+                $scope.finishDate = new Date();
+                $scope.minFinishDate = $scope.startDate;
+                $scope.$watch("startDate", function(data){
+                    
+                    if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
+                        $scope.finishDate = $scope.startDate;
+                    
+                    $scope.minFinishDate = $scope.startDate;    
+                    
+                });
+                
+                $scope.$watch("minFinishDate", function(data){
+                    
+                    console.log(data);
+                    $scope.minFinishDate = $scope.startDate;
+                });
+                //DATES FUNCTIONALITY
+                
+                $scope.forming = function(){
+                    
+                    $scope.businessTripForm.$setSubmitted();
+                    
+                    if ($scope.businessTripForm.$valid){
                         
-                        $scope.returnToHistory();
-                        alert("asd");
-                        
-                    }, function error(response){
-                        alert("Error:" +response.statusText);
-                    });
-                }
+                        var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                        var data = {location: $scope.location,
+                                    congressName: $scope.congressName,
+                                    reasons: $scope.reasons,
+                                    startDate: formatDate($scope.startDate),
+                                    finishDate: formatDate($scope.finishDate)
+                                    };
+                    
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/businesstripform/'+userLogin,
+                            data: data,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+
+                            $scope.returnToHistory();
+
+                        }, function error(response){
+                            alert("Error:" +response.statusText);
+                        });
+                    }
+                };
                 
             }
             
             function overtimeHoursController2($scope, $http, $filter){
+                
+                $scope.jiraTicketdID = "";
+                $scope.reasons = "";
                 
                 function overtime(){
                     this.date = new Date();
@@ -337,6 +392,8 @@
                     
                     $scope.overtimeList.push(OTaux);
                     
+                    $scope.noDatesFlag = false;
+                    
                     //TODO: trying to set "validity:filtered" to true or at least, to set the border-bottom-color property to grey.
                     //$('.md-datepicker-input-container.md-datepicker-invalid').css('border-bottom-color', 'rgb(224,224,224) !important');
                     /*$scope.overtimeHoursForm.OTdate.$error = {};
@@ -365,9 +422,13 @@
                     // ng-valid-mindate ng-valid-maxdate ng-valid-valid pepitogrillo ng-dirty ng-valid-parse ng-invalid ng-invalid-filtered
                 }
                 
+                $scope.noDatesFlag = true;
                 $scope.removeElement = function(index){
                     
                     $scope.overtimeList.splice(index, 1);
+                    
+                    if ($scope.overtimeList.length == 0)
+                        $scope.noDatesFlag = true;
                 };
                 
                 $scope.timeFlag = true;
@@ -393,6 +454,39 @@
                                 return false;
                     
                     return true;
+                };
+                
+                $scope.forming = function(){
+                    
+                    $.each($scope.overtimeList, function(index, current){
+                       current.date = formatDate(current.date);
+                    });
+                    
+                    $scope.overtimeHoursForm.$setSubmitted();
+                    
+                    if ($scope.overtimeHoursForm.overtimeHoursReasons.$valid && $scope.overtimeHoursForm.jiraTicketdID.$valid &&
+                        !$scope.timeFlag && !$scope.noDatesFlag){
+                        
+                        var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                        var data = {jiraTicketID: $scope.jiraTicketdID,
+                                    reasons: $scope.reasons,
+                                    datesList: $scope.overtimeList
+                                    };
+                    
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/overtimehoursform/'+userLogin,
+                            data: data,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+
+                            $scope.returnToHistory();
+
+                        }, function error(response){
+                            alert("Error:" +response.statusText);
+                        });
+                    }
                 };
             }
             
@@ -521,8 +615,36 @@
 
                 $scope.dateSelected = new Date();// this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
 
-                $scope.reason = "";
+                $scope.reasons = "";
                 $scope.wholeOrHalfDay = "wholeDay";
+                
+                $scope.forming = function(){
+                    
+                    $scope.workAtHomeForm.$setSubmitted();
+                    
+                    if ($scope.workAtHomeForm.$valid){
+                        
+                        var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                        var data = {date: $scope.dateSelected,
+                                    reasons: $scope.reasons,
+                                    wholeOrHalfDay: $scope.wholeOrHalfDay == "wholeDay" ? 1 : 0
+                                    };
+                    
+                        $http({
+                            method: 'POST',
+                            url: window.location.pathname+'/../../api/workathomeform/'+userLogin,
+                            data: data,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function success(response){
+
+                            $scope.returnToHistory();
+
+                        }, function error(response){
+                            alert("Error:" +response.statusText);
+                        });
+                    }3
+                };
             }
             
             function submit($http, url, data, success, error){

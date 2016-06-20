@@ -7,7 +7,7 @@
 <md-list-item ng-repeat="day in daysList">
     <md-input-container>
         <label>Date</label>
-        <input value="{[{day.date1}]}" disabled="">
+        <input value="{[{day.date1 | date:'dd/MM/yyyy'}]}" disabled="">
     </md-input-container>
     <md-input-container>
         <label>Hours</label>

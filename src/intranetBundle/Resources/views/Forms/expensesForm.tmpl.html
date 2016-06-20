@@ -1,40 +1,38 @@
-<div ng-controller="expensesController" layout="row" layout-align="center start">
-    <form name="expensesForm" id="expensesForm" method="POST" action="respuesta.php" novalidate>
-        <md-list layout="column" ng-cloak="">
-            <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
-            <md-list-item layout-lg="row" layout-xl="row">
-                <md-input-container class="md-block">
-                    <label>Seller company</label>
-                    <input type="text" name="seller" ng-model="data.seller" required>
-                    <div ng-messages="expensesForm.seller.$error">
-                        <div ng-message="required">You have to specify a seller.</div>
-                    </div>
-                </md-input-container>
-                <md-datepicker ng-model="dateSelected" md-min-date="data.today" md-placeholder="Before to" name="expenseDate" ></md-datepicker> <!--al dejar el ngmodel vacío, tirar error-->
-                <input type="hidden" value="{[{dateSelected | date:'dd/MM/yyyy'}]}" name="pruebaFechas">
-            </md-list-item>
-            <md-list-item layout-lg="row" layout-xl="row">
-                <md-input-container class="md-block">
-                    <label>Amount (EUR)*</label>
-                    <input type="number" ng-model="data.amount" name="expenseAmount" required>
-                    <div ng-messages="expensesForm.expenseAmount.$error">
-                        <div ng-message="required">An amount is required.</div>
-                    </div>
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <label>Concept*</label>
-                    <input type="text" name="expenseConcept" ng-model="data.concept" required>
-                    <div ng-messages="expensesForm.expenseConcept.$error">
-                        <div ng-message="required">You must specify a concept.</div>
-                    </div>
-                </md-input-container>
-            </md-list-item>
+<div ng-form name="expensesForm" ng-controller="expensesController" layout="row" layout-align="center start">
+    <md-list layout="column" ng-cloak="">
+        <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
+        <md-list-item layout-lg="row" layout-xl="row">
+            <md-input-container class="md-block">
+                <label>Seller company</label>
+                <input type="text" name="seller" ng-model="data.seller" required>
+                <div ng-messages="expensesForm.seller.$error">
+                    <div ng-message="required">You have to specify a seller.</div>
+                </div>
+            </md-input-container>
+            <md-datepicker ng-model="data.dateSelected" md-min-date="today" md-placeholder="Before to" name="expenseDate" ></md-datepicker> <!--al dejar el ngmodel vacío, tirar error-->
+            <input type="hidden" value="{[{dateSelected | date:'dd/MM/yyyy'}]}" name="pruebaFechas">
+        </md-list-item>
+        <md-list-item layout-lg="row" layout-xl="row">
+            <md-input-container class="md-block">
+                <label>Amount (EUR)*</label>
+                <input type="number" ng-model="data.amount" name="expenseAmount" required>
+                <div ng-messages="expensesForm.expenseAmount.$error">
+                    <div ng-message="required">An amount is required.</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>Concept*</label>
+                <input type="text" name="expenseConcept" ng-model="data.concept" required>
+                <div ng-messages="expensesForm.expenseConcept.$error">
+                    <div ng-message="required">You must specify a concept.</div>
+                </div>
+            </md-input-container>
+        </md-list-item>
+        <md-list-item>
             <md-list-item>
-                <md-list-item>
 <!--                    <md-button class="md-raised md-primary" id="subm" type="submit" ng-disabled="expensesForm.$invalid" ng-click="submitting(expensesForm)">Send</md-button> -->
-                    <md-button class="md-raised md-primary" id="subm" ng-disabled="forming()">Send</md-button>
-                </md-list-item>
+                <md-button class="md-raised md-primary" id="subm" ng-click="forming()">Send</md-button>
             </md-list-item>
-        </md-list>
-    </form>
+        </md-list-item>
+    </md-list>
 </div>

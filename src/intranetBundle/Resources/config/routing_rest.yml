@@ -64,3 +64,26 @@ api_post_vacation_form:
     requirements:
         _method: POST
         
+api_post_expenses_form:
+    pattern: /expensesform/{login}
+    defaults: { _controller: "intranetBundle:ApiRest:postExpensesform"}
+    requirements:
+        _method: POST
+        
+api_post_business_trip_form:
+    pattern: /businesstripform/{login}
+    defaults: { _controller: "intranetBundle:ApiRest:postBusinessTripform"}
+    requirements:
+        _method: POST
+        
+api_post_overtime_hours_form:
+    pattern: /overtimehoursform/{login}
+    defaults: { _controller: "intranetBundle:ApiRest:postOvertimeHoursform"}
+    requirements:
+        _method: POST
+        
+api_post_work_at_home_form:
+    pattern: /workathomeform/{login}
+    defaults: { _controller: "intranetBundle:ApiRest:postWorkAtHomeform"}
+    requirements:
+        _method: POST

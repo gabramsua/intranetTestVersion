@@ -1665,7 +1665,10 @@ class DefaultController extends Controller{
     
     public function mainDialogAction(){
         
-        return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html');
+        $params = ['name' => $_SESSION['name'],
+                   'surname' => $_SESSION['surname']];
+        
+        return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html', $params);
     }
     
     public function businessTripDialogAction(){

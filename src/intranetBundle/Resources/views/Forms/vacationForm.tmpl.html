@@ -5,7 +5,7 @@
             <label style="font-size: small;">Fecha comienzo</label>
             <label style="font-size: small; margin-left: 100px; color:lightgrey;">Fecha comienzo</label>
         </md-list-item>
-        <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0" ng-controller="dateRangeController">
+        <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0">
             <md-datepicker ng-model="startDate" md-placeholder="From" md-min-date="today" class="dtNoSpaceAtLeft"></md-datepicker>
             <md-datepicker ng-model="finishDate" md-placeholder="To" md-min-date="minFinishDate"></md-datepicker> <!--se le puede aplicar padding para separarlo del anterior, pero al aplicarse el responsive para dispositivos más pequeños queda feo ya que no se alinean.  -->
         </md-list-item>
