@@ -1588,6 +1588,12 @@ class DefaultController extends Controller{
        'intranetBundle:ChannelTemplates:createChannelDialog.tmpl.html'
       );
   }
+
+  public function deleteDialogAction(){
+    return $this->render(
+       'intranetBundle::deleteDialog.tmpl.html'
+      );
+  }
   
   public function mainNewsDialogAction(){
     return $this->render(

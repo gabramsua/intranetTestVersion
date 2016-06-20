@@ -1,0 +1,34 @@
+<md-dialog ng-app="MyApp" ng-cloak flex="40" ng-init="getInfo()">
+    <form name="Form" id="Form" method="POST" novalidate>
+        <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2>Delete </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeDialog()">
+                  <md-icon aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+        </md-toolbar>
+    <md-dialog-content class="md-dialog-content">
+        <md-list layout="column" ng-cloak="">
+        <div layout="row" layout-sm="column">
+            <div flex>
+                ?Está seguro? <br> Se borrará el elemento.
+
+                 
+            </div>
+            
+
+        <md-list-item>
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="delete"  ng-click="delete()">
+                {% trans %}Delete{% endtrans %}
+            </md-button>
+            <md-button class="md-raised md-primary" id="subm" type="submit" name="nope"  ng-click="closeDialog()">
+                {% trans %}nope_{% endtrans %}
+            </md-button>
+        </md-list-item>
+        </div>
+        </md-list>
+        </md-dialog-content>
+    </form>
+</md-dialog>

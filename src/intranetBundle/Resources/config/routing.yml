@@ -285,7 +285,12 @@ intranet_main_create_channel_dialog:
     defaults: { _controller: intranetBundle:Default:createChannelDialog, _locale:en }
     requirements:
         _locale: en|fr|es
-      
+
+intranet_delete_dialog:   
+    path:     /{_locale}/deleteDialog
+    defaults: { _controller: intranetBundle:Default:deleteDialog, _locale:en }
+    requirements:
+        _locale: en|fr|es   
       
 #FORMS SUBPAGES
 
