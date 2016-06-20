@@ -215,22 +215,6 @@
                 
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
                 
-                
-                $scope.sub = function(){
-                    $http({
-                        method: 'POST',
-                        url: 'respuesta.php',
-                       
-                    })
-                    .then(function success(response){
-                        
-                        $scope.returnToHistory();
-                        
-                    }, function error(response){
-                        alert("Error:" +response.statusText);
-                    });
-                }
-                
                 function reinitializeModel(){
                     
                     $scope.data = {
@@ -497,17 +481,6 @@
                 }
             }
             
-            function submit($http, url, data, success, error){
-                    
-                $http({
-                    method: 'POST',
-                    url: url,
-                    data: data,
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                }).then(success, error);
-            }
-            
             function historicController($scope, $http, $mdDialog){
                 
                 var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
@@ -678,16 +651,17 @@
         </script>
 
         <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController">
-            <md-content class="md-padding">
+            <md-content>
+<!--            <md-content class="md-padding">-->
                 <md-tabs id="tabs" class="md-accent" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
                     <md-tab id="tab0">
-                        <md-tab-label>Historico</md-tab-label>
+                        <md-tab-label>{% trans %}historic{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_historic')}}'"></div>
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab1">
-                        <md-tab-label>Vacation</md-tab-label>
+                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_vacation')}}'"></div>
 <!--                            <div ng-include="'vacationForm.html'"></div>-->
@@ -701,28 +675,28 @@
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab2">
-                        <md-tab-label>Expenses</md-tab-label>
+                        <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_expenses')}}'"></div>
 <!--                            <div ng-include="'expensesForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab3">
-                        <md-tab-label>business trip</md-tab-label>
+                        <md-tab-label>{% trans %}business_trip_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_business_trip')}}'"></div>
 <!--                            <div ng-include="'businessTripForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab7">
-                        <md-tab-label>Overtime hours</md-tab-label>
+                        <md-tab-label>{% trans %}overtime_hours_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'"></div>
 <!--                            <div ng-include="'overtimeHoursForm2.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab5">
-                        <md-tab-label>Work at home</md-tab-label>
+                        <md-tab-label>{% trans %}work_at_home_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_work_at_home')}}'"></div>
 <!--                            <div ng-include="'workAtHomeForm.html'"></div>-->

@@ -119,10 +119,6 @@
                     <md-input-container class="md-block">
                         <label>{% trans %}Name{% endtrans %}</label>
                         <input type='text' name="myName" id="myName" ng-model="user.name" required="required">
-
-                        <div ng-messages="expensesForm.seller.$error">
-                            <div ng-message="required">You have to specify a seller.</div>
-                        </div>
                     </md-input-container>
                 </md-list-item>
             </div>
@@ -131,10 +127,6 @@
                     <md-input-container class="md-block">
                         <label>{% trans %}Surname{% endtrans %}</label>
                         <input type='text' id="mySurname" name="mySurname" ng-model="user.surname">
-
-                        <div ng-messages="expensesForm.seller.$error">
-                            <div ng-message="required">You have to specify a seller.</div>
-                        </div>
                     </md-input-container>
                 </md-list-item>
             </div>
