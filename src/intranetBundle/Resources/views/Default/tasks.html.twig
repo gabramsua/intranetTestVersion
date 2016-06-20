@@ -58,7 +58,8 @@
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
-                        controller: createTaskDialogController
+                        controller: createTaskDialogController,
+                        onRemoving: $scope.getAllTasks
                     });
                 }
                 
@@ -151,7 +152,7 @@
 
                 $scope.create=function(){
 
-                //We must see if another channel exists already with the same name
+                //We must see if another task exists already with the same attributes
                 $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/tasks',
@@ -164,6 +165,7 @@
                         for (i = 0; i < $scope.tasksListB.length; i++) {
                             //console.log($scope.tasksListB[i].title);
                             if($scope.tasksListB[i].title!=$scope.allData.taskData[0].title){
+                                $scope.title=$scope.tasksListB[i].title;
                                 $flag_all+=1;
                             }else{break;}
                         }
@@ -171,18 +173,18 @@
                             $notID=-1;
                                 $http({
                                     method: 'POST',
-                                    url: window.location.pathname+'/../../api/channel/'+$notID,
+                                    url: window.location.pathname+'/../../api/tasks/'+$notID,
                                     data: {
                                         title: $scope.allData.taskData[0].title,
                                         content: $scope.allData.taskData[0].content,
-                                        usersInTask: $scope.allData.taskUsers
+                                        usersInTask: $listChecked
                                     },
                                     contentType: 'application/json',
                                     dataType: 'json',
                                     headers: {'Content-Type': 'application/json'}
                                 })
                                 .then(function success(response){
-                                    console.log("Party time");
+
                                     $scope.closeDialog();
                                 }, function error(response){
                                     //console.log("Error:" +response.statusText);
@@ -192,26 +194,6 @@
                         console.log("Error:" +response.statusText);
                     });
                 };
-                    /*$notID=-1;
-                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
-                    $http({
-                        method: 'POST',
-                        url: window.location.pathname+'/../../api/new/'+$notID,
-                        data: {
-                            title: $scope.allData.taskData[0].title,
-                            content: $scope.allData.taskData[0].content,
-                            usersInTask: $scope.allData.taskUsers
-                        },
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        console.log("Party time at creating task");
-                        $scope.closeDialog();
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });*/
 
                 var last = {
                     bottom: false,
@@ -233,7 +215,7 @@
                     var pinTo = $scope.getToastPosition();
                     $mdToast.show(
                       $mdToast.simple()
-                        .textContent('{% trans %}YA EXISTE UN CANAL LLAMADO {% endtrans %} '+$scope.channel.name)
+                        .textContent('{% trans %}YA EXISTE UNA TAREA LLAMADO {% endtrans %} '+$scope.title)
                         .position(pinTo )
                         .hideDelay(5000)
                     );
