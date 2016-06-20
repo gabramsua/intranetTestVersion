@@ -3,7 +3,7 @@
 {% block contenido %}
 <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
-            app.config(function($interpolateProvider){
+            app.config(function($interpolateProvider){ 
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
 
@@ -11,7 +11,7 @@
             app.controller('updateNewDialogController ', updateNewDialogController );
             
             
-            function newsController($scope, $mdDialog, $http){
+            function newsController($rootScope, $scope, $mdDialog, $http){
 
                 $scope.getAllNews = function(){
                     $http({
@@ -29,6 +29,7 @@
 
                     $scope.selectedItem;
                     $scope.selected = function($ch){
+                        $rootScope.cha=$ch;
                         if($ch==null){
                             var urlapi=window.location.pathname+'/../../api/news';
 
@@ -43,27 +44,67 @@
                         })
                         .then(function success(response){
                             $scope.newsList = response.data;
-                            console.log($scope.newsList);
+                            //console.log($scope.newsList);
+                        }, function error(response){
+                            console.log("Error:" +response.statusText);
+                        });
+                    }
+                    $rootScope.cha=$scope.selectedItem;
+                    $rootScope.selected = function($ch){
+                        if($ch==null){
+                            var urlapi=window.location.pathname+'/../../api/news';
+
+                        }else{
+                            var urlapi=window.location.pathname+'/../../api/news/'+$ch;
+                         }  
+                        $http({
+                            method: 'GET',
+                            url: urlapi,
+                            dataType: 'json',
+                            headers: {'Content-Type': 'application/json'}
+                        })
+                        .then(function success(response){
+                            $scope.newsList = response.data;
                         }, function error(response){
                             console.log("Error:" +response.statusText);
                         });
                     }
                 }
 
+                $scope.deleteNew = function(ev, n){
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_delete_dialog')}}",
+                        locals: {
+                            currentNew: n
+                        }, 
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: function deleteNewDialogController($scope, $mdDialog, $http, currentNew){
+                                        $scope.new = currentNew;
 
-                $scope.deleteNew = function(id){
-                    
-                    $http({
-                        method: 'DELETE',
-                        url: window.location.pathname+'/../../api/new/'+id,
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                         $scope.getAllNews();
-                    }, function error(response){
-                        console.log("Error al delete:" +response.statusText);
-                    });
+                                        $scope.closeDialog = function(){
+                                            $mdDialog.hide();
+                                            $rootScope.selected($rootScope.cha);
+                                         };
+
+                                       $scope.delete=function(){
+                                            $http({
+                                                method: 'DELETE',
+                                                url: window.location.pathname+'/../../api/new/'+$scope.new.id,
+                                                dataType: 'json',
+                                                headers: {'Content-Type': 'application/json'}
+                                            })
+                                            .then(function success(response){                        
+                                                $scope.closeDialog();
+                                            }, function error(response){
+                                                console.log("Error al delete:" +response.statusText);
+                                            });  
+                                        };
+                                    },
+                        //deleteNewDialogController,
+                        //onRemoving: console.log("cerraste el dialogo") //$scope.selected(null)
+                    }); 
                 }
 
                 $scope.readNewDialog = function(ev, n) {
@@ -78,7 +119,6 @@
                         controller: updateNewDialogController,
                         onRemoving: $scope.getAllNews
                     });
-                    //alert(user.name);
                 }
 
                 $scope.showCreateNewDialog = function(ev) {
@@ -92,24 +132,6 @@
                         onRemoving: $scope.getAllNews
                     });
                 }
-
-                /*//Cargar aquí los nombres de canales
-                $http({
-                        method: 'GET',
-                        url: window.location.pathname+'/../../api/channels',
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                        $scope.items = response.data;
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
-                    });
-
-                $scope.selectedItem;
-                $scope.selected = function($v){
-                  alert($v);
-                }*/
             }
 
             function updateNewDialogController($scope, $mdDialog, $http, currentNew){
@@ -129,9 +151,6 @@
                             "channelsInNew": $.map(response.data.channelsInNew, function(elem){return elem.name}),
                             "allChannels": response.data.allChannels
                         };
-                        
-                        console.log("ALL CHANNELS: "+$scope.allData.allChannels);
-                        console.log("CHANNELS in new: "+$scope.allData.channelsInNew);
 
                         $scope.allChannels = $scope.allData.allChannels;
                         $scope.channelsInNew = $scope.allData.allChannels.filter(function(channel){
@@ -165,8 +184,7 @@
                 };
 
                $scope.update=function(id){
-                    //alert($scope.allData.channelsInNew);
-                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+
                     $http({
                             method: 'PATCH',
                             url: window.location.pathname+'/../../api/new/'+id,
@@ -180,7 +198,6 @@
                             headers: {'Content-Type': 'application/json'}
                         })
                         .then(function success(response){
-                            console.log("Party time at update");
                             $scope.closeDialog();
                         }, function error(response){
                             console.log("Error:" +response.statusText);
@@ -203,7 +220,6 @@
                     })
                     .then(function success(response){
                         $scope.allChannels = response.data;
-                        console.log($scope.allChannels);
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
@@ -219,7 +235,6 @@
                 };
                 
                 $scope.toggle = function(channel){
-                    //console.log(channel.name);
                     var index = ($listChecked).indexOf(channel.name);
 
                     if (index > -1){
@@ -228,14 +243,12 @@
                     else{
                         ($listChecked).push(channel.name);
                     }
-                    //console.log($listChecked);
 
                 };  
 
                 $scope.create=function(){
 
                     $notID=-1;
-                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
                     $http({
                         method: 'POST',
                         url: window.location.pathname+'/../../api/new/'+$notID,
@@ -250,7 +263,6 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        console.log("Party time at creating");
                         $scope.closeDialog();
                     }, function error(response){
                         console.log("Error:" +response.statusText);
@@ -258,6 +270,28 @@
                 };    
             }
 
+            function deleteNewDialogController($scope, $mdDialog, $http, currentNew){
+                $scope.new = currentNew;
+
+                $scope.closeDialog = function(){
+                    $mdDialog.hide();
+                 };
+
+
+               $scope.delete=function(){
+                    $http({
+                        method: 'DELETE',
+                        url: window.location.pathname+'/../../api/new/'+$scope.new.id,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){                        
+                        $scope.closeDialog();
+                    }, function error(response){
+                        console.log("Error al delete:" +response.statusText);
+                    });  
+                };
+            }
 </script>
 
 
@@ -299,7 +333,7 @@
                 <span style="width: 30%">{[{ n.title }]}</span>
                 <span style="width: 50%">{[{ n.content }]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew(n.id)">
+                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew($event,n)">
                         Delete
                     </md-button> 
                 </div>

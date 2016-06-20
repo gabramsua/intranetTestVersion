@@ -58,18 +58,17 @@
                     //alert(user.name);
                 }
 
-                $scope.deleteUser = function(login){
-                    
-                     $http({
-                        method: 'DELETE',
-                        url: window.location.pathname+'/../../api/user/'+login,
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                         $scope.getAllUsers();
-                    }, function error(response){
-                        console.log("Errorr al borrar:" +response.statusText);
+                $scope.deleteUser = function(ev, user){
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_delete_dialog')}}",
+                        locals: {
+                            currentUser: user
+                        }, 
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: deleteUserDialogController,
+                        onRemoving: $scope.getAllUsers
                     });
                 }
             }
@@ -137,6 +136,28 @@
                     }
             }
    
+            function deleteUserDialogController($scope, $mdDialog, $http, currentUser){
+                $scope.user = currentUser;
+                
+                $scope.closeDialog = function(){
+                    $mdDialog.hide();
+                 };
+
+
+               $scope.delete=function(){
+                    $http({
+                        method: 'DELETE',
+                        url: window.location.pathname+'/../../api/user/'+$scope.user.login,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                         $scope.closeDialog();
+                    }, function error(response){
+                        console.log("Error al borrar:" +response.statusText);
+                    });  
+                 };
+            }
 </script>
 
 
@@ -164,7 +185,7 @@
                 <span style="width: 50%">{[{user.name}]} {[{user.surname}]}</span>
                 <span style="width: 50%">{[{user.login}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn" ng-click="deleteUser(user.login)">
+                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteUser($event, user)">
                         Delete
                     </md-button> 
                 </div>

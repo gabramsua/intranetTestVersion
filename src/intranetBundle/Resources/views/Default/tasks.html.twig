@@ -5,24 +5,13 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
         <link rel="stylesheet" href="taskStyles.css">
-<!--        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script> this librariy is loaded in the header (layout.html.twig), so is not needed here -->
         <script src="moment.min.js"></script>
-<!--
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-        <script src="http:////ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
-        <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
--->
+
         <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
             app.config(function($interpolateProvider){
-                $interpolateProvider.startSymbol('{[{').endSymbol('}]}');});
+                $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+            });
             app.controller('tasksController', tasksController);
             app.controller('updateTaskDialogController', updateTaskDialogController);
             app.controller('createTaskDialogController', createTaskDialogController);
@@ -65,7 +54,7 @@
                 $scope.showCreateTaskDialog = function(ev) {
                     
                     $mdDialog.show({
-                        templateUrl: "{{path('intranet_main_task_dialog2')}}",
+                        templateUrl: "{{path('intranet_main_task_dialog2')}}", 
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -106,29 +95,27 @@
                     });
                 }
                 
-                $scope.deleteTask = function(taskId){
-                    
-                     $http({
-                        method: 'DELETE',
-                        url: window.location.pathname+'/../../api/tasks/'+taskId,
-                        dataType: 'json',
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                         $scope.getAllTasks();
-                    }, function error(response){
-                        console.log("Error:" +response.statusText);
+                $scope.deleteTask = function(ev, task){
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_delete_dialog')}}",
+                        locals: {
+                            currentTask: task
+                        }, 
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: deleteTaskDialogController,
+                        onRemoving: $scope.getAllTasks
                     });
-                }
-                
-                
+                }   
             }
             
-            function createTaskDialogController($scope, $mdDialog, $http){
-                
+            function createTaskDialogController($scope, $mdDialog, $http, $mdToast){
+
+                $listChecked=[];
+
                 $scope.getInfo = function(){
                     
-                    //AJAX call requesting all users in the database with the field "onboard" set to "true".
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/users/all/onboard',
@@ -136,9 +123,7 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
                         $scope.allUsers = response.data;
-                        
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
@@ -147,6 +132,112 @@
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
+
+                $scope.alreadyIn = function(user){
+                    return ($listChecked).indexOf(user.login) > -1;
+                };
+                
+                $scope.toggle = function(user){
+                    var index = ($listChecked).indexOf(user.login);
+
+                    if (index > -1){
+                        ($listChecked).splice(index, 1);
+                    }
+                    else{
+                        ($listChecked).push(user.login);
+                    }
+                    //console.log($listChecked);
+                }; 
+
+                $scope.create=function(){
+
+                //We must see if another channel exists already with the same name
+                $http({
+                        method: 'GET',
+                        url: window.location.pathname+'/../../api/tasks',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        $scope.tasksListB = response.data;
+                        $flag_all=0;
+                        for (i = 0; i < $scope.tasksListB.length; i++) {
+                            //console.log($scope.tasksListB[i].title);
+                            if($scope.tasksListB[i].title!=$scope.allData.taskData[0].title){
+                                $flag_all+=1;
+                            }else{break;}
+                        }
+                        if($flag_all==$scope.tasksListB.length){
+                            $notID=-1;
+                                $http({
+                                    method: 'POST',
+                                    url: window.location.pathname+'/../../api/channel/'+$notID,
+                                    data: {
+                                        title: $scope.allData.taskData[0].title,
+                                        content: $scope.allData.taskData[0].content,
+                                        usersInTask: $scope.allData.taskUsers
+                                    },
+                                    contentType: 'application/json',
+                                    dataType: 'json',
+                                    headers: {'Content-Type': 'application/json'}
+                                })
+                                .then(function success(response){
+                                    console.log("Party time");
+                                    $scope.closeDialog();
+                                }, function error(response){
+                                    //console.log("Error:" +response.statusText);
+                                });
+                        }else{$scope.showSimpleToast();}
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });
+                };
+                    /*$notID=-1;
+                    //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
+                    $http({
+                        method: 'POST',
+                        url: window.location.pathname+'/../../api/new/'+$notID,
+                        data: {
+                            title: $scope.allData.taskData[0].title,
+                            content: $scope.allData.taskData[0].content,
+                            usersInTask: $scope.allData.taskUsers
+                        },
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                        console.log("Party time at creating task");
+                        $scope.closeDialog();
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });*/
+
+                var last = {
+                    bottom: false,
+                    top: true,
+                    left: false,
+                    right: true
+                  };
+
+                  $scope.toastPosition = angular.extend({},last);
+
+                  $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {
+                    
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                      $mdToast.simple()
+                        .textContent('{% trans %}YA EXISTE UN CANAL LLAMADO {% endtrans %} '+$scope.channel.name)
+                        .position(pinTo )
+                        .hideDelay(5000)
+                    );
+                  };    
             }
             
             function updateTaskDialogController($scope, $mdDialog, $http, currentTask, rol){
@@ -243,18 +334,30 @@
                 };
             }
             
+            function deleteTaskDialogController($scope, $mdDialog, $http, currentTask){
+                $scope.task = currentTask;
+                
+                $scope.closeDialog = function(){
+                    $mdDialog.hide();
+                 };
+
+
+               $scope.delete=function(){
+                    $http({
+                        method: 'DELETE',
+                        url: window.location.pathname+'/../../api/tasks/'+$scope.task.id,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function success(response){
+                         $scope.closeDialog();
+                    }, function error(response){
+                        console.log("Error:" +response.statusText);
+                    });                     
+                 };
+            }
             
         </script>
-<script>
-    
-    var prueba;
-    //prueba.push({#% for task in listTasks %#}'{#task#}'{#% endfor %#});
-    //prueba = JSON.parse({{listTasks | json_encode()}});
-    prueba = "{{listTasks | json_encode()}}";
-    //var kis = $.map(prueba, function(el) { return el });
-    prueba = prueba.replace(/&quot;/g, "");
-    console.log(prueba);
-</script>
 
 <div ng-cloak ng-app="MyApp" ng-controller="tasksController" ng-init="userRol == 'developer' ? getTasksOfUser() : getAllTasks()">
     
@@ -271,16 +374,12 @@
         <md-divider></md-divider>
         <div ng-repeat="task in tasksList track by $index">
             <md-list-item ng-click="showUpdateTaskDialog($event, task)">
-    <!--
-                <span style="width: 15%">{[{task[1]}]}</span>
-                <span style="width: 70%">{[{task[2]}]}</span>
-                <span style="width: 15%">{[{task[3]}]}</span>
-    -->
+   
                 <span style="width: 15%">{[{task.title}]}</span>
                 <span style="width: 60%">{[{task.content}]}</span>
                 <span style="width: 15%">{[{task.who_create}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask(task.id)" ng-if="userRol != 'developer'">X</md-button> <!--sustituir por el icono de abajo-->
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">X</md-button> <!--sustituir por el icono de abajo-->
                 </div>
             
             </md-list-item>

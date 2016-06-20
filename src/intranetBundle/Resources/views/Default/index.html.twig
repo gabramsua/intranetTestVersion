@@ -40,13 +40,12 @@
           $scope.toastPosition = angular.extend({},last);
 
           $scope.getToastPosition = function() {
-            //sanitizePosition();
             return Object.keys($scope.toastPosition)
               .filter(function(pos) { return $scope.toastPosition[pos]; })
               .join(' ');
           };      
 
-          $scope.showSimpleToast = function() {//this.showSimpleToast
+          $scope.showSimpleToast = function() {
             var pinTo = $scope.getToastPosition();
             $mdToast.show(
               $mdToast.simple()
@@ -64,7 +63,7 @@
     <div class="row" style="margin-top: 15%;">
         <div class="col-sm-6 col-md-4 col-md-offset-4" >
             <div class="account-wall">
-                <img class="profile-img" src="../../imgs/webcuisine.jpg" alt="" style="margin-left: 17%;">
+                <img class="profile-img" src="../../images/webcuisine.jpg" alt="" style="margin-left: 17%;">
                 <form class="form-signin" action="{{ path('intranet_login')}}" method="post">
 	                <input type="text" name="login" class="form-control" placeholder="{%trans%}name_and_surname{%endtrans%}" required autofocus>
 	                <input type="password" name="pass" class="form-control" placeholder="Password" required>
@@ -72,7 +71,7 @@
 	                    Sign in
 	                </button>
 	                
-	                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span><!--pull-right need-help-->
+	                <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
                 </form>
 
     		<h6 class="text-center login-title">Copyright (c) 2016 Copyright Holder All Rights Reserved.</h6>

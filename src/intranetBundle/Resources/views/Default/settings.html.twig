@@ -13,10 +13,19 @@
     var app=angular.module('settingsApp', ['ngMaterial']);
     app.controller('settingsController', settingsController);
 
-    function settingsController ($scope,$http) { 
-       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");       
+    function settingsController ($scope,$http, $mdToast) { 
+       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");     
 
-       $scope.getCurrentUser = function(){
+       $scope.showphoto = function(){
+       alert(subida3);
+           if (window.File && window.FileReader && window.FileList && window.Blob) {
+              alert("Great success! All the File APIs are supported.");
+            } else {
+              alert('The File APIs are not fully supported in this browser.');
+            }
+       }  
+
+        $scope.getCurrentUser = function(){
                     
             $http({
                 method: 'GET',
@@ -34,7 +43,7 @@
         }
         
         $scope.updateUser=function(login){
-        
+
             $http({
                     method: 'PATCH',
                     url: window.location.pathname+'/../../api/user/'+login,
@@ -53,12 +62,42 @@
                 })
                 .then(function success(response){
                     console.log("Party time");
-                    //$scope.closeDialog();
+                    $scope.showSimpleToast();
+                    
                 }, function error(response){
                     console.log("Error:" +response.statusText);
                 }
-            );   
+            ); 
+                
         }
+
+        
+            var last = {
+                bottom: false,
+                top: true,
+                left: false,
+                right: true
+              };
+
+              $scope.toastPosition = angular.extend({},last);
+
+              $scope.getToastPosition = function() {
+                return Object.keys($scope.toastPosition)
+                  .filter(function(pos) { return $scope.toastPosition[pos]; })
+                  .join(' ');
+              };      
+
+              $scope.showSimpleToast = function() {
+                
+                var pinTo = $scope.getToastPosition();
+                $mdToast.show(
+                  $mdToast.simple()
+                    .textContent('{% trans %}modified_yourself{% endtrans %}')
+                    .position(pinTo )
+                    .hideDelay(10000)
+                );
+              };  
+        
     }    
 
     app.config(function($interpolateProvider){
@@ -67,8 +106,9 @@
             
 </script>
 
+
 <div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
-    <form name="settingsForm" id="settingsForm" method="POST" action="javaScript:handleClick()" novalidate>
+    <form name="settingsForm" id="settingsForm" method="POST" novalidate>
     <!--{{ path('intranet_cruduser') }}-->
     
     <md-content ng-init="getCurrentUser()">
@@ -143,14 +183,46 @@
                 </md-list-item>
             </div>
         </div>
+
+        <div layout="row" layout-sm="column">
+            <div flex>
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
-                    <label>{% trans %}Photo{% endtrans %}</label><br>
-                    </md-button>-->
-                    <input type='file' id="myPhoto" name="myPhoto"  style="width: 250px;"><img src="{{ me.photo }}">
+                    <label>{% trans %}Photo{% endtrans %}</label><br>                  
+                    
+                    <input id="picture" name="picture" type="file" class="ng-hide" ng-model="picture" multiple>
+                    <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
+                    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+                    <script>
+                    
+                        $('#photo').click(function(){                        
+                            $('input[type=file]').click();
+                        });
+                        
+                        
+                        $('#photo').hover(function(){
+                            $(this).css('opacity', '0.5');
+                        }, function(){
+                            $(this).css('opacity', '1');
+                        });
+                    </script>
                 </md-input-container>
-            </md-list-item>
 
+
+                <md-input-container class="md-block">
+                    <md-button class="md-raised md-primary" ng-click="showphoto()">
+                </md-input-container>
+                <hr>
+
+                <md-button>
+                    <label for="files">
+                       <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/>BUTTOn
+                    </label>  
+                </md-button>
+                <input id="files" name="file-input" type="file" style="display:none;">
+            </md-list-item>
+            </div>
+        </div>
         <div layout="row" layout-sm="column">
             <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
