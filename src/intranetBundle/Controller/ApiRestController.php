@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use intranetBundle\Entity\Entity\Tasks;
 use intranetBundle\Entity\Entity\userstasks;
 use intranetBundle\Entity\Entity\userschannel;
 use intranetBundle\Entity\Entity\channelnew_feed;
@@ -303,6 +304,39 @@ class ApiRestController extends Controller
             $serializer->serialize($task, 'json');
 
             return $task;
+        }else if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            
+            $post = file_get_contents("php://input");
+            $newIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getManager();
+            $new = new Tasks();
+            $new->setTitle($newIncoming['title']);
+            $new->setContent($newIncoming['content']);
+            $new->setWhoCreate($_SESSION['name']." ".$_SESSION['surname']);
+            $em->persist($new);
+            $em->flush();
+
+            $lastNew = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findBy([], ['id' => 'DESC'], 1);
+
+            //For each channel, I see if its checkbox is sent. In case of YES, insert the row with all the channel marked.
+            $allUsers = $this->getDoctrine()
+                             ->getRepository('intranetBundle:Entity\Users')
+                             ->findAll();
+                foreach ($allUsers as $index => $object) {
+                    foreach ($newIncoming['usersInTask'] as $key => $value) {
+                        if($object->getLogin()==$value){   //isset($_REQUEST[$object->getLogin()])
+                            $intermediate = new userstasks();
+                            $intermediate->setIdTask($lastNew[0]->getId());
+                            $intermediate->setLogin($object->getLogin());
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($intermediate);
+                            $em->flush();
+                         }
+                    }
+                }
+          
+            
         }
     }
     
