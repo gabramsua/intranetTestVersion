@@ -1610,7 +1610,10 @@ class DefaultController extends Controller{
     //FORMS
     public function formsAction(){
         
-        $params = ['userLogin' => $_SESSION['userLDAP'], 'rol' => $_SESSION['rol']];
+        $params = ['userLogin' => $_SESSION['userLDAP'],
+                   'rol' => $_SESSION['rol'],
+                   'name' => $_SESSION['name'],
+                   'surname' => $_SESSION['surname']];
         
         return $this->render(
            'intranetBundle:Default:forms.html.twig',

@@ -16,6 +16,8 @@ use intranetBundle\Entity\Entity\userschannel;
 use intranetBundle\Entity\Entity\channelnew_feed;
 use intranetBundle\Entity\Entity\Channel;
 use intranetBundle\Entity\Entity\NewFeed;
+use intranetBundle\Entity\Entity\F_Vacation;
+use intranetBundle\Entity\Entity\Users_F_Vacation;
 
 class ApiRestController extends Controller
 {
@@ -1053,6 +1055,42 @@ class ApiRestController extends Controller
         $serializer->serialize($allData, 'json');
         
         return $allData;
+    }
+    
+    
+    public function postVacationformAction($login){
+        
+        $post = file_get_contents("php://input");
+        $data = json_decode($post, true);
+        
+        $form = new F_Vacation();
+        $form->setDate1($data['startdate']);
+        $form->setDate2($data['finishdate']);
+        $form->setStatus(0);
+        $form->setType("Vacation");
+        $form->setSend(date("d/m/Y"));
+        $form->setIsRead(0);
+        $form->setSurrogate($data['surrogate']);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($form);
+        $em->flush();
+
+        //But it is also needed to insert in the intermediate table
+        //login, id_form => I need to take the ID of the last form inserted
+        $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Vacation')->findBy([], ['id' => 'DESC'], 1);
+
+        $usform = new Users_F_Vacation();
+        //$usform->setLogin($_SESSION['userLDAP']);
+        $usform->setLogin($login);
+        $usform->setIdForm($lastForm[0]->getId());
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($usform);
+        $em->flush();
+        
+        return "ok";
     }
     
 }

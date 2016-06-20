@@ -57,3 +57,10 @@ api_get_user_forms:
     defaults: { _controller: "intranetBundle:ApiRest:getUserForms"}
     requirements:
         _method: GET
+        
+api_post_vacation_form:
+    pattern: /vacationform/{login}
+    defaults: { _controller: "intranetBundle:ApiRest:postVacationform"}
+    requirements:
+        _method: POST
+        
