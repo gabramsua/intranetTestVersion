@@ -1098,7 +1098,6 @@ class ApiRestController extends Controller
         $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Vacation')->findBy([], ['id' => 'DESC'], 1);
 
         $usform = new Users_F_Vacation();
-        //$usform->setLogin($_SESSION['userLDAP']);
         $usform->setLogin($login);
         $usform->setIdForm($lastForm[0]->getId());
 
@@ -1135,7 +1134,6 @@ class ApiRestController extends Controller
         $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Expenses')->findBy([], ['id' => 'DESC'], 1);
 
         $usform = new Users_F_Expenses();
-        //$usform->setLogin($_SESSION['userLDAP']);
         $usform->setLogin($login);
         $usform->setIdForm($lastForm[0]->getId());
 
@@ -1173,7 +1171,6 @@ class ApiRestController extends Controller
         $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Trip')->findBy([], ['id' => 'DESC'], 1);
 
         $usform = new Users_F_Trip();
-        //$usform->setLogin($_SESSION['userLDAP']);
         $usform->setLogin($login);
         $usform->setIdForm($lastForm[0]->getId());
 

@@ -33,7 +33,7 @@
             </md-input-container>
             <md-input-container class="md-block">
                 <label>Congress name</label>
-                <input type="text" ng-model="congressName" name="congressName" required>
+                <input type="text" ng-model="congressName" name="congressName">
             </md-input-container>
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
@@ -46,7 +46,7 @@
             </md-input-container>
         </md-list-item>
         <md-list-item>
-            <md-button class="md-raised md-primary" ng-click="forming()" style="margin-top: 40px">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" ng-click="forming()" style="margin-top: 40px" ng-disabled="buttonFlag">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
         </md-list-item>
     </md-list>
 </div>
