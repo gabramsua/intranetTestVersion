@@ -48,6 +48,14 @@ business_trip_form: Business Trip
 overtime_hours_form: Overtime Hours
 work_at_home_form: Work at Home
 
+#HISTORIC
+type_form: Type
+date_set_form: Date sent
+status_form: Status
+pending_form: Pending
+rejected_form: Rejected
+approved_form: Approved
+
 #WORKATHOME FORM
 full_day: Full day
 half_day: Half day

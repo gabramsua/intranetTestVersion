@@ -8,49 +8,63 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
 
 <div ng-controller="historicController" ng-init="fillList()" ng-cloak>
     <md-content layout="row" layout-align="center start">
-        <md-list flex-gt-xs="50">
-            <md-list-item class="md-2-line secondary-button-padding listFormElement" ng-click="showFormDetails($event, form)" ng-repeat="form in filteredFormsList" ng-style="form.status==0 ? {'background-color': '#FF5E5C'} : form.status==1 ? {'background-color': '#68FF64'} : {'background-color': '#C3F8F7'}">
-                <div class="md-list-item-text" layout="column">
-                    <h3>Type: {[{ form.type }]}</h3>
-                    <h4>Date sent: {[{ form.send | date:'dd/MM/yyyy'}]}</h4>
-                    <h4>Date sent: {[{ form.status }]}</h4>
-                </div>
-                    <md-button ng-if="form.status == 2" class="md-secondary" ng-click="">
-                        <md-icon md-svg-src="icons/ic_delete_black_24px.svg" aria-label="android "></md-icon>
-                    </md-button>
-<!--
-                    <md-button class="md-secondary" ng-click="">
-                        <md-icon md-svg-src="icons/ic_info_black_24px.svg" aria-label="android "></md-icon>
-                    </md-button>
--->
-                <md-divider></md-divider>
+
+        <md-list flex-gt-xs="60">
+            <md-divider></md-divider>
+            <md-divider></md-divider>
+            <md-list-item style="font-size: large">
+                <span style="width: 20%">{% trans %}type_form{% endtrans %}</span>
+                <span style="width: 50%">{% trans %}date_set_form{% endtrans %}</span>
+                <span style="width: 15%">{% trans %}status_form{% endtrans %}</span>
             </md-list-item>
+            <md-divider></md-divider>
+            <md-divider></md-divider>
+            <div ng-repeat="form in filteredFormsList">
+                <md-list-item ng-click="showUpdateTaskDialog($event, task)">
+
+                    <span style="width: 20%">{[{form.type}]}</span>
+                    <span style="width: 50%">{[{form.send}]}</span>
+                    <div style="width: 15%">
+                      <span ng-if="form.status == 0" style="color:#4073A5; font-weight:bold;">{% trans %}pending_form{% endtrans %}</span>
+                      <span ng-if="form.status == 1" style="color:#389C97; font-weight:bold;">{% trans %}approved_form{% endtrans %}</span>
+                      <span ng-if="form.status == 2" style="color:#8A2278; font-weight:bold;">{% trans %}rejected_form{% endtrans %}</span>
+                    </div>
+                    <div ng-if="form.status == 0">
+                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm($event, form)" ng-if="form.status == 0">X</md-button> <!--sustituir por el icono de abajo-->
+                    </div>
+
+                </md-list-item>
+    <!--            <md-icon md-svg-src="/es/ic_delete_black_24px.svg" aria-label="android "></md-icon>-->
+                <md-divider></md-divider>
+            </div>
         </md-list>
-        <div class="radioButtonList">
-            <p>Select a form type:</p>
-            <md-radio-group ng-model="filters.formType">
-                <md-radio-button value="All" class="md-primary">All</md-radio-button>
-                <md-radio-button value="Vacation" class="md-primary">Vacation</md-radio-button>
-                <md-radio-button value="Expenses" class="md-primary">Expenses</md-radio-button>
-                <md-radio-button value="BusinessTrip" class="md-primary">Business Trip</md-radio-button>
-                <md-radio-button value="OvertimeHours" class="md-primary">Overtime hours</md-radio-button>
-                <md-radio-button value="WorkAtHome" class="md-primary">Work at home</md-radio-button>
-            </md-radio-group>
-        </div>
-        <div class="radioButtonList">
-            <p>Select a form status:</p>
-            <md-radio-group ng-model="filters.formStatus">
-                <md-radio-button value="3" class="md-primary">All</md-radio-button>
-                <md-radio-button value="1" class="md-primary">Accepted</md-radio-button>
-                <md-radio-button value="2" class="md-primary">Rejected</md-radio-button>
-                <md-radio-button value="0" class="md-primary">Pending</md-radio-button>
-            </md-radio-group>
-        </div>
+        <div layout="column">
+          <div class="radioButtonList">
+              <p>Select a form type:</p>
+              <md-radio-group ng-model="filters.formType">
+                  <md-radio-button value="All" class="md-primary">All</md-radio-button>
+                  <md-radio-button value="Vacation" class="md-primary">Vacation</md-radio-button>
+                  <md-radio-button value="Expenses" class="md-primary">Expenses</md-radio-button>
+                  <md-radio-button value="BusinessTrip" class="md-primary">Business Trip</md-radio-button>
+                  <md-radio-button value="OvertimeHours" class="md-primary">Overtime hours</md-radio-button>
+                  <md-radio-button value="WorkAtHome" class="md-primary">Work at home</md-radio-button>
+              </md-radio-group>
+          </div>
+          <div class="radioButtonList">
+              <p>Select a form status:</p>
+              <md-radio-group ng-model="filters.formStatus">
+                  <md-radio-button value="3" class="md-primary">All</md-radio-button>
+                  <md-radio-button value="1" class="md-primary">Accepted</md-radio-button>
+                  <md-radio-button value="2" class="md-primary">Rejected</md-radio-button>
+                  <md-radio-button value="0" class="md-primary">Pending</md-radio-button>
+              </md-radio-group>
+          </div>
+      </div>
 <!--
         <div ng-repeat="type in formTypes">{[{type}]}</div>
         <md-radio-group ng-model="filters.formType">
             <md-radio-button ng-repeat="type in formTypes" value="{[{type}]}" class="md-primary">{[{type}]}</md-radio-button>
-            
+
         </md-radio-group>
         <md-radio-group ng-model="filters.formStatus">
             <md-radio-button ng-repeat="st in status" value="{[{st}]}" class="md-primary">{[{st}]}</md-radio-button>

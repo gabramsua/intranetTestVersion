@@ -1,5 +1,5 @@
 <style>
-    
+
     /*the following styles hide the placeholder that "google places" provides in the input to get places*/
     #gplace::-webkit-input-placeholder { /* Chrome/Opera/Safari */
         visibility: hidden;
@@ -14,9 +14,9 @@
         visibility: hidden;
     }
     /*end hidding placeholder from google*/
-    
+
 </style>
-<div ng-form name="businessTripForm" layout="row" layout-align="center start" ng-controller="businessTripController">
+<div ng-form name="businessTripForm" layout="row" layout-align="center start" ng-controller="businessTripController" style="background-color:#FDFDFD;">
     <md-list layout="column" ng-cloak="">
         <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
         <md-list-item layout-lg="row" layout-xl="row" style="margin-bottom: 18px;">

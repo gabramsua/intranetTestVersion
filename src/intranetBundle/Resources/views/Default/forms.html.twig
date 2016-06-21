@@ -16,7 +16,7 @@
         <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
         <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
             app.controller('tabsController', tabsController);
@@ -31,7 +31,7 @@
             app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
-            
+
             app.config(function($mdThemingProvider) {
 
                 // Configure a dark theme with primary foreground yellow
@@ -41,7 +41,7 @@
                                   .dark();
 
             });
-            
+
             app.config(function ($mdDateLocaleProvider) {
                 $mdDateLocaleProvider.formatDate = function(date) {
                     return date ? moment(date).format('DD/MM/YYYY') : '';
@@ -52,7 +52,7 @@
                     return m.isValid() ? m.toDate() : new Date(NaN);
                 };
             });
-            
+
             app.directive('googleplace', function() {
                 return {
                     require: 'ngModel',
@@ -65,31 +65,31 @@
 
                         google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
                             scope.$apply(function() {
-                                model.$setViewValue(element.val());                
+                                model.$setViewValue(element.val());
                             });
                         });
                     }
                 };
             });
-            
+
             function tabsController($scope){
-                $scope.returnToHistory = function() {
-                    $scope.selectedIndex = 0; 
+                $scope.returnToHistoric = function() {
+                    $scope.selectedIndex = 0;
                 };
             }
-            
+
             function formHeaderController($scope, $filter){
                 $scope.auxDate = new Date();
                 $scope.name = ("{{name | json_encode()}}").replace(/&quot;/g, "")+ " " +
                     ("{{surname | json_encode()}}").replace(/&quot;/g, "");;
             }
-            
+
             function formatDate(date){
-                
+
                 if (typeof date != "string"){
-                
+
                     var dateFormatted = "";
-                    
+
                     if (date.getDate() < 10)
                         dateFormatted += '0';
 
@@ -104,12 +104,12 @@
                 }else
                     return date;
             }
-            
+
             function vacationController($scope, $http){
-                
+
                 $scope.buttonFlag = false;
                 $scope.surrogate = "";
-                
+
                 //DATES FUNCTIONALITY
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var.
                 $scope.startDate = new Date();
@@ -118,34 +118,34 @@
                 //$WATCH ---> https://quizzpot.com/courses/introduccion-a-angular-js/articles/escuchando-cambios-en-el-scope-usando-el-watch
                 //https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=como+usar+%24watch
                 $scope.$watch("startDate", function(data){
-                    
+
                     if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
                         $scope.finishDate = $scope.startDate;
-                    
-                    $scope.minFinishDate = $scope.startDate;    
-                    
+
+                    $scope.minFinishDate = $scope.startDate;
+
                 });
-                
+
                 $scope.$watch("minFinishDate", function(data){
-                    
+
                     console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
                 //DATES FUNCTIONALITY
-                
+
                 $scope.forming = function(){
-                    
+
                     $scope.vacationForm.$setSubmitted();
-                    
+
                     if ($scope.vacationForm.$valid){
-                        
+
                         $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {startdate: formatDate($scope.startDate),
                                 finishdate: formatDate($scope.finishDate),
                                 surrogate: $scope.surrogate
                                 };
-                    
+
                         $http({
                             method: 'POST',
                             url: window.location.pathname+'/../../api/vacationform/'+userLogin,
@@ -154,7 +154,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
-                            $scope.returnToHistory();
+                            $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
@@ -162,17 +162,17 @@
                         });
                     }
                 };
-                
+
                 function reinitializeModel(){
-                    
+
                     $scope.surrogate = "";
                     $scope.startDate = new Date();
                     $scope.finishDate = new Date();
                 }
             }
-            
+
             function expensesController($scope, $http){
-                
+
                 $scope.buttonFlag = false;
                 $scope.data = {
                     seller: "",
@@ -180,22 +180,22 @@
                     concept: "",
                     dateSelected: new Date() // this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
                 }
-                
+
                 $scope.forming = function(){
-                    
+
                     $scope.expensesForm.$setSubmitted();
-                    
+
                     if ($scope.expensesForm.$valid){
-                        
+
                         $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {
                             seller: $scope.data.seller,
-                            amount: $scope.data.amount, 
+                            amount: $scope.data.amount,
                             concept: $scope.data.concept,
                             beforeToDate: formatDate($scope.data.dateSelected)
                         };
-                    
+
                         $http({
                             method: 'POST',
                             url: window.location.pathname+'/../../api/expensesform/'+userLogin,
@@ -204,7 +204,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
-                            $scope.returnToHistory();
+                            $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
@@ -212,11 +212,11 @@
                         });
                     }
                 };
-                
+
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
-                
+
                 function reinitializeModel(){
-                    
+
                     $scope.data = {
                         seller: "",
                         amount: null,
@@ -225,41 +225,41 @@
                     }
                 }
             }
-            
+
             function businessTripController($scope, $http){
-                
+
                 $scope.buttonFlag = false;
                 $scope.location = "";
                 $scope.congressName = "";
                 $scope.reasons = "";
-                
+
                 //DATES FUNCTIONALITY
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var
                 $scope.startDate = new Date();
                 $scope.finishDate = new Date();
                 $scope.minFinishDate = $scope.startDate;
                 $scope.$watch("startDate", function(data){
-                    
+
                     if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
                         $scope.finishDate = $scope.startDate;
-                    
-                    $scope.minFinishDate = $scope.startDate;    
-                    
+
+                    $scope.minFinishDate = $scope.startDate;
+
                 });
-                
+
                 $scope.$watch("minFinishDate", function(data){
-                    
+
                     console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
                 //DATES FUNCTIONALITY
-                
+
                 $scope.forming = function(){
-                    
+
                     $scope.businessTripForm.$setSubmitted();
-                    
+
                     if ($scope.businessTripForm.$valid){
-                        
+
                         $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {location: $scope.location,
@@ -268,7 +268,7 @@
                                     startDate: formatDate($scope.startDate),
                                     finishDate: formatDate($scope.finishDate)
                                     };
-                    
+
                         $http({
                             method: 'POST',
                             url: window.location.pathname+'/../../api/businesstripform/'+userLogin,
@@ -277,7 +277,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
-                            $scope.returnToHistory();
+                            $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
@@ -285,125 +285,125 @@
                         });
                     }
                 };
-                
+
                 function reinitializeModel(){
-                    
+
                     $scope.location = "";
                     $scope.congressName = "";
                     $scope.reasons = "";
                     $scope.startDate = new Date();
                     $scope.finishDate = new Date();
                 }
-                
+
             }
-            
+
             function overtimeHoursController2($scope, $http, $filter){
-                
+
                 $scope.buttonFlag = false;
                 $scope.jiraTicketdID = "";
                 $scope.reasons = "";
-                
+
                 function overtime(){
                     this.date = new Date();
                     this.hours = 0;
                     this.minutes = 0;
                 }
-                
+
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
-                
+
                 $scope.dateSelected = new Date();// this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
-                
+
                 $scope.time = {
                     hours : [0, 1, 2, 3, 4, 5, 6, 7, 8],
                     minutes : [0, 15, 30, 45],
                     selectedHour: 0,
                     selectedMinute: 0
                 }
-                
+
                 $scope.overtimeList = [];
-                
+
                 $scope.showData = function(){
-                  
+
                     $scope.overtimeList.forEach(function(item, index){
                         console.log("Fecha: "+item.date+" || Hora: "+item.hours+" || Minutos: "+item.minutes);
                     });
                 };
-                
+
                 $scope.overtimeList.forEach(function(current, index){
-                    
+
                     $scope.$watch('overtimeList', function(newValue){
-                        $scope.overtimeList.date = $filter('date')(newValue[index].date, 'yyyy/MM/dd'); 
+                        $scope.overtimeList.date = $filter('date')(newValue[index].date, 'yyyy/MM/dd');
                     });
                 });
-                
-                
+
+
                 $scope.hoursSelected = 0;
                 $scope.minutesSelected = 0;
-                
+
                 $scope.addDateField2 = function(){
                     var OTaux = new overtime();
-                    
+
                     OTaux.date = $scope.dateSelected;
                     OTaux.hours = $scope.hoursSelected;
                     OTaux.minutes = $scope.minutesSelected;
-                    
+
                     $scope.overtimeList.push(OTaux);
-                    
+
                     $scope.noDatesFlag = false;
                 }
-                
+
                 $scope.noDatesFlag = true;
                 $scope.removeElement = function(index){
-                    
+
                     $scope.overtimeList.splice(index, 1);
-                    
+
                     if ($scope.overtimeList.length == 0)
                         $scope.noDatesFlag = true;
                 };
-                
+
                 $scope.timeFlag = true;
-                
+
                 $scope.timeValidation = function(hours, minutes){
-                
+
                     if (hours == 0 && minutes == 0)
                         $scope.timeFlag = true;
                     else
                         $scope.timeFlag = false;
                 };
-                
+
                 $scope.isEmptyList = function(){
                     console.log($.isEmptyObject($scope.overtimeList));
                     return $.isEmptyObject($scope.overtimeList);
                 };
-                
+
                 $scope.alreadySelectedDatesDates = function(date){
-                    
+
                     if ($scope.overtimeList.length > 0)
                         for (var i = 0; i < $scope.overtimeList.length; i++)
                             if (moment(date).isSame($scope.overtimeList[i].date, 'day'))
                                 return false;
-                    
+
                     return true;
                 };
-                
+
                 $scope.forming = function(){
-                    
+
                     $.each($scope.overtimeList, function(index, current){
                        current.date = formatDate(current.date);
                     });
-                    
+
                     $scope.overtimeHoursForm.$setSubmitted();
-                    
+
                     if ($scope.overtimeHoursForm.overtimeHoursReasons.$valid && $scope.overtimeHoursForm.jiraTicketdID.$valid &&
                         !$scope.timeFlag && !$scope.noDatesFlag){
-                        
+
                         $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {jiraTicketID: $scope.jiraTicketdID,
                                     reasons: $scope.reasons,
                                     datesList: $scope.overtimeList
                                     };
-                    
+
                         $http({
                             method: 'POST',
                             url: window.location.pathname+'/../../api/overtimehoursform/'+userLogin,
@@ -412,7 +412,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
-                            $scope.returnToHistory();
+                            $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             $scope.noDatesFlag = true;
                             $scope.timeFlag = true;
@@ -422,9 +422,9 @@
                         });
                     }
                 };
-                
+
                 function reinitializeModel(){
-                    
+
                     $scope.jiraTicketdID = "";
                     $scope.reasons = "";
                     $scope.overtimeList = [];
@@ -432,9 +432,9 @@
                     $scope.minutesSelected = 0;
                 }
             }
-            
+
             function workAtHomeController($scope, $http){
-                    
+
                 $scope.buttonFlag = false;
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
 
@@ -442,20 +442,20 @@
 
                 $scope.reasons = "";
                 $scope.wholeOrHalfDay = "wholeDay";
-                
+
                 $scope.forming = function(){
-                    
+
                     $scope.workAtHomeForm.$setSubmitted();
-                    
+
                     if ($scope.workAtHomeForm.$valid){
-                        
+
                         $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {date: $scope.dateSelected,
                                     reasons: $scope.reasons,
                                     wholeOrHalfDay: $scope.wholeOrHalfDay == "wholeDay" ? 1 : 0
                                     };
-                    
+
                         $http({
                             method: 'POST',
                             url: window.location.pathname+'/../../api/workathomeform/'+userLogin,
@@ -464,7 +464,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
-                            $scope.returnToHistory();
+                            $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
@@ -472,33 +472,40 @@
                         });
                     }
                 };
-                
+
                 function reinitializeModel(){
-                    
+
                     $scope.dateSelected = new Date();
                     $scope.reasons = "";
                     $scope.wholeOrHalfDay = "wholeDay";
                 }
             }
-            
+
             function historicController($scope, $http, $mdDialog){
-                
+
+
                 var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
-                
+
                 $scope.filters = {
                     formType: 'All',
                     formStatus: 3
                 };
-                
+
+                //form filter status legend
+                //0 -> Pending
+                //1 -> Accepted
+                //2 -> Rejected
+                //3 -> All
+
                 $scope.fillList = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/user/'+userLogin+'/forms',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){
-                        
+
                         $scope.formsList = response.data.allForms;
                         $scope.filteredFormsList = groupAllFormsInOneArray(response.data.allForms);
                         $scope.daysOnOvertimeHoursForms = response.data.daysOnOvertimeHoursForms;
@@ -507,9 +514,9 @@
                         console.log("ERROR: "+response.statusText);
                     });
                 }
-                
+
                 $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
-                    
+
                     $scope.filteredFormsList = [];
                     if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
                         $scope.filteredFormsList = groupAllFormsInOneArray($scope.formsList);
@@ -517,7 +524,7 @@
                         $scope.filteredFormsList = groupAllFormsInOneArray($scope.formsList);
                         $scope.filteredFormsList = filterFormsByStatus($scope.filteredFormsList, $scope.filters.formStatus);
                     }else{
-                        
+
                         switch($scope.filters.formType){
                             case 'Vacation':
                                 $scope.filteredFormsList = filterFormsByStatus($scope.formsList.vacationFormsList, $scope.filters.formStatus);
@@ -539,13 +546,13 @@
                                 break;
                         }
                     }
-                    
+
                 });
-                
+
                 function filterFormsByStatus(currentTypeFormList, status){
-                    
+
                     var formsListOutput = [];
-                    
+
                     if (status == 3)
                         formsListOutput = currentTypeFormList;
                     else{
@@ -554,37 +561,37 @@
                                 formsListOutput.push(currentForm);
                         });
                     }
-                    
+
                     return formsListOutput;
                 }
-                
+
                 function groupAllFormsInOneArray(formsList){
-                    
+
                     var formsListOutput = [];
-                    
+
                     $.each(formsList, function(index, currentList){
-                        
+
                         $.each(currentList, function(index, currentForm){
                             formsListOutput.push(currentForm);
                         });
                     });
-                    
+
                     return formsListOutput;
                 }
-                
+
                 $scope.showFormDetails = function(ev, form) {
-                    
+
                     var daysOnOvertimeHoursForm = null
-                    
+
                     if (form.type == "OvertimeHours")
                         daysOnOvertimeHoursForm = $scope.daysOnOvertimeHoursForms[form.id];
-                    
+
                     $mdDialog.show({
                         templateUrl: "{{ path('intranet_forms_main_dialog')}}",
                         locals: {
                             currentForm: form,
                             daysOnOvertimeHoursForm: daysOnOvertimeHoursForm
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -592,11 +599,11 @@
                     });
                 }
             }
-            
+
             function dialogController($scope, $mdDialog, currentForm, daysOnOvertimeHoursForm){
-                
+
                 $scope.form = currentForm;
-                
+
                 switch($scope.form.type){
                     case "Expenses":
                         $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_expenses')}}";
@@ -615,42 +622,42 @@
                         $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_work_at_home')}}";
                         break;
                 }
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 }
             }
-            
+
             //TODO:DEPRECATED (ASK IF IT'S POSSIBLE TO CREATE A FACTORY WITH THIS GIVEN THAT IT'S A FUNCTIONALITY THAT EVERY FORMS SHARE)
             function dateRangeController ( $scope, $filter ) {
-                
+
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); // minDate, don't touch this var. TODO: HAY QUE RESTAR UN DÍA a esta fecha para que permita seleccionar el día actual.
                 $scope.startDate = new Date();
                 $scope.finishDate = new Date();
                 $scope.minFinishDate = $scope.startDate;
-                
+
                 //$WATCH ---> https://quizzpot.com/courses/introduccion-a-angular-js/articles/escuchando-cambios-en-el-scope-usando-el-watch
                 //https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=como+usar+%24watch
                 $scope.$watch("startDate", function(data){
-                    
+
                     if($scope.startDate > $scope.finishDate) //al cambiar la fecha de comienzo, si esta es mayor que la de fin, la de fin se actualiza a la de comienzo, si no, la de fin se queda igual
                         $scope.finishDate = $scope.startDate;
-                    
-                    $scope.minFinishDate = $scope.startDate;    
-                    
+
+                    $scope.minFinishDate = $scope.startDate;
+
                 });
-                
+
                 $scope.$watch("minFinishDate", function(data){
-                    
+
                     console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
             }
-            
-            
+
+
         </script>
 
-        <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController">
+        <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController" style="background-color:#FDFDFD !important;">
             <md-content>
 <!--            <md-content class="md-padding">-->
                 <md-tabs id="tabs" class="md-accent" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
@@ -667,13 +674,15 @@
 <!--                            <div ng-include="'vacationForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
+              <!--
                     <md-tab id="tab1">
                         <md-tab-label>VacationTest</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_vacation_test')}}'"></div>
-<!--                            <div ng-include="'vacationFormTest.html'"></div>-->
+                            <div ng-include="'vacationFormTest.html'"></div>
                         </md-tab-body>
                     </md-tab>
+              -->
                     <md-tab id="tab2">
                         <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
@@ -704,9 +713,9 @@
                     </md-tab>
                 </md-tabs>
             </md-content>
-            
+
         </div>
-        
-        
+
+
 
 {% endblock %}
