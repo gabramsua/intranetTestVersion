@@ -39,15 +39,15 @@
     {% if user.onboard==1 %}
             <li><a href='{{ path('intranet_tasks')}}'>{% trans %}Task {% endtrans %}-<i> internships</i></a></li>
     {% endif %}
-    {% if role!="developer"%}
+    {% if role!="test"%}
             <li><a href='{{ path('intranet_userManagement')}}'>{% trans %}User Management {% endtrans %}-<i> admins</i></a></li>
     {% endif %}
-    {% if role!="developer"%}
+    {% if role!="test"%}
             <li><a href='{{ path('intranet_news')}}'>{% trans %}News Feed {% endtrans %}-<i> BÜOs</i></a></li>
             <li><a href='{{ path('intranet_channels')}}'>{% trans %}Channels {% endtrans %}-<i> BÜOs</i></a></li>
     {% endif %}
         
-    {% if role!="developer"%}
+    {% if role!="test"%}
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Form Management {% endtrans %}-<i> BÜOs</i><span class="caret"></span></a>
           <ul class="dropdown-menu">

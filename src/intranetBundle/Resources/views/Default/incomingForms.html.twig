@@ -95,6 +95,24 @@
     </script>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div ng-cloak ng-app="MyApp" ng-controller="incomingsController" ng-init="">
     <h2>HOURS</h2>
     <md-list ng-init="getAllHours()">
@@ -103,6 +121,7 @@
         <md-list-item style="font-size: large" ng-model="prueba">
             <span style="width: 15%">User</span>
             <span style="width: 60%">Date</span>
+            <span style="width: 10%">Status</span>
         </md-list-item>
         <md-divider></md-divider>
         <md-divider></md-divider>
@@ -112,6 +131,9 @@
             <md-list-item ng-click="showUpdateHoursDialog($event, form)">
                 <span style="width: 15%">{[{user.login}]}</span>
                 <span style="width: 60%">{[{form.send}]}</span>
+                <span style="width: 10%">
+                  <div ng-if="form.status == 0" style="background: grey"></div>
+                </span>
             </md-list-item>
 
             <md-divider></md-divider>
