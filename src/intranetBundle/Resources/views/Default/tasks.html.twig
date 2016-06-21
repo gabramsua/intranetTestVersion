@@ -23,7 +23,7 @@
                 dataFromServer = dataFromServer.replace("]]", "");
                 dataFromServer = dataFromServer.split("],[");
                 
-                $scope.userRol = "asd";//("{{rol | json_encode()}}").replace(/&quot;/g, "");
+                $scope.userRol = ("{{rol | json_encode()}}").replace(/&quot;/g, "");
                 $scope.userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.tasks = [];
@@ -344,7 +344,7 @@
 <div ng-cloak ng-app="MyApp" ng-controller="tasksController" ng-init="userRol == 'developer' ? getTasksOfUser() : getAllTasks()">
     
     <md-list>
-        <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol != developer">New Task</md-button>
+        <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol != 'developer'">New Task</md-button>
         <md-divider></md-divider>
         <md-divider></md-divider>
         <md-list-item style="font-size: large" ng-model="prueba">

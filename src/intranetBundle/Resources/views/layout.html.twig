@@ -31,18 +31,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
 
+<link rel="stylesheet" href="../../assets/menu.css">
+
 {% endblock %}
 
 
 {% block cabecera %}
     <div id="cabecera">
-      <h1>Here will be the image</h1>
+      <img href="{{ path('intranet_homepage')}}" class="profile-img" src="../../images/webcuisine-logo.png" alt="" style="margin-top: 1%;margin-left: 2%;">
     </div>
 {% endblock %}
 
 {% block menu %}
     {# {{ uROL('buo') }} #}
-    <div style="height:100%;">
+    <div style="height:100%;background: #fdfdfd;">
     {{ render(controller('intranetBundle:Menu:menu')) }}
     </div>
 {% endblock %}
@@ -59,8 +61,12 @@
         {% endblock %}
     </div>
 
+    
+{% endblock %}
+
+{% block footer %}
     <div id="pie">
         <hr/>
-        <div align="center">- pie de página -</div>
+        <div align="center"><b>- pie de página -</b></div>
     </div>
 {% endblock %}

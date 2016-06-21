@@ -1,7 +1,7 @@
 {# {% extends '::base.html.twig' %} #}
 
 {% block menu %}
-  <nav class="nav nav-pills nav-stacked" style="background: #ececec;"><!--navbar navbar-inverse-->
+  <nav class="nav nav-pills nav-stacked" id="nav-sup"><!--navbar navbar-inverse-->
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -9,7 +9,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{ path('intranet_homepage')}}">WebCuisine</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
@@ -21,7 +20,7 @@
   </div>
   </nav>
 <!--*********************************************************************************************************************-->
-<div class="container-fluid col-md-2" style="height: 100%;float: left;background: #e0e0e0;">
+<div class="container-fluid col-md-2" id="nav-left">
   <ul class="nav nav-pills nav-stacked"><!--horizontal: nav-justified-->
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Forms {% endtrans %}<span class="caret"></span></a>

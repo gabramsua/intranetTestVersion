@@ -317,7 +317,7 @@ class ApiRestController extends Controller
             $em->persist($new);
             $em->flush();
 
-            $lastNew = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findBy([], ['id' => 'DESC'], 1);
+            $lastNew = $this->getDoctrine()->getRepository('intranetBundle:Entity\Tasks')->findBy([], ['id' => 'DESC'], 1);
 
             //For each channel, I see if its checkbox is sent. In case of YES, insert the row with all the channel marked.
             $allUsers = $this->getDoctrine()
@@ -1318,6 +1318,46 @@ class ApiRestController extends Controller
         
         return "ok";
     }
+
+    public function getFormsHoursAction(){
+        $hoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Hours')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($hoursList, 'json');
+
+        $usershoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Hours')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usershoursList, 'json');
+
+        $data = [
+            "hoursList" => $hoursList,
+            "usershoursList" => $usershoursList
+        ];
+
+        return $data;
+    }
+
+    public function getFormHourAction($id){
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+            $channel = $this->getDoctrine()->getRepository('intranetBundle:Entity\Channel')->findOneById($id);
+
+            if(is_null($channel))
+                throw new HttpException(404, "The channel $id could not be found.");
+
+            if(!is_object($channel)){
+                throw $this->createNotFoundException();
+            }
+
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($channel, 'json');
+
+            return $channel;
+            
+        }
+    }
+
+    
     
 }
 

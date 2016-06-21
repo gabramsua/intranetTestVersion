@@ -1,0 +1,32 @@
+#nav-sup{
+	/*background: #e0e0e0;*/
+	background: #055751;
+	border-radius: 5px;
+}
+
+#nav-sup a{
+	color: #D1D1D1;	
+}
+
+#nav-sup a:hover{
+	background: #055751;
+	color: black;	
+}
+
+#nav-left{
+	height: 100%;
+	float: left;
+	background: #fdfdfd;/*#e0e0e0;
+	/*margin-top: -40px;*/
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+#nav-left a{
+	color: #055751;	
+	background: #fdfdfd;/*#e0e0e0;*/
+}
+#nav-left a:hover{
+	color: black;	
+}
+
