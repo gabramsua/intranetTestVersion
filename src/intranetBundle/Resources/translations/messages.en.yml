@@ -38,3 +38,19 @@ create_channel: "Create the Channel"
 
 #NEWS
 message_2: "Not a bad idea to build a filter by channel<br> or showing also the channels which it belongs and clicking in the name of the td"
+
+
+#FORMS
+historic: Historic
+vacation_form: Vacation
+expenses_form: Expenses
+business_trip_form: Business Trip
+overtime_hours_form: Overtime Hours
+work_at_home_form: Work at Home
+
+#WORKATHOME FORM
+full_day: Full day
+half_day: Half day
+reasons: Reasons
+error_reason_required: You have to specify a reason to justify the trip.
+sendButton: Send

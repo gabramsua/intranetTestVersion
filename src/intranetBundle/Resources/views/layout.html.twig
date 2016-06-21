@@ -29,7 +29,7 @@
 <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
 <link rel="stylesheet" href="../../assets/menu.css">
 
@@ -50,16 +50,19 @@
 {% endblock %}
 
 {% block body %}
+
+    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 80%;height: 100%">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+    
     <div id="newsfeed" style="width: 200px; float: right; margin-top: 100px; margin-right: 100px;">
         {% block newsfeed %}
             {{ render(controller('intranetBundle:News:news')) }}
         {% endblock %}
     </div>
 
-    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 80%;height: 100%">
-        {% block contenido %}
-        {% endblock %}
-    </div>
+
 
     
 {% endblock %}

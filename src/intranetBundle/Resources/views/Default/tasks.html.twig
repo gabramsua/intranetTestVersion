@@ -15,34 +15,39 @@
             app.controller('tasksController', tasksController);
             app.controller('updateTaskDialogController', updateTaskDialogController);
             app.controller('createTaskDialogController', createTaskDialogController);
-            
+
             function tasksController($scope, $mdDialog, $http){
                 var dataFromServer = ("{{listTasks | json_encode()}}").replace(/&quot;/g, "");
-                
+
                 dataFromServer = dataFromServer.replace("[[", "");
                 dataFromServer = dataFromServer.replace("]]", "");
                 dataFromServer = dataFromServer.split("],[");
+<<<<<<< HEAD
                 
                 $scope.userRol = ("{{rol | json_encode()}}").replace(/&quot;/g, "");
+=======
+
+                $scope.userRol = "asd";//("{{rol | json_encode()}}").replace(/&quot;/g, "");
+>>>>>>> 190292a6e5a14410f308f18547a47c9c4736c7e9
                 $scope.userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
-                
+
                 $scope.tasks = [];
-                
+
                 $scope.isLoading = false;
-                
+
                 for (var i = 0; i < dataFromServer.length; i++){
                     $scope.tasks.push(dataFromServer[i].split(','));
                 }
-                
+
                 //TaskTemplates/mainDialogTask.tmpl.html
                 $scope.showUpdateTaskDialog = function(ev, task) {
-                    
+
                     $mdDialog.show({
                         templateUrl: "{{path('intranet_main_task_dialog2')}}",
                         locals: {
                             currentTask: task,
                             rol: $scope.userRol
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -50,11 +55,11 @@
                         onRemoving: ($scope.userRol != "developer") ? $scope.getAllTasks : null
                     });
                 }
-                
+
                 $scope.showCreateTaskDialog = function(ev) {
-                    
+
                     $mdDialog.show({
-                        templateUrl: "{{path('intranet_main_task_dialog2')}}", 
+                        templateUrl: "{{path('intranet_main_task_dialog2')}}",
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -62,9 +67,9 @@
                         onRemoving: $scope.getAllTasks
                     });
                 }
-                
+
                 $scope.getTasksOfUser = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/users/'+$scope.userLogin+'/tasks',
@@ -72,16 +77,16 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         $scope.tasksList = response.data;
                         console.log($scope.tasksList);
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
                 }
-                
+
                 $scope.getAllTasks = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/tasks',
@@ -89,34 +94,34 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         $scope.tasksList = response.data;
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
                 }
-                
+
                 $scope.deleteTask = function(ev, task){
                     $mdDialog.show({
                         templateUrl: "{{path('intranet_delete_dialog')}}",
                         locals: {
                             currentTask: task
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
                         controller: deleteTaskDialogController,
                         onRemoving: $scope.getAllTasks
                     });
-                }   
+                }
             }
-            
+
             function createTaskDialogController($scope, $mdDialog, $http, $mdToast){
 
                 $listChecked=[];
 
                 $scope.getInfo = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/users/all/onboard',
@@ -129,7 +134,7 @@
                         console.log("Error:" +response.statusText);
                     });
                 };
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
@@ -137,7 +142,7 @@
                 $scope.alreadyIn = function(user){
                     return ($listChecked).indexOf(user.login) > -1;
                 };
-                
+
                 $scope.toggle = function(user){
                     var index = ($listChecked).indexOf(user.login);
 
@@ -148,7 +153,7 @@
                         ($listChecked).push(user.login);
                     }
                     //console.log($listChecked);
-                }; 
+                };
 
                 $scope.create=function(){
 
@@ -208,10 +213,10 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {
-                    
+
                     var pinTo = $scope.getToastPosition();
                     $mdToast.show(
                       $mdToast.simple()
@@ -219,17 +224,17 @@
                         .position(pinTo )
                         .hideDelay(5000)
                     );
-                  };    
+                  };
             }
-            
+
             function updateTaskDialogController($scope, $mdDialog, $http, currentTask, rol){
-                
+
                 $scope.userRol = rol;
                 $scope.task = currentTask;
                 $scope.loading = false;
-                
+
                 $scope.getInfo = function(){
-                    
+
                     //AJAX call requesting the task info, its list of users and the list of all users in the database.
                     $http({
                         method: 'GET',
@@ -238,7 +243,7 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         $scope.allData = {
                             "taskData": response.data.taskData,
                             "taskUsers": $.map(response.data.usersInTask, function(elem){return elem.login}),
@@ -247,39 +252,39 @@
                         console.log($scope.allData.taskData);
                         $scope.allUsers = $scope.allData.allUsers;
                         $scope.usersInTaskShownToDeveloper = $scope.allData.allUsers.filter(function(user){
-                            
+
                             if (($scope.allData.taskUsers).indexOf(user.login) > -1)
                                 return user;
                         });
-                        
+
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
                 };
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
-                
+
                 $scope.alreadyIn = function(user){
-                    
+
                     return ($scope.allData.taskUsers).indexOf(user.login) > -1;
                 };
-                
+
                 $scope.toggle = function(user){
-                 
+
                     var index = ($scope.allData.taskUsers).indexOf(user.login);
-                    
+
                     if (index > -1)
                         ($scope.allData.taskUsers).splice(index, 1);
                     else
                         ($scope.allData.taskUsers).push(user.login);
                 };
-                
+
                 $scope.update = function($id){
-                        
+
                     $scope.loading = true;
-                    
+
                     $http({
                         method: 'PATCH',
                         url: window.location.pathname+'/../../api/tasks/'+$id,
@@ -293,7 +298,7 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         //TODO
                         /*if("error de validación")
                             //toast informando del error
@@ -303,7 +308,7 @@
                         console.log("Error:" +response.statusText);
                     });
                 };
-                
+
                 //DEPRECATED
                 //Used to update the task by submit.
                 $scope.update2 = function(){
@@ -315,10 +320,10 @@
                     $("#taskUpdateForm").submit();
                 };
             }
-            
+
             function deleteTaskDialogController($scope, $mdDialog, $http, currentTask){
                 $scope.task = currentTask;
-                
+
                 $scope.closeDialog = function(){
                     $mdDialog.hide();
                  };
@@ -335,14 +340,14 @@
                          $scope.closeDialog();
                     }, function error(response){
                         console.log("Error:" +response.statusText);
-                    });                     
+                    });
                  };
             }
-            
+
         </script>
 
 <div ng-cloak ng-app="MyApp" ng-controller="tasksController" ng-init="userRol == 'developer' ? getTasksOfUser() : getAllTasks()">
-    
+
     <md-list>
         <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol != 'developer'">New Task</md-button>
         <md-divider></md-divider>
@@ -356,14 +361,14 @@
         <md-divider></md-divider>
         <div ng-repeat="task in tasksList track by $index">
             <md-list-item ng-click="showUpdateTaskDialog($event, task)">
-   
+
                 <span style="width: 15%">{[{task.title}]}</span>
                 <span style="width: 60%">{[{task.content}]}</span>
                 <span style="width: 15%">{[{task.who_create}]}</span>
                 <div>
                     <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">X</md-button> <!--sustituir por el icono de abajo-->
                 </div>
-            
+
             </md-list-item>
 <!--            <md-icon md-svg-src="/es/ic_delete_black_24px.svg" aria-label="android "></md-icon>-->
             <md-divider></md-divider>

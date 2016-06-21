@@ -24,7 +24,6 @@
             app.controller('dateRangeController', dateRangeController);
             app.controller('vacationController', vacationController);
             app.controller('expensesController', expensesController);
-            app.controller('overtimeHoursController', overtimeHoursController);
             app.controller('overtimeHoursController2', overtimeHoursController2);
             app.controller('businessTripController', businessTripController);
             app.controller('workAtHomeController', workAtHomeController);
@@ -32,66 +31,6 @@
             app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
-            app.directive('zeroTimeDirective', function(){
-                
-                //https://blog.umur.io/2013/07/02/angularjs-directives-using-isolated-scope-with-attributes/
-                //https://johnpapa.net/angularjss-controller-as-and-the-vm-variable/
-                return{
-                    restrict: 'A',
-                    require: 'ngModel',
-                    scope: {theOtherValue: "&theOtherTimeValue"},
-                    link: function(scope, element, attr, ctrl){
-                        
-                        //var otherSideValue = attr.zeroTimeDirective;
-                        var otherSideValue = scope.theOtherValue();
-                        
-                        ctrl.$parsers.unshift(function(value){
-                            console.log(attr);
-                            console.log("seleccionado: "+value+"|| otrolado: "+otherSideValue);
-                            if (value == 0 && otherSideValue == 0)
-                                ctrl.$setValidity('noZero', false);
-                            else
-                                ctrl.$setValidity('noZero', true);
-                            
-                            return value;
-                        });
-                    }
-                };
-            });
-            
-            /*app.directive('noMatchingDates', function(){
-                
-                return{
-                    restrict: 'A',
-                    require: 'ngModel',
-                    link: function(scope, element, attr, ctrl){
-                        
-                        var dates = attr.noMatchingDates;
-                        
-                        ctrl.$parsers.unshift(function(value){
-                            
-                            console.log(dates);
-                            console.log(dates);
-                            console.log(typeof dates);
-                            var arrayOfDates = eval(dates);
-                            console.log(typeof arrayOfDates);
-                            console.log(arrayOfDates);
-                            
-                            arrayOfDates.forEach(function(currentDate, index){
-                                
-                                
-                                if(moment(value).isSame(currentDate.date, 'day')){
-                                    ctrl.$setValidity('matchingDates', false);
-                                    return value;
-                                }else
-                                    ctrl.$setValidity('matchingDates', true);
-                            });
-                            
-                            return value;
-                        });
-                    }
-                };
-            });*/
             
             app.config(function($mdThemingProvider) {
 
@@ -168,6 +107,7 @@
             
             function vacationController($scope, $http){
                 
+                $scope.buttonFlag = false;
                 $scope.surrogate = "";
                 
                 //DATES FUNCTIONALITY
@@ -195,12 +135,11 @@
                 
                 $scope.forming = function(){
                     
-                    //alert($scope.startDate+$scope.finishDate);
-                    
                     $scope.vacationForm.$setSubmitted();
                     
                     if ($scope.vacationForm.$valid){
                         
+                        $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {startdate: formatDate($scope.startDate),
                                 finishdate: formatDate($scope.finishDate),
@@ -216,16 +155,25 @@
                         }).then(function success(response){
 
                             $scope.returnToHistory();
-
+                            $scope.buttonFlag = false;
+                            reinitializeModel();
                         }, function error(response){
                             alert("Error:" +response.statusText);
                         });
                     }
                 };
+                
+                function reinitializeModel(){
+                    
+                    $scope.surrogate = "";
+                    $scope.startDate = new Date();
+                    $scope.finishDate = new Date();
+                }
             }
             
             function expensesController($scope, $http){
                 
+                $scope.buttonFlag = false;
                 $scope.data = {
                     seller: "",
                     amount: null,
@@ -239,6 +187,7 @@
                     
                     if ($scope.expensesForm.$valid){
                         
+                        $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {
                             seller: $scope.data.seller,
@@ -256,7 +205,8 @@
                         }).then(function success(response){
 
                             $scope.returnToHistory();
-
+                            $scope.buttonFlag = false;
+                            reinitializeModel();
                         }, function error(response){
                             alert("Error:" +response.statusText);
                         });
@@ -265,25 +215,20 @@
                 
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
                 
-                
-                $scope.sub = function(){
-                    $http({
-                        method: 'POST',
-                        url: 'respuesta.php',
-                       
-                    })
-                    .then(function success(response){
-                        
-                        $scope.returnToHistory();
-                        
-                    }, function error(response){
-                        alert("Error:" +response.statusText);
-                    });
+                function reinitializeModel(){
+                    
+                    $scope.data = {
+                        seller: "",
+                        amount: null,
+                        concept: "",
+                        dateSelected: new Date()
+                    }
                 }
             }
             
             function businessTripController($scope, $http){
                 
+                $scope.buttonFlag = false;
                 $scope.location = "";
                 $scope.congressName = "";
                 $scope.reasons = "";
@@ -315,6 +260,7 @@
                     
                     if ($scope.businessTripForm.$valid){
                         
+                        $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {location: $scope.location,
                                     congressName: $scope.congressName,
@@ -332,17 +278,28 @@
                         }).then(function success(response){
 
                             $scope.returnToHistory();
-
+                            $scope.buttonFlag = false;
+                            reinitializeModel();
                         }, function error(response){
                             alert("Error:" +response.statusText);
                         });
                     }
                 };
                 
+                function reinitializeModel(){
+                    
+                    $scope.location = "";
+                    $scope.congressName = "";
+                    $scope.reasons = "";
+                    $scope.startDate = new Date();
+                    $scope.finishDate = new Date();
+                }
+                
             }
             
             function overtimeHoursController2($scope, $http, $filter){
                 
+                $scope.buttonFlag = false;
                 $scope.jiraTicketdID = "";
                 $scope.reasons = "";
                 
@@ -393,33 +350,6 @@
                     $scope.overtimeList.push(OTaux);
                     
                     $scope.noDatesFlag = false;
-                    
-                    //TODO: trying to set "validity:filtered" to true or at least, to set the border-bottom-color property to grey.
-                    //$('.md-datepicker-input-container.md-datepicker-invalid').css('border-bottom-color', 'rgb(224,224,224) !important');
-                    /*$scope.overtimeHoursForm.OTdate.$error = {};
-                    $scope.overtimeHoursForm.OTdate.$error = [];
-                    
-                    $scope.overtimeHoursForm.OTdate.$setValidity('filtered', true);
-                    
-                    $scope.overtimeHoursForm.OTdate.$valid = true;
-                    $scope.overtimeHoursForm.OTdate.$invalid = false;
-                    
-                    console.log("------------------------------------");
-                    console.log("OTdate.$error: "+$scope.overtimeHoursForm.OTdate.$error);
-                    console.log($scope.overtimeHoursForm.OTdate.$error);
-                    console.log("OTdate: "+$scope.overtimeHoursForm.OTdate);
-                    console.log($scope.overtimeHoursForm.OTdate);
-                    console.log("overtimeForm: "+$scope.overtimeHoursForm.$error);
-                    console.log($scope.overtimeHoursForm.$error);
-                    console.log("------------------------------------");*/
-                    
-                    
-                    
-                    
-                    //$(".dtNoSpaceAtLeft").addClass('pepitogrillo');
-                    //$(".dtNoSpaceAtLeft").removeClass('ng-invalid-filtered');
-                    //md-datepicker-invalid
-                    // ng-valid-mindate ng-valid-maxdate ng-valid-valid pepitogrillo ng-dirty ng-valid-parse ng-invalid ng-invalid-filtered
                 }
                 
                 $scope.noDatesFlag = true;
@@ -467,6 +397,7 @@
                     if ($scope.overtimeHoursForm.overtimeHoursReasons.$valid && $scope.overtimeHoursForm.jiraTicketdID.$valid &&
                         !$scope.timeFlag && !$scope.noDatesFlag){
                         
+                        $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {jiraTicketID: $scope.jiraTicketdID,
                                     reasons: $scope.reasons,
@@ -482,135 +413,29 @@
                         }).then(function success(response){
 
                             $scope.returnToHistory();
-
+                            $scope.buttonFlag = false;
+                            $scope.noDatesFlag = true;
+                            $scope.timeFlag = true;
+                            reinitializeModel();
                         }, function error(response){
                             alert("Error:" +response.statusText);
                         });
                     }
                 };
-            }
-            
-            function overtimeHoursController($scope, $http){
                 
-                function overtime(){
-                    this.date = new Date();
-                    this.hours = 0;
-                    this.minutes = 0;
+                function reinitializeModel(){
+                    
+                    $scope.jiraTicketdID = "";
+                    $scope.reasons = "";
+                    $scope.overtimeList = [];
+                    $scope.hoursSelected = 0;
+                    $scope.minutesSelected = 0;
                 }
-                
-                $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
-                
-                $scope.dateSelected = new Date();// this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
-                
-                $scope.time = {
-                    hours : [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                    minutes : [0, 15, 30, 45],
-                    selectedHour: 0,
-                    selectedMinute: 0
-                }
-                
-                $scope.overtimeList = [new overtime()];
-                
-                $scope.addDateField = function(){
-                    $scope.overtimeList.push(new overtime());
-                }
-                
-                $scope.showData = function(){
-                  
-                    $scope.overtimeList.forEach(function(item, index){
-                        console.log("Fecha: "+item.date+" || Hora: "+item.hours+" || Minutos: "+item.minutes);
-                    });
-                };
-                
-                $scope.alreadySelectedDatesDates = function(date){
-                    
-                    /*var dias = [];
-                    dias.push(moment().add(1, 'd'));
-                    dias.push(moment().add(3, 'd'));
-                    dias.push(moment().add(4, 'd'));*/
-                    
-                    for (var i = 0; i < $scope.overtimeList.length; i++)
-                        if (moment(date).isSame($scope.overtimeList[i].date, 'day'))
-                            return false;
-                        else
-                            return true;
-                    
-                    /*dias.forEach(function(current, index){
-                        
-                        if (moment(date).isSame(current, 'day'))
-                            return false;
-                        else
-                            return true;
-//                        return !(moment(date).isSame(current.date, 'day'));
-                        
-                    });*/
-                    
-                };
-                
-                
-                $scope.sub = function(){
-                    $http({
-                        method: 'POST',
-                        url: 'respuesta.php',
-                       
-                    })
-                    .then(function success(response){
-                        
-                        $scope.returnToHistory();
-                        alert("asd");
-                        
-                    }, function error(response){
-                        alert("Error:" +response.statusText);
-                    });
-                }
-                
-                /*$scope.updateHours = function(index, hoursSelected){
-                    
-                    $scope.$apply(function(){
-                        $scope.overtimeList[index].hours = hoursSelected;
-                    });
-                    //$scope.overtimeList[index].hours = hoursSelected;
-                    //console.log(index+"-"+$scope.overtimeList[index].minutes);
-                };
-                
-                $scope.updateHours = function(index, minutesSelected){
-                    
-                    $scope.$apply(function(){
-                        $scope.overtimeList[index].minutes = minutesSelected;
-                    });
-                    //$scope.overtimeList[index].hours = hoursSelected;
-                    //console.log(index+"-"+$scope.overtimeList[index].minutes);
-                };*/
-                
-                /*$scope.$watch('time.selectedHour', function(){
-                    $scope.$digest();
-                });
-                $scope.$watch('time.selectedMinute', function(){
-                    $scope.$digest();
-                });*/
-                
-                //En principio estos tres métodos no sirven ya que al estar los campos bindeados con ng-model se insertan automaticamente.
-                /*$scope.changeDate = function(index, dateSelected){
-                    
-                    //$scope.overtimeList[index].date = dateSelected;
-                };
-                
-                $scope.insertHours = function(index, hoursSelected){
-                    
-                    //$scope.overtimeList[index].hours = hoursSelected;
-                    console.log(index+"-"+$scope.overtimeList[index].minutes);
-                };
-                
-                $scope.insertMinutes = function(index, minutesSelected){
-                    
-                    //$scope.overtimeList[index].minutes = minutesSelected;
-                    console.log(index+"-"+$scope.overtimeList[index].hours);
-                };*/
-            
             }
             
             function workAtHomeController($scope, $http){
                     
+                $scope.buttonFlag = false;
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
 
                 $scope.dateSelected = new Date();// this date if for the date-bingind with the datepicker, the other one ($scope.data.today) is used to specify the min date limit.
@@ -624,6 +449,7 @@
                     
                     if ($scope.workAtHomeForm.$valid){
                         
+                        $scope.buttonFlag = true;
                         var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                         var data = {date: $scope.dateSelected,
                                     reasons: $scope.reasons,
@@ -639,69 +465,36 @@
                         }).then(function success(response){
 
                             $scope.returnToHistory();
-
+                            $scope.buttonFlag = false;
+                            reinitializeModel();
                         }, function error(response){
                             alert("Error:" +response.statusText);
                         });
-                    }3
+                    }
                 };
-            }
-            
-            function submit($http, url, data, success, error){
+                
+                function reinitializeModel(){
                     
-                $http({
-                    method: 'POST',
-                    url: url,
-                    data: data,
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                }).then(success, error);
+                    $scope.dateSelected = new Date();
+                    $scope.reasons = "";
+                    $scope.wholeOrHalfDay = "wholeDay";
+                }
             }
             
             function historicController($scope, $http, $mdDialog){
                 
-                //por qué esto no actualiza la vista directamente y el siguiente métdo sí?
-                /*$scope.fillList = function(){
-                
-                    submit($http, 'model.php', null, function(response){
-                        //present info
-                        
-                        $timeout(function(){
-                            $scope.formsList = response.data;
-                        });
-                        console.log("SUCCESS");
-                    }, function(response){
-                        //manage error
-                        console.log("ERROR");
-                    });
-                };*/
-                
-                /*
-                
-                $scope.formType = ['All', 'Vacation', 'Expenses', 'Business trip', 'Overtime hours', 'Work at home'];
-                
-                $scope.formStatus = ['All', 'Accepted', 'Rejected', 'Pending'];*/
+                var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
                 
                 $scope.filters = {
                     formType: 'All',
                     formStatus: 3
                 };
                 
-                //form filter status legend
-                //0 -> Pending
-                //1 -> Accepted
-                //2 -> Rejected
-                //3 -> All
-                
-                //var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
-                var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
-                
                 $scope.fillList = function(){
                     
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/user/'+userLogin+'/forms',
-                        //url: 'window.location.pathname/../../api/user/gram1i/forms',
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){
@@ -714,29 +507,6 @@
                         console.log("ERROR: "+response.statusText);
                     });
                 }
-                
-                /*$scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
-                    
-                    $scope.filteredFormsList = [];
-                    if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
-                        $scope.filteredFormsList = $scope.formsList;
-                    }else{
-                        $.each($scope.formsList, function(index, current){
-
-                            if($scope.filters.formType === "All"  && $scope.filters.formStatus != 3){
-                                if(current.status == $scope.filters.formStatus)
-                                    $scope.filteredFormsList.push(current);
-                            }else if($scope.filters.formType !== "All" && $scope.filters.formStatus == 3){
-                                    if(current.type === $scope.filters.formType)
-                                        $scope.filteredFormsList.push(current);
-                            }else{
-                                if(current.status == $scope.filters.formStatus && current.type === $scope.filters.formType)
-                                    $scope.filteredFormsList.push(current);
-                            }
-                        });
-                    }
-                    
-                });*/
                 
                 $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
                     
@@ -880,17 +650,18 @@
             
         </script>
 
-        <div ng-cloak="" class="tabsdemoStaticTabs" ng-app="MyApp" ng-controller="tabsController">
-            <md-content class="md-padding">
+        <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController">
+            <md-content>
+<!--            <md-content class="md-padding">-->
                 <md-tabs id="tabs" class="md-accent" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
                     <md-tab id="tab0">
-                        <md-tab-label>Historico</md-tab-label>
+                        <md-tab-label>{% trans %}historic{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_historic')}}'"></div>
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab1">
-                        <md-tab-label>Vacation</md-tab-label>
+                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_vacation')}}'"></div>
 <!--                            <div ng-include="'vacationForm.html'"></div>-->
@@ -904,35 +675,28 @@
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab2">
-                        <md-tab-label>Expenses</md-tab-label>
+                        <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_expenses')}}'"></div>
 <!--                            <div ng-include="'expensesForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab3">
-                        <md-tab-label>business trip</md-tab-label>
+                        <md-tab-label>{% trans %}business_trip_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_business_trip')}}'"></div>
 <!--                            <div ng-include="'businessTripForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab7">
-                        <md-tab-label>Overtime hoursCool</md-tab-label>
+                        <md-tab-label>{% trans %}overtime_hours_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'"></div>
 <!--                            <div ng-include="'overtimeHoursForm2.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
-                    <md-tab id="tab4">
-                        <md-tab-label>Overtime hours</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_overtime_hours')}}'"></div>
-<!--                            <div ng-include="'overtimeHoursForm.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
                     <md-tab id="tab5">
-                        <md-tab-label>Work at home</md-tab-label>
+                        <md-tab-label>{% trans %}work_at_home_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_work_at_home')}}'"></div>
 <!--                            <div ng-include="'workAtHomeForm.html'"></div>-->

@@ -3,23 +3,23 @@
         <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController">
         </md-list-item>
         <md-list-item style="padding-left: 16px">
-            <md-datepicker ng-model="dateSelected" md-min-date="today" ng-change="updateDate($index, day.date)" style="padding-top: 1px" name="OTdate" no-matching-dates="{[{overtimeList}]}"></md-datepicker>
+            <md-datepicker ng-model="dateSelected" md-min-date="today" ng-change="updateDate($index, day.date)" style="padding-top: 1px" name="OTdate"></md-datepicker>
         <md-radio-group ng-model="wholeOrHalfDay" style="margin-left: 50px">
-            <md-radio-button value="wholeDay" class="md-primary">Full day</md-radio-button>
-            <md-radio-button value="halfDay">Half day</md-radio-button>
+            <md-radio-button value="wholeDay" class="md-primary">{% trans %}full_day{% endtrans %}</md-radio-button>
+            <md-radio-button value="halfDay">{% trans %}half_day{% endtrans %}</md-radio-button>
         </md-radio-group>
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block" style="width: 100%;">
-                <label>Reasons*</label>
+                <label>{% trans %}reasons{% endtrans %}*</label>
                 <textarea ng-model="reasons" name="workAtHomeReasons" md-maxlength="250" rows="3" style="overflow-y: scroll;" md-select-on-focus required></textarea>
                 <div ng-messages="workAtHomeForm.workAtHomeReasons.$error">
-                    <div ng-message="required">You have to specify a reason to justify the trip</div>
+                    <div ng-message="required">{% trans %}error_reason_required{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item>
-            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()" ng-disabled="buttonFlag">{% trans %}sendButton{% endtrans %}</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
         </md-list-item>
     </md-list>
 </div>
