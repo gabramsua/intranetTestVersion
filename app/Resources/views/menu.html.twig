@@ -22,7 +22,7 @@
 <!--*********************************************************************************************************************-->
 <div class="container-fluid col-md-2" id="nav-left">
   <ul class="nav nav-pills nav-stacked"><!--horizontal: nav-justified-->
-    <li class="dropdown">
+    <!--<li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Forms {% endtrans %}<span class="caret"></span></a>
       <ul class="dropdown-menu">
       <li><a href="{{ path('intranet_formHistorical')}}">{% trans %}My Historical{% endtrans %}</a></li>
@@ -33,19 +33,21 @@
         <li><a href="{{ path('intranet_formHome')}}">{% trans %}Work at Home{% endtrans %}</a></li>
       </ul>
     </li>
-
+-->
+    <li><a></a></li>
+    <li><a href='{{ path('intranet_forms')}}'>{% trans %}Forms {% endtrans %}<i></i></a></li>
     {% if user.onboard==1 %}
             <li><a href='{{ path('intranet_tasks')}}'>{% trans %}Task {% endtrans %}-<i> internships</i></a></li>
     {% endif %}
-    {% if role!="administrator"%}
+    {% if role!="developer"%}
             <li><a href='{{ path('intranet_userManagement')}}'>{% trans %}User Management {% endtrans %}-<i> admins</i></a></li>
     {% endif %}
-    {% if role!="buo"%}
+    {% if role!="developer"%}
             <li><a href='{{ path('intranet_news')}}'>{% trans %}News Feed {% endtrans %}-<i> BÜOs</i></a></li>
             <li><a href='{{ path('intranet_channels')}}'>{% trans %}Channels {% endtrans %}-<i> BÜOs</i></a></li>
     {% endif %}
-        <li><a href='{{ path('intranet_forms')}}'>{% trans %}Forms {% endtrans %}-<i> BÜOs</i></a></li>
-    {% if role!="buo"%}
+        
+    {% if role!="developer"%}
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown">{% trans %}Form Management {% endtrans %}-<i> BÜOs</i><span class="caret"></span></a>
           <ul class="dropdown-menu">

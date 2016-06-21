@@ -26,70 +26,77 @@
             });
         }
 
-        $scope.showUpdateTaskDialog = function(ev, task) {
-            
-            $mdDialog.show({
-                templateUrl: "{{path('intranet_main_task_dialog2')}}",
-                locals: {
-                    currentTask: task,
-                    rol: $scope.userRol
-                }, 
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                controller: updateTaskDialogController,
-                onRemoving: ($scope.userRol != "developer") ? $scope.getAllTasks : null
-            });
-        }
-        
-        $scope.showCreateTaskDialog = function(ev) {
-            
-            $mdDialog.show({
-                templateUrl: "{{path('intranet_main_task_dialog2')}}", 
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                controller: createTaskDialogController,
-                onRemoving: $scope.getAllTasks
-            });
-        }
-        
-        $scope.getTasksOfUser = function(){
+        $scope.getAllVacations = function(){
             
             $http({
                 method: 'GET',
-                url: window.location.pathname+'/../../api/users/'+$scope.userLogin+'/tasks',
+                url: window.location.pathname+'/../../api/forms/vacations',
                 dataType: 'json',
                 headers: {'Content-Type': 'application/json'}
             })
             .then(function success(response){
-                
-                $scope.tasksList = response.data;
-                console.log($scope.tasksList);
+                $scope.vacationsList = response.data.vacationsList;
+                $scope.usersvacationsList = response.data.usersvacationsList;
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
         }
         
-        $scope.deleteTask = function(ev, task){
-            $mdDialog.show({
-                templateUrl: "{{path('intranet_delete_dialog')}}",
-                locals: {
-                    currentTask: task
-                }, 
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                controller: deleteTaskDialogController,
-                onRemoving: $scope.getAllTasks
+        $scope.getAllExpenses = function(){
+            
+            $http({
+                method: 'GET',
+                url: window.location.pathname+'/../../api/forms/expenses',
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                $scope.expensesList = response.data.expensesList;
+                $scope.usersexpensesList = response.data.usersexpensesList;
+            }, function error(response){
+                console.log("Error:" +response.statusText);
             });
-        }   
+        }
+
+        $scope.getAllTrips = function(){
+            
+            $http({
+                method: 'GET',
+                url: window.location.pathname+'/../../api/forms/trips',
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                $scope.tripsList = response.data.tripsList;
+                $scope.userstripsList = response.data.userstripsList;
+            }, function error(response){
+                console.log("Error:" +response.statusText);
+            });
+        }
+
+        $scope.getAllHome = function(){
+            
+            $http({
+                method: 'GET',
+                url: window.location.pathname+'/../../api/forms/homes',
+                dataType: 'json',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function success(response){
+                $scope.homesList = response.data.homesList;
+                $scope.usershomesList = response.data.usershomesList;
+            }, function error(response){
+                console.log("Error:" +response.statusText);
+            });
+        }
+        
+        
     }
     </script>
 
 
 <div ng-cloak ng-app="MyApp" ng-controller="incomingsController" ng-init="">
-    
+    <h2>HOURS</h2>
     <md-list ng-init="getAllHours()">
         <md-divider></md-divider>
         <md-divider></md-divider>
@@ -99,224 +106,117 @@
         </md-list-item>
         <md-divider></md-divider>
         <md-divider></md-divider>
-<!--        <div ng-repeat="form in hoursList">
-        <div ng-repeat="user in usershoursList" ng-if="user.idForm == form.id">-->
-{% for form in hoursList %}
-{% for user in usershoursList %}
-{% if user.idForm==form.id %}
-           <!-- BANDERA=1-->
+        <div ng-repeat="form in hoursList">
+        <div ng-repeat="user in usershoursList" ng-if="user.id_form == form.id">
+           
             <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.idForm}]}</span>
+                <span style="width: 15%">{[{user.login}]}</span>
                 <span style="width: 60%">{[{form.send}]}</span>
             </md-list-item>
-{% endif %}
-{% endfor %}{% endfor %}
+
             <md-divider></md-divider>
- <!--       </div>
-        </div>-->
+        </div>
+        </div>
+    </md-list>
+
+
+
+    <h2>VACATIONS</h2>
+    <md-list ng-init="getAllVacations()">
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <md-list-item style="font-size: large" ng-model="prueba">
+            <span style="width: 15%">User</span>
+            <span style="width: 60%">Date</span>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <div ng-repeat="form in vacationsList">
+        <div ng-repeat="user in usersvacationsList" ng-if="user.id_form == form.id">
+           
+            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
+                <span style="width: 15%">{[{user.login}]}</span>
+                <span style="width: 60%">{[{form.send}]}</span>
+            </md-list-item>
+
+            <md-divider></md-divider>
+        </div>
+        </div>
+    </md-list>
+
+
+
+    <h2>EXPENSES</h2>
+    <md-list ng-init="getAllExpenses()">
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <md-list-item style="font-size: large" ng-model="prueba">
+            <span style="width: 15%">User</span>
+            <span style="width: 60%">Date</span>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <div ng-repeat="form in expensesList">
+        <div ng-repeat="user in usersexpensesList" ng-if="user.id_form == form.id">
+           
+            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
+                <span style="width: 15%">{[{user.login}]}</span>
+                <span style="width: 60%">{[{form.send}]}</span>
+            </md-list-item>
+
+            <md-divider></md-divider>
+        </div>
+        </div>
+    </md-list>
+
+
+
+    <h2>TRIPS</h2>
+    <md-list ng-init="getAllTrips()">
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <md-list-item style="font-size: large" ng-model="prueba">
+            <span style="width: 15%">User</span>
+            <span style="width: 60%">Date</span>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <div ng-repeat="form in tripsList">
+        <div ng-repeat="user in userstripsList" ng-if="user.id_form == form.id">
+           
+            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
+                <span style="width: 15%">{[{user.login}]}</span>
+                <span style="width: 60%">{[{form.send}]}</span>
+            </md-list-item>
+
+            <md-divider></md-divider>
+        </div>
+        </div>
+    </md-list>
+
+
+
+    <h2>HOME</h2>
+    <md-list ng-init="getAllHome()">
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <md-list-item style="font-size: large" ng-model="prueba">
+            <span style="width: 15%">User</span>
+            <span style="width: 60%">Date</span>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <div ng-repeat="form in homesList">
+        <div ng-repeat="user in usershomesList" ng-if="user.id_form == form.id">
+           
+            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
+                <span style="width: 15%">{[{user.login}]}</span>
+                <span style="width: 60%">{[{form.send}]}</span>
+            </md-list-item>
+
+            <md-divider></md-divider>
+        </div>
+        </div>
     </md-list>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <md-divider><md-divider><md-divider><md-divider><md-divider><md-divider>
-<b>TABLA FORMULARIOS HORAS</b>
-<table border=1>
-<tr >
-<th></th>
-    <th>Type</th>
-    <th>USER</th>
-    <th>DATE</th>
-    <th>READ</th>
-    <th>STATUS</th>
-</tr>
-{% for form in listIncomingFormsH %}
-{% for u in relationHours %}
-{% if u.idForm==form.id %}
-<tr>
-  	<td>
-          <form action='{{ path('intranet_readForm')}}' method='post'>
-                <input type="submit" value="VER">
-                  <input type="hidden" name="typeF" value="hours">
-                  <input type="hidden" name="id" value="{{form.id}}">
-          </form>
-    </td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ u.login }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
-</tr>{% endif %}
-{% endfor %}{% endfor %}
-</table>
-
-<hr>
-
-<b>TABLA FORMULARIOS VACATIONS</b>
-<table border=1>
-<tr>
-<th></th>
-   <th>TYPE</th>
-   <th>LOGIN</th>
-   <th>DATE</th>
-   <th>READ</th>
-   <th>FROM</th>
-   <th>TO</th>
-   <th>STATUS</th>
-</tr>
-{% for form in listIncomingFormsV %}
-{% for u in relationVacations %}
-{% if u.idForm==form.id %}
-<tr>
-   <td>
-        <form action='{{ path('intranet_readForm')}}' method='post'>
-              <input type="submit" value="VER">
-                <input type="hidden" name="typeF" value="vacations">
-                <input type="hidden" name="id" value="{{form.id}}">
-        </form>
-   </td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ u.login }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.date2 }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
-</tr>{% endif %}
-{% endfor %}{% endfor %}
-
-</table>
-
-<hr>
-
-<b>TABLA FORMULARIOS EXPENSES</b>
-<table border=1>
-<tr>
-<th></th>
-   <th>TYPE</th>
-   <th>LOGIN</th>
-   <th>DATE</th>
-   <th>READ</th>
-   <th>COMPANY</th>
-   <th>CONCEPT</th>
-   <th>AMOUNT</th>
-   <th>STATUS</th>
-</tr>
-{% for form in listIncomingFormsE %}
-{% for u in relationExpenses %}
-{% if u.idForm==form.id %}
-<tr>
-   <td>
-        <form action='{{ path('intranet_readForm')}}' method='post'>
-              <input type="submit" value="VER">
-                <input type="hidden" name="typeF" value="expenses">
-                <input type="hidden" name="id" value="{{form.id}}">
-        </form>
-   </td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ u.login }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.company }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.concept }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.amount }} €</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
-</tr>{% endif %}
-{% endfor %}{% endfor %}
-
-</table>
-
-<hr>
-
-<b>TABLA FORMULARIOS TRIPS</b>
-<table border=1>
-<tr>
-<th></th>
-   <th>TYPE</th>
-   <th>LOGIN</th>
-   <th>DATE</th>
-   <th>READ</th>
-   <th>FROM</th>
-   <th>TO</th>
-   <th>PLACE</th>
-   <th>REASON</th>
-   <th>STATUS</th>
-</tr>
-{% for form in listIncomingFormsT %}
-{% for u in relationTrips %}
-{% if u.idForm==form.id %}
-<tr>
-   <td>
-        <form action='{{ path('intranet_readForm')}}' method='post'>
-              <input type="submit" value="VER">
-                <input type="hidden" name="typeF" value="trip">
-                <input type="hidden" name="id" value="{{form.id}}">
-        </form>
-   </td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ u.login }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.date2 }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.place }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.reasons }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
-</tr>{% endif %}
-{% endfor %}{% endfor %}
-
-</table>
-
-<hr>
-
-<b>TABLA FORMULARIOS WORK AT HOME</b>
-<table border=1>
-<tr>
-<th></th>
-   <th>TYPE</th>
-   <th>LOGIN</th>
-   <th>DATE</th>
-   <th>READ</th>
-   <th>DATE</th>
-   <th>REASON</th>
-   <th>WHOLE DAY</th>
-   <th>STATUS</th>
-</tr>
-{% for form in listIncomingFormsH %}
-{% for u in relationHomes %}
-{% if u.idForm==form.id %}
-<tr>
-   <td>
-        <form action='{{ path('intranet_readForm')}}' method='post'>
-              <input type="submit" value="VER">
-                <input type="hidden" name="typeF" value="Home">
-                <input type="hidden" name="id" value="{{form.id}}">
-        </form>
-   </td>
-    <td style="padding-left: 10px;padding-right: 10px;">{{ form.type }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ u.login }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.send }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.isread }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.date1 }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.reason }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.wholeDay }}</td>
-   <td style="padding-left: 10px;padding-right: 10px;">{{ form.status }}</td>
-
-</tr>{% endif %}
-{% endfor %}{% endfor %}
-
-</table>
-
-
 {% endblock %}

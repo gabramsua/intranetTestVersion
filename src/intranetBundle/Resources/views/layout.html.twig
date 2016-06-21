@@ -38,7 +38,9 @@
 
 {% block cabecera %}
     <div id="cabecera">
+    <a href="{{ path('intranet_homepage')}}">
       <img href="{{ path('intranet_homepage')}}" class="profile-img" src="../../images/webcuisine-logo.png" alt="" style="margin-top: 1%;margin-left: 2%;">
+      </a>
     </div>
 {% endblock %}
 
@@ -50,18 +52,16 @@
 {% endblock %}
 
 {% block body %}
-
-    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 80%;height: 100%">
+    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 60%;height: 100%;">
         {% block contenido %}
         {% endblock %}
     </div>
     
-    <div id="newsfeed" style="width: 200px; float: right; margin-top: 100px; margin-right: 100px;">
+    <div id="newsfeed" style="width: 17%; margin-top: -50%; margin-left: 80%; position: absolute;">
         {% block newsfeed %}
             {{ render(controller('intranetBundle:News:news')) }}
         {% endblock %}
     </div>
-
 
 
     
