@@ -13,18 +13,18 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
             <md-divider></md-divider>
             <md-divider></md-divider>
             <md-list-item style="font-size: large">
-                <span style="width: 20%">{% trans %}type_form{% endtrans %}</span>
-                <span style="width: 50%">{% trans %}date_set_form{% endtrans %}</span>
-                <span style="width: 15%">{% trans %}status_form{% endtrans %}</span>
+                <span style="width: 30%">{% trans %}type_form{% endtrans %}</span>
+                <span style="width: 25%" hide-lg>{% trans %}date_set_form{% endtrans %}</span>
+                <span style="width: 25%">{% trans %}status_form{% endtrans %}</span>
             </md-list-item>
             <md-divider></md-divider>
             <md-divider></md-divider>
             <div ng-repeat="form in filteredFormsList">
-                <md-list-item ng-click="showUpdateTaskDialog($event, task)">
+                <md-list-item ng-click="showFormDetails($event, form)">
 
-                    <span style="width: 20%">{[{form.type}]}</span>
-                    <span style="width: 50%">{[{form.send}]}</span>
-                    <div style="width: 15%">
+                    <span style="width: 30%">{[{form.type}]}</span>
+                    <span style="width: 25%" hide-lg>{[{form.send}]}</span>
+                    <div style="width: 25%">
                       <span ng-if="form.status == 0" style="color:#4073A5; font-weight:bold;">{% trans %}pending_form{% endtrans %}</span>
                       <span ng-if="form.status == 1" style="color:#389C97; font-weight:bold;">{% trans %}approved_form{% endtrans %}</span>
                       <span ng-if="form.status == 2" style="color:#8A2278; font-weight:bold;">{% trans %}rejected_form{% endtrans %}</span>
