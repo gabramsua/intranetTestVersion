@@ -9,236 +9,246 @@
     app.controller('incomingsController', incomingsController);
     
     function incomingsController($scope, $mdDialog, $http){
-        
-        $scope.getAllHours = function(){
-            
-            $http({
+
+      $scope.allForms = [];
+
+      $scope.filters = {
+                    formType: 'All',
+                    formStatus: 3
+      };
+
+        $scope.getAll = function(){
+          $http({
                 method: 'GET',
-                url: window.location.pathname+'/../../api/forms/hours',
+                url: window.location.pathname+'/../../api/forms',
                 dataType: 'json',
                 headers: {'Content-Type': 'application/json'}
             })
             .then(function success(response){
                 $scope.hoursList = response.data.hoursList;
                 $scope.usershoursList = response.data.usershoursList;
-            }, function error(response){
-                console.log("Error:" +response.statusText);
-            });
-        }
-
-        $scope.getAllVacations = function(){
-            
-            $http({
-                method: 'GET',
-                url: window.location.pathname+'/../../api/forms/vacations',
-                dataType: 'json',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(function success(response){
+                $scope.hoursdataList = response.data.hoursdataList;
+                $scope.dataList = response.data.dataList;
+                $scope.usersList = response.data.usersList;
                 $scope.vacationsList = response.data.vacationsList;
                 $scope.usersvacationsList = response.data.usersvacationsList;
-            }, function error(response){
-                console.log("Error:" +response.statusText);
-            });
-        }
-        
-        $scope.getAllExpenses = function(){
-            
-            $http({
-                method: 'GET',
-                url: window.location.pathname+'/../../api/forms/expenses',
-                dataType: 'json',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(function success(response){
                 $scope.expensesList = response.data.expensesList;
                 $scope.usersexpensesList = response.data.usersexpensesList;
-            }, function error(response){
-                console.log("Error:" +response.statusText);
-            });
-        }
-
-        $scope.getAllTrips = function(){
-            
-            $http({
-                method: 'GET',
-                url: window.location.pathname+'/../../api/forms/trips',
-                dataType: 'json',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(function success(response){
                 $scope.tripsList = response.data.tripsList;
                 $scope.userstripsList = response.data.userstripsList;
-            }, function error(response){
-                console.log("Error:" +response.statusText);
-            });
-        }
-
-        $scope.getAllHome = function(){
-            
-            $http({
-                method: 'GET',
-                url: window.location.pathname+'/../../api/forms/homes',
-                dataType: 'json',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(function success(response){
                 $scope.homesList = response.data.homesList;
                 $scope.usershomesList = response.data.usershomesList;
+
+
+                $scope.daysOnOvertimeHoursForms = response.data.daysOnOvertimeHoursForms;
+
+
+                $scope.filteredFormsList = gimmeAll();
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
         }
-        
-        
-    }
+
+        $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
+            $scope.filteredFormsList = [];
+            if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
+                $scope.filteredFormsList = gimmeAll();
+            }else if($scope.filters.formType === "All" && $scope.filters.formStatus != 3){
+                $scope.filteredFormsList = gimmeAll();
+                $scope.filteredFormsList = filterFormsByStatus($scope.filteredFormsList, $scope.filters.formStatus);
+            }else{
+
+                switch($scope.filters.formType){
+                    case 'Vacation':
+                        $scope.filteredFormsList = filterFormsByStatus($scope.vacationsList, $scope.filters.formStatus);
+                        break;
+                    case 'Expenses':
+                        $scope.filteredFormsList = filterFormsByStatus($scope.expensesList, $scope.filters.formStatus);
+                        break;
+                    case 'BusinessTrip':
+                        $scope.filteredFormsList = filterFormsByStatus($scope.tripsList, $scope.filters.formStatus);
+                        break;
+                    case 'OvertimeHours':
+                        $scope.filteredFormsList = filterFormsByStatus($scope.hoursList, $scope.filters.formStatus);
+                        break;
+                    case 'WorkAtHome':
+                        $scope.filteredFormsList = filterFormsByStatus($scope.homesList, $scope.filters.formStatus);
+                        break;
+                    default:
+                        $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
+                        break;
+                }
+            }
+
+        });
+
+        function gimmeAll(){
+          var formsListOutput = [];
+
+          $.each($scope.hoursList, function(index, currentForm){
+            formsListOutput.push(currentForm);    
+          });
+          $.each($scope.vacationsList, function(index, currentForm){
+            formsListOutput.push(currentForm);    
+          });
+          $.each($scope.expensesList, function(index, currentForm){
+            formsListOutput.push(currentForm);    
+          });
+          $.each($scope.tripsList, function(index, currentForm){
+            formsListOutput.push(currentForm);    
+          });
+          $.each($scope.homesList, function(index, currentForm){
+            formsListOutput.push(currentForm);    
+          });
+
+          return formsListOutput;
+        }
+
+        function filterFormsByStatus(currentTypeFormList, status){
+
+            var formsListOutput = [];
+
+            if (status == 3)
+                formsListOutput = currentTypeFormList;
+            else{
+                $.each(currentTypeFormList, function(index, currentForm){
+                    if (currentForm.status == status)
+                        formsListOutput.push(currentForm);
+                });
+            }
+
+            return formsListOutput;
+        }
+
+        $scope.showFormDetails = function(ev, form) {
+            var datos = [];
+            var user = null;
+            if (form.type == "OvertimeHours"){
+            
+                $.each($scope.hoursdataList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.dataList, function(index, dat){
+                            if (dat.id == intermediate.id_data){
+                                datos.push(dat);
+                            }
+                        });
+                    }
+                });
+
+                
+                $.each($scope.usershoursList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.usersList, function(index, u){
+                            if (u.login == intermediate.login){
+                                user = u;
+                            }
+                        });
+                    }
+                });
+
+            }
+
+            $mdDialog.show({
+                templateUrl: "{{ path('intranet_forms_main_dialog2')}}",
+                locals: {
+                    currentForm: form,
+                    daysOnOvertimeHoursForm: datos,
+                    user: user
+                },
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: dialogController
+            });
+        }
+
+        function dialogController($scope, $mdDialog, currentForm, daysOnOvertimeHoursForm, user){
+                $scope.form = currentForm;
+                $scope.user = user;
+
+                switch($scope.form.type){
+                    case "Expenses":
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_expenses')}}";
+                        break;
+                    case "OvertimeHours":
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_overtime_hours')}}";
+                        $scope.daysList = daysOnOvertimeHoursForm;
+                        break;
+                    case "Vacation":
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_vacation')}}";
+                        break;
+                    case "BusinessTrip":
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_business_trip')}}";
+                        break;
+                    case "WorkAtHome":
+                        $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_work_at_home')}}";
+                        break;
+                }
+
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                }
+            }
+
+            
+   }     
     </script>
 
+<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak>
+    <md-content layout="row" layout-align="center start">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div ng-cloak ng-app="MyApp" ng-controller="incomingsController" ng-init="">
-    <h2>HOURS</h2>
-    <md-list ng-init="getAllHours()">
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 15%">User</span>
-            <span style="width: 60%">Date</span>
-            <span style="width: 10%">Status</span>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <div ng-repeat="form in hoursList">
-        <div ng-repeat="user in usershoursList" ng-if="user.id_form == form.id">
-           
-            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.login}]}</span>
-                <span style="width: 60%">{[{form.send}]}</span>
-                <span style="width: 10%">
-                  <div ng-if="form.status == 0" style="background: grey"></div>
-                </span>
-            </md-list-item>
-
+        <md-list flex-gt-xs="60">
             <md-divider></md-divider>
-        </div>
-        </div>
-    </md-list>
-
-
-
-    <h2>VACATIONS</h2>
-    <md-list ng-init="getAllVacations()">
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 15%">User</span>
-            <span style="width: 60%">Date</span>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <div ng-repeat="form in vacationsList">
-        <div ng-repeat="user in usersvacationsList" ng-if="user.id_form == form.id">
-           
-            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.login}]}</span>
-                <span style="width: 60%">{[{form.send}]}</span>
-            </md-list-item>
-
             <md-divider></md-divider>
-        </div>
-        </div>
-    </md-list>
-
-
-
-    <h2>EXPENSES</h2>
-    <md-list ng-init="getAllExpenses()">
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 15%">User</span>
-            <span style="width: 60%">Date</span>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <div ng-repeat="form in expensesList">
-        <div ng-repeat="user in usersexpensesList" ng-if="user.id_form == form.id">
-           
-            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.login}]}</span>
-                <span style="width: 60%">{[{form.send}]}</span>
+            <md-list-item style="font-size: large">
+                <span style="width: 20%">{% trans %}type_form{% endtrans %}</span>
+                <span style="width: 50%">{% trans %}date_set_form{% endtrans %}</span>
+                <span style="width: 15%">{% trans %}status_form{% endtrans %}</span>
             </md-list-item>
-
             <md-divider></md-divider>
-        </div>
-        </div>
-    </md-list>
-
-
-
-    <h2>TRIPS</h2>
-    <md-list ng-init="getAllTrips()">
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 15%">User</span>
-            <span style="width: 60%">Date</span>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <div ng-repeat="form in tripsList">
-        <div ng-repeat="user in userstripsList" ng-if="user.id_form == form.id">
-           
-            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.login}]}</span>
-                <span style="width: 60%">{[{form.send}]}</span>
-            </md-list-item>
-
             <md-divider></md-divider>
-        </div>
-        </div>
-    </md-list>
+            <div ng-repeat="form in filteredFormsList track by $index">
+                <md-list-item ng-click="showFormDetails($event, form)">
 
+                    <span style="width: 20%">{[{form.type}]}</span>
+                    <span style="width: 50%">{[{form.send}]}</span>
+                    <div style="width: 15%">
+                      <span ng-if="form.status == 0" style="color:#4073A5; font-weight:bold;">{% trans %}pending_form{% endtrans %}</span>
+                      <span ng-if="form.status == 1" style="color:#389C97; font-weight:bold;">{% trans %}approved_form{% endtrans %}</span>
+                      <span ng-if="form.status == 2" style="color:#8A2278; font-weight:bold;">{% trans %}rejected_form{% endtrans %}</span>
+                    </div>
+                    <div ng-if="form.status == 0">
+                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm($event, form)" ng-if="form.status == 0">X</md-button> <!--sustituir por el icono de abajo-->
+                    </div>
 
-
-    <h2>HOME</h2>
-    <md-list ng-init="getAllHome()">
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 15%">User</span>
-            <span style="width: 60%">Date</span>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-divider></md-divider>
-        <div ng-repeat="form in homesList">
-        <div ng-repeat="user in usershomesList" ng-if="user.id_form == form.id">
-           
-            <md-list-item ng-click="showUpdateHoursDialog($event, form)">
-                <span style="width: 15%">{[{user.login}]}</span>
-                <span style="width: 60%">{[{form.send}]}</span>
-            </md-list-item>
-
-            <md-divider></md-divider>
-        </div>
-        </div>
-    </md-list>
+                </md-list-item>
+    
+                <md-divider></md-divider>
+            </div>
+        </md-list>
+        <div layout="column">
+          <div class="radioButtonList">
+              <p>Select a form type:</p>
+              <md-radio-group ng-model="filters.formType">
+                  <md-radio-button value="All" class="md-primary">All</md-radio-button>
+                  <md-radio-button value="Vacation" class="md-primary">Vacation</md-radio-button>
+                  <md-radio-button value="Expenses" class="md-primary">Expenses</md-radio-button>
+                  <md-radio-button value="BusinessTrip" class="md-primary">Business Trip</md-radio-button>
+                  <md-radio-button value="OvertimeHours" class="md-primary">Overtime hours</md-radio-button>
+                  <md-radio-button value="WorkAtHome" class="md-primary">Work at home</md-radio-button>
+              </md-radio-group>
+          </div>
+          <div class="radioButtonList">
+              <p>Select a form status:</p>
+              <md-radio-group ng-model="filters.formStatus">
+                  <md-radio-button value="3" class="md-primary">All</md-radio-button>
+                  <md-radio-button value="1" class="md-primary">Accepted</md-radio-button>
+                  <md-radio-button value="2" class="md-primary">Rejected</md-radio-button>
+                  <md-radio-button value="0" class="md-primary">Pending</md-radio-button>
+              </md-radio-group>
+          </div>
+      </div>
+    </md-content>
 </div>
+
 {% endblock %}

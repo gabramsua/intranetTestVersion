@@ -359,6 +359,12 @@ intranet_forms_main_dialog:
     defaults: { _controller: intranetBundle:Default:mainDialog, _locale:en }
     requirements:
         _locale: en|fr|es
+
+intranet_forms_main_dialog2:
+    path:     /{_locale}/mainDialog2
+    defaults: { _controller: intranetBundle:Default:mainDialog2, _locale:en }
+    requirements:
+        _locale: en|fr|es
         
 intranet_forms_dialog_business_trip:
     path:     /{_locale}/businessTripDialog

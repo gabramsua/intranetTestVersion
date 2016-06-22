@@ -1676,6 +1676,11 @@ class DefaultController extends Controller{
         
         return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html', $params);
     }
+
+    public function mainDialog2Action(){
+        
+        return $this->render('intranetBundle:DialogTemplates:mainDialog2.tmpl.html');
+    }
     
     public function businessTripDialogAction(){
         

@@ -1401,7 +1401,74 @@ class ApiRestController extends Controller
         return $data;
     }
 
+    public function getFormsAction(){
+        $hoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Hours')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($hoursList, 'json');
+        $usershoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Hours')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usershoursList, 'json');
+        $hoursdataList = $this->getDoctrine()->getRepository('intranetBundle:Entity\hours_data')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($hoursdataList, 'json');
+        $dataList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Data')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($dataList, 'json');
+        $usersList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usersList, 'json');
 
+        $vacationsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Vacation')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($vacationsList, 'json');
+        $usersvacationsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Vacation')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usersvacationsList, 'json');
+
+        $expensesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Expenses')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($expensesList, 'json');
+        $usersexpensesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Expenses')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usersexpensesList, 'json');
+
+        $tripsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Trip')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($tripsList, 'json');
+        $userstripsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Trip')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($userstripsList, 'json');
+
+        $homesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Home')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($homesList, 'json');
+        $usershomesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Home')->findAll();
+        $serializer = SerializerBuilder::create()->build();
+        $serializer->serialize($usershomesList, 'json');
+
+
+
+
+
+
+        $data = [
+            "hoursList" => $hoursList,
+            "usershoursList" => $usershoursList,
+            "hoursdataList" => $hoursdataList,
+            "dataList" => $dataList,
+            "usersList" => $usersList,
+            "vacationsList" => $vacationsList,
+            "usersvacationsList" => $usersvacationsList,
+            "expensesList" => $expensesList,
+            "usersexpensesList" => $usersexpensesList,
+            "tripsList" => $tripsList,
+            "userstripsList" => $userstripsList,
+            "homesList" => $homesList,
+            "usershomesList" => $usershomesList
+        ];
+
+        return $data;
+    }
 
 
 
