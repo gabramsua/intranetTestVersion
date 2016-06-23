@@ -87,3 +87,15 @@ api_post_work_at_home_form:
     defaults: { _controller: "intranetBundle:ApiRest:postWorkAtHomeform"}
     requirements:
         _method: POST
+        
+api_get_forms_status:
+    pattern: /formsstatus/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getFormsStatus"}
+    requirements:
+        _method: GET|PATCH  
+        
+api_get_forms_read:
+    pattern: /formsread/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getFormsRead"}
+    requirements:
+        _method: GET|PATCH        
