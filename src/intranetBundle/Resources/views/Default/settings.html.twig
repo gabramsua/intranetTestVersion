@@ -8,43 +8,7 @@
 
     function settingsController ($scope,$http, $mdToast) { 
        var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");    
-       var userLang = ("{{me.lang | json_encode()}}").replace(/&quot;/g, "");    
-
-        $scope.user = {
-            lang: '{[{user.lang}]}'
-       };
-       $scope.changeLanguage = function(){
-        console.log($scope.user.lang);
-        {% set lj='$scope.user.lang' %}
-       }
-       $scope.$watchGroup(['user.lang'], function(){
-
-            switch($scope.user.lang){
-                case 'es':
-                    {% set l="es" %}console.log("{{l}}");
-                    break;
-                case 'en':
-                    {% set l="en" %}console.log("{{l}}");
-                    break;
-                case 'fr':
-                    {% set l="fr" %}console.log("{{l}}");
-                    break;
-                case 'de':
-                    {% set l="de" %}console.log("{{l}}");
-                    break;
-                default:
-                    {% set l="fr" %}console.log("{{l}}");
-                    break;
-            }
-            
-
-        });
-
-
-
-
-
-
+       
        $scope.showphoto = function(){
        alert(subida3);
            if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -89,8 +53,6 @@
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(function success(response){
-                    console.log("Party time at updating. You chose: ");
-                    console.log($scope.user.lang);
                     $scope.showSimpleToast();
                     
                 }, function error(response){
@@ -261,8 +223,6 @@
 
         <md-list-item>
 
-
-        
             <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" href="{{ path('intranet_settingsb') }}">
                 {% trans %}Modify{% endtrans %}
             </md-button>

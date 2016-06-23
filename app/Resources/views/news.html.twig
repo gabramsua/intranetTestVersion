@@ -8,11 +8,10 @@
 <link rel="stylesheet" type="text/css" href="https://material.angularjs.org/1.1.0-rc.5/docs.css">
 <style>
     #container {
-        height: 292px;
-        //height: 500px;
+        height: 450px;
         width: 100%;
         max-width: 100%;
-        border: 1px solid black;
+        //border: 1px solid black;
         overflow-y: scroll;
         overflow-x: hidden;
     }
@@ -23,7 +22,7 @@
 <div ng-app="newsFeedApp" class="" id="newsFeedApp">
  <div ng-controller="feedsController"><!-- ng-init="populateChannelsList()"-->
     <md-input-container class="md-block" flex-gt-sm style="width: 200px;" ng-init="populateChannelsList()">
-        <md-select ng-model="channelSelected" ng-change="updateFeedList()">
+        <md-select aria-label="horse" ng-model="channelSelected" ng-change="updateFeedList()">
             <md-option ng-repeat="channel in userChannels" value="{[{channel}]}">
                 {[{channel}]}
             </md-option>

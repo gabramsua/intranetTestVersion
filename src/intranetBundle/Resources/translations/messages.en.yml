@@ -4,23 +4,31 @@ New User: "New User"
 Welcome: "Welcome to the intranet"
 lang: "ENGLISH"
 Hello: "Hi!"
-you dont exist: "If you are here it is because you dont exist yet on the databse"
-creating on database: "We are going to create you on the database"
+translation: Please select a Language, remember that this configuration won´t be saved to your personal settings
+
+#LOGIN
+name_and_surname: Please enter your name and surname
+help_login: Please enter your name, surname and your password
+Sign_in: Sign in
+
+no_exist_welcome: Please select your options and click register
+Register: Register
 
 #MENU
+Lang: Language
 Settings: "Settings"
 Forms: Forms
-Overtime Hours: Overtime Hours
-Vacation: Vacation
-Expenses: Expenses
-Request Business Trip: Request Business Trip
-Book a room: Book a Room
 Task: Task
 User Management: User Management
 News Feed: News Feed
+Channels: Channels
 Form Management: Form Management
-Incoming Forms: Incoming Forms
-Old Forms: Old Forms
+
+#LANDING
+langing_page_title: LANDING PAGE
+landing_page_subtitle: This is Landing Page
+landing_1: <b>This page needs to be edited</b>
+landing_2: Menu not visible for all => indicate routes?
 
 #SETTINGS
 Name: Name
@@ -62,3 +70,6 @@ half_day: Half day
 reasons: Reasons
 error_reason_required: You have to specify a reason to justify the trip.
 sendButton: Send
+
+#TOASTS
+you_dont_exist: Something went wrong while validating your credentials

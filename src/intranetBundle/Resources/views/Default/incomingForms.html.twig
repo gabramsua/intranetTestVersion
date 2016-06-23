@@ -283,10 +283,9 @@
             } 
     </script>
 
-<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak>
+<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak">
     <md-content layout="row" layout-align="center start">
-
-        <md-list flex-gt-xs="60">
+        <md-list flex-gt-xs="60" style="overflow: auto;">
             <md-divider></md-divider>
             <md-divider></md-divider>
             <md-list-item style="font-size: large">
@@ -322,7 +321,6 @@
                 <md-divider></md-divider>
             </div>
         </md-list>
-
         <div layout="column" style="margin-left: 50px; margin-right: 0px;">
           <div class="radioButtonList">
               <p>Select a form type:</p>
@@ -344,7 +342,7 @@
                   <md-radio-button value="0" class="md-primary">Pending</md-radio-button>
               </md-radio-group>
           </div>
-      </div>
+        </div>
     </md-content>
 </div>
 
