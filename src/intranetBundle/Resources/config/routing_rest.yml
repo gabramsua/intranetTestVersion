@@ -15,13 +15,13 @@ api_get_task:
     defaults: { _controller: "intranetBundle:ApiRest:getTask"}
     requirements:
         _method: DELETE|GET|PATCH|POST
-        
+
 api_get_all_news:
     pattern: /news
     defaults: { _controller: "intranetBundle:ApiRest:getNewsall"}
     requirements:
         _method: POST|GET
-        
+
 api_get_news:
     pattern: /news/{channelName}
     defaults: { _controller: "intranetBundle:ApiRest:getNews"}
@@ -51,39 +51,71 @@ api_get_channel_users:
     defaults: { _controller: "intranetBundle:ApiRest:getChannelUsers"}
     requirements:
         _method: DELETE|GET|PATCH
-        
+
 api_get_user_forms:
     pattern: /user/{login}/forms
     defaults: { _controller: "intranetBundle:ApiRest:getUserForms"}
     requirements:
         _method: GET
-        
+
 api_post_vacation_form:
     pattern: /vacationform/{login}
     defaults: { _controller: "intranetBundle:ApiRest:postVacationform"}
     requirements:
         _method: POST
-        
+
 api_post_expenses_form:
     pattern: /expensesform/{login}
     defaults: { _controller: "intranetBundle:ApiRest:postExpensesform"}
     requirements:
         _method: POST
-        
+
 api_post_business_trip_form:
     pattern: /businesstripform/{login}
     defaults: { _controller: "intranetBundle:ApiRest:postBusinessTripform"}
     requirements:
         _method: POST
-        
+
 api_post_overtime_hours_form:
     pattern: /overtimehoursform/{login}
     defaults: { _controller: "intranetBundle:ApiRest:postOvertimeHoursform"}
     requirements:
         _method: POST
-        
+
 api_post_work_at_home_form:
     pattern: /workathomeform/{login}
     defaults: { _controller: "intranetBundle:ApiRest:postWorkAtHomeform"}
     requirements:
         _method: POST
+
+#DELETE FORMS
+
+api_delete_vacation_form:
+    pattern: /user/{login}/vacationform/{idForm}
+    defaults: { _controller: "intranetBundle:ApiRest:deleteVacationForm"}
+    requirements:
+        _method: DELETE
+
+api_delete_expenses_form:
+    pattern: /user/{login}/expensesform/{idForm}
+    defaults: { _controller: "intranetBundle:ApiRest:deleteExpensesForm"}
+    requirements:
+        _method: DELETE
+
+api_delete_business_trip_form:
+    pattern: /user/{login}/bussinestripform/{idForm}
+    defaults: { _controller: "intranetBundle:ApiRest:deleteBusinessTripForm"}
+    requirements:
+        _method: DELETE
+
+api_delete_overtime_hours_form:
+    pattern: /user/{login}/overtimehoursform/{idForm}
+    defaults: { _controller: "intranetBundle:ApiRest:deleteOvertimeHoursForm"}
+    requirements:
+        _method: DELETE|GET
+
+api_delete_work_at_home_form:
+    pattern: /user/{login}/workathomeform/{idForm}
+    defaults: { _controller: "intranetBundle:ApiRest:deleteWorkAtHomeForm"}
+    requirements:
+        _method: DELETE
