@@ -1,0 +1,42 @@
+{% extends 'intranetBundle::layout2.html.twig' %}
+
+{% block contenido %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<script src="moment.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+<script src="http:////ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+
+
+<script>
+    window.onload = function(){
+          document.forms['form1'].submit();
+    }
+</script>
+    <form action="{{ path('intranet_settings', {_locale: user.lang }) }}" method="post" id="form1"></form>
+
+
+    <script>
+      var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
+      app.controller('AppCtrl', AppCtrl);
+
+      function AppCtrl($scope){
+          
+      }
+
+      </script>
+<div ng-controller="AppCtrl" ng-app="MyApp" layout="column" ng-cloak>
+    <div layout="row" layout-sm="column" layout-align="space-around" style="margin: 0 auto;margin-top:350px;">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+</div>
+{% endblock %}

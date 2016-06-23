@@ -29,6 +29,8 @@ use intranetBundle\Entity\Entity\Users_F_Hours;
 use intranetBundle\Entity\Entity\Users_F_Trip;
 use intranetBundle\Entity\Entity\Data;
 use intranetBundle\Entity\Entity\hours_data;
+use phpmailer;
+use SMTP;
 
 class ApiRestController extends Controller
 {
@@ -1406,6 +1408,112 @@ class ApiRestController extends Controller
         return $data;
     }
 
+    public function getFormsAction(){
+
+            $hoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Hours')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($hoursList, 'json');
+            $usershoursList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Hours')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($usershoursList, 'json');
+            $hoursdataList = $this->getDoctrine()->getRepository('intranetBundle:Entity\hours_data')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($hoursdataList, 'json');
+            $dataList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Data')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($dataList, 'json');
+            $usersList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($usersList, 'json');
+
+            $vacationsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Vacation')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($vacationsList, 'json');
+            $usersvacationsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Vacation')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($usersvacationsList, 'json');
+
+            $expensesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Expenses')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($expensesList, 'json');
+            $usersexpensesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Expenses')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($usersexpensesList, 'json');
+
+            $tripsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Trip')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($tripsList, 'json');
+            $userstripsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Trip')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($userstripsList, 'json');
+
+            $homesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Home')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($homesList, 'json');
+            $usershomesList = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users_F_Home')->findAll();
+            $serializer = SerializerBuilder::create()->build();
+            $serializer->serialize($usershomesList, 'json');
+
+
+
+
+
+            $data = [
+                "hoursList" => $hoursList,
+                "usershoursList" => $usershoursList,
+                "hoursdataList" => $hoursdataList,
+                "dataList" => $dataList,
+                "usersList" => $usersList,
+                "vacationsList" => $vacationsList,
+                "usersvacationsList" => $usersvacationsList,
+                "expensesList" => $expensesList,
+                "usersexpensesList" => $usersexpensesList,
+                "tripsList" => $tripsList,
+                "userstripsList" => $userstripsList,
+                "homesList" => $homesList,
+                "usershomesList" => $usershomesList
+            ];
+
+            return $data;
+        
+    }
+
+    public function getFormsStatusAction($id){
+
+        if ($_SERVER['REQUEST_METHOD'] == 'PATCH'){
+            $post = file_get_contents("php://input");
+            $formIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getEntityManager();
+            switch ($formIncoming['type']) {
+                case 'OvertimeHours':
+                      $formtype='Hours';
+                      break;
+                case 'Vacation':
+                      $formtype='Vacation';
+                      break;
+                case 'Expenses':
+                      $formtype='Expenses';
+                      break;
+                case 'BusinessTrip':
+                      $formtype='Trip';
+                      break;
+                case 'WorkAtHome':
+                      $formtype='Home';
+                      break;
+            }
+            $f = $em->getRepository('intranetBundle:Entity\F_'.$formtype)->findOneById($id);
+
+            $f->setStatus($formIncoming['status']);
+            $em->flush();
+
+            //Now it is time to send the notification.
+            //I need to get the user(his email) who send the form, I can obtain it through the intermediate table.
+
+            $intermediate = $em->getRepository('intranetBundle:Entity\Users_F_'.$formtype)->findOneByIdForm($id);
+
+            $usuario = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($intermediate->getLogin());
+            //$usuario->getEmail();
 
 
 
@@ -1413,27 +1521,131 @@ class ApiRestController extends Controller
 
 
 
-    public function getFormHourAction($id){
+            if($usuario->getNotifications()==1){
+                require("class.phpmailer.php");
+                require("class.smtp.php");
 
-        if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+                $mail = new PHPMailer();
+                $mail->PluginDir = "includes/";
 
-            $channel = $this->getDoctrine()->getRepository('intranetBundle:Entity\Channel')->findOneById($id);
+                //With this property we indicate we are going to use an smtp server
+                $mail->Mailer = "smtp";
 
-            if(is_null($channel))
-                throw new HttpException(404, "The channel $id could not be found.");
+                //Assign to Host the name of our SMTP Server
+                $mail->Host = "webcity10.code-labs.net";
 
-            if(!is_object($channel)){
-                throw $this->createNotFoundException();
+                //It requires authentication
+                $mail->SMTPAuth = true;
+                $mail->Username = "relay@appcuisine.de";
+                $mail->Password = "U41jLVpuROD0";
+
+                $mail->From = "intranet@appcuisine.de";
+                $mail->FromName = "webCuisine";
+
+                $mail->Timeout=40;
+
+                
+                $mail->AddAddress($usuario->getEmail());
+                
+
+                switch ($usuario->getLang()) {
+                  case 'es':
+                      if ($formIncoming['status']==1){
+                          $mail->Subject = "Su formulario ha sido aceptado.";
+                      }else{
+                          $mail->Subject = "Su formulario ha sido rechazado.";
+                      }
+                        $mail->Body = "El formulario que mandaste del tipo ".$formIncoming['type'].", por favor chequea que es correcto <a href='http://intranet.stage.unitedcuisines.net/intranetTestVersion/web/app_dev.php/es/intranet_logout'>aqui</a>.";
+                      break;
+                  case 'en':
+                      if ($formIncoming['status']==1){
+                        $mail->Subject = "Your form has been accepted.";
+                      }else{
+                        $mail->Subject = "Your form has been rejected.";
+                      }
+                      $mail->Body = "You send a ".$formIncoming['type']." form, please check it <a href='http://intranet.stage.unitedcuisines.net/intranetTestVersion/web/app_dev.php/es/intranet_logout'>here</a>.";
+                      break;
+                  case 'fr':
+                      if ($formIncoming['status']==1){
+                          $mail->Subject = "Sa forme a été acceptée.";
+                      }else{
+                          $mail->Subject = "Sa forme a été rejetée.";
+                      }
+                        $mail->Body = "La forme que vous avez envoyé le gars ".$formIncoming['type'].", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/intranetTestVersion/web/app_dev.php/es/intranet_logout'>ici</a>.";
+                      break;
+
+                  default:
+                    # code...
+                    break;
+                }
+
+                
+                 $mail->AltBody = "Only text format.";
+
+                $exito = $mail->Send();
+
+                //Only 4 attempts will be done if message couldn´t be sent 
+                //Each attempt is produced every 5 seconds => sleep function
+
+                $intentos=1;
+                while ((!$exito) && ($intentos < 5)) {
+                sleep(5);
+                    $exito = $mail->Send();
+                    $intentos=$intentos+1;
+                 }
+
+                 /*if(!$exito){
+                    echo "<br>A problem was found while sending the email notification.";
+                    echo "<br/>".$mail->ErrorInfo;
+                 }else{
+                    echo "<br><b><u>Mensaje enviado correctamente</u></b>";
+                 }*/
             }
 
-            $serializer = SerializerBuilder::create()->build();
-            $serializer->serialize($channel, 'json');
 
-            return $channel;
+
+
+
+            return "ok";
+            
 
         }
     }
 
+    public function getFormsReadAction($id){
+
+        if ($_SERVER['REQUEST_METHOD'] == 'PATCH'){
+            $post = file_get_contents("php://input");
+            $formIncoming = json_decode($post, true);
+
+            $em = $this->getDoctrine()->getEntityManager();
+            switch ($formIncoming['type']) {
+                case 'OvertimeHours':
+                      $formtype='Hours';
+                      break;
+                case 'Vacation':
+                      $formtype='Vacation';
+                      break;
+                case 'Expenses':
+                      $formtype='Expenses';
+                      break;
+                case 'BusinessTrip':
+                      $formtype='Trip';
+                      break;
+                case 'WorkAtHome':
+                      $formtype='Home';
+                      break;
+            }
+            $f = $em->getRepository('intranetBundle:Entity\F_'.$formtype)->findOneById($id);
+
+            $f->setIsRead(1);
+            $em->flush();
+
+            return "ok";
+            
+
+        }
+    }
 
     public function deleteExpensesFormAction($login, $idForm){
 

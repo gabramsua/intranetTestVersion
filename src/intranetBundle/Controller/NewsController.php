@@ -10,7 +10,7 @@ class NewsController extends Controller{
 
   public function newsAction(){
       
-      //agregado nacho
+      
       $userLogin = $_SESSION['userLDAP'];
       
       $em = $this->getDoctrine()->getEntityManager();
@@ -28,7 +28,7 @@ class NewsController extends Controller{
                       ->getRepository('intranetBundle:Entity\NewFeed')
                       ->findAll();
       
-      //fin agregado nacho
+      
       
       $news = $this->getDoctrine()
                       ->getRepository('intranetBundle:Entity\NewFeed')
@@ -43,17 +43,14 @@ class NewsController extends Controller{
 
           foreach ($n as $index => $object2) {
               if($object->getId()==$object2->getIdNew()){
-                // foreach ($newschannel as $nc){
-                  // if(in_array($object->getId(), $nc)){
-                  // }else{
+                
                     array_push($newschannel,$object);
-                  // }
-                // }
+                  
               }
           }
       }
 
-      $params=array('new'=>$newschannel, 'channels'=>$channelsList);
+      $params=array('new'=>$newschannel, 'channels'=>$channelsList, 'login'=> $userLogin);
       //array_push($params, );
       return $this->render('::news.html.twig', $params);
    }

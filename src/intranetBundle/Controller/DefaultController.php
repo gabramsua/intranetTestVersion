@@ -232,6 +232,14 @@ class DefaultController extends Controller{
       }
   }
 
+  public function settingsbAction(){
+    $user = $this->getDoctrine()
+                       ->getRepository('intranetBundle:Entity\Users')
+                       ->findOneByLogin($_SESSION['userLDAP']);
+         $params=array('user'=>$user);
+         return $this->render('intranetBundle:Default:landingb.html.twig', $params);
+  }
+
   public function logoutAction(){
     unset($_SESSION["nome"]);
     return $this->render(
@@ -1675,6 +1683,11 @@ class DefaultController extends Controller{
                    'surname' => $_SESSION['surname']];
         
         return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html', $params);
+    }
+
+    public function mainDialog2Action(){
+        
+        return $this->render('intranetBundle:DialogTemplates:mainDialog2.tmpl.html');
     }
     
     public function businessTripDialogAction(){

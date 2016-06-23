@@ -119,3 +119,15 @@ api_delete_work_at_home_form:
     defaults: { _controller: "intranetBundle:ApiRest:deleteWorkAtHomeForm"}
     requirements:
         _method: DELETE
+
+api_get_forms_status:
+    pattern: /formsstatus/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getFormsStatus"}
+    requirements:
+        _method: GET|PATCH
+
+api_get_forms_read:
+    pattern: /formsread/{id}
+    defaults: { _controller: "intranetBundle:ApiRest:getFormsRead"}
+    requirements:
+        _method: GET|PATCH

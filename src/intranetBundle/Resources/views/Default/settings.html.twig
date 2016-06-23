@@ -1,20 +1,49 @@
 {% extends 'intranetBundle::layout.html.twig' %}
 
 {% block contenido %}
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <script>
     var app=angular.module('settingsApp', ['ngMaterial']);
     app.controller('settingsController', settingsController);
 
     function settingsController ($scope,$http, $mdToast) { 
-       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");     
+       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");    
+       var userLang = ("{{me.lang | json_encode()}}").replace(/&quot;/g, "");    
+
+        $scope.user = {
+            lang: '{[{user.lang}]}'
+       };
+       $scope.changeLanguage = function(){
+        console.log($scope.user.lang);
+        {% set lj='$scope.user.lang' %}
+       }
+       $scope.$watchGroup(['user.lang'], function(){
+
+            switch($scope.user.lang){
+                case 'es':
+                    {% set l="es" %}console.log("{{l}}");
+                    break;
+                case 'en':
+                    {% set l="en" %}console.log("{{l}}");
+                    break;
+                case 'fr':
+                    {% set l="fr" %}console.log("{{l}}");
+                    break;
+                case 'de':
+                    {% set l="de" %}console.log("{{l}}");
+                    break;
+                default:
+                    {% set l="fr" %}console.log("{{l}}");
+                    break;
+            }
+            
+
+        });
+
+
+
+
+
 
        $scope.showphoto = function(){
        alert(subida3);
@@ -43,7 +72,6 @@
         }
         
         $scope.updateUser=function(login){
-
             $http({
                     method: 'PATCH',
                     url: window.location.pathname+'/../../api/user/'+login,
@@ -61,11 +89,12 @@
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(function success(response){
-                    console.log("Party time");
+                    console.log("Party time at updating. You chose: ");
+                    console.log($scope.user.lang);
                     $scope.showSimpleToast();
                     
                 }, function error(response){
-                    console.log("Error:" +response.statusText);
+                    console.log("Errorrrrr:" +response.statusText);
                 }
             ); 
                 
@@ -136,7 +165,7 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Language{% endtrans %}</label><br><br>
-                        <md-radio-group ng-model="user.lang" >
+                        <md-radio-group ng-model="user.lang" ng-click="changeLanguage()">
                             <md-radio-button id="myLanguage" name="myLanguage" value="es" class="md-primary">
                                 ES
                             </md-radio-button>
@@ -168,7 +197,7 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>Onboard</label><br><br>
-                        <md-checkbox ng-model="user.onboard" id="onb" aria-label="Checkbox 2" class="md-primary">
+                        <md-checkbox ng-model="user.onboard" id="onb" aria-label="Checkbox 2" class="md-primary" disabled>
                             {% trans %}Usuario nuevo{% endtrans %}
                         </md-checkbox>
                     </md-input-container>
@@ -231,7 +260,10 @@
         </div> 
 
         <md-list-item>
-            <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" ng-click="updateUser(user.login)">
+
+
+        
+            <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" href="{{ path('intranet_settingsb') }}">
                 {% trans %}Modify{% endtrans %}
             </md-button>
         </md-list-item>
