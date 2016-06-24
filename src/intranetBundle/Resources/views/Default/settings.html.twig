@@ -97,9 +97,9 @@
             
 </script>
 
-
-<div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
-    <form name="settingsForm" id="settingsForm" method="POST" novalidate>
+<!-- action="{{ path('intranet_editchannel') }}" -->
+<div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start" >
+    <form name="settingsForm" id="settingsForm" method="POST" novalidate  action="{{ path('intranet_cruduser') }}">
     <!--{{ path('intranet_cruduser') }}-->
     
     <md-content ng-init="getCurrentUser()">
@@ -223,7 +223,7 @@
 
         <md-list-item>
 
-            <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" href="{{ path('intranet_settingsb') }}">
+            <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" >
                 {% trans %}Modify{% endtrans %}
             </md-button>
         </md-list-item>

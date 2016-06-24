@@ -220,16 +220,11 @@ class DefaultController extends Controller{
    }
 
   public function settingsAction(){
-      //if the user is active or the admin is modifyng another user
-      if(isset($_REQUEST['isAdmin'])){
-        $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_REQUEST['login']);
-        $params=array('me'=>$usuario);
-        return $this->render('intranetBundle:Default:settingsForAdmin.html.twig',$params);
-      }else{
-          $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']); #findAll
-          $params=array('me'=>$usuario);
-          return $this->render('intranetBundle:Default:settings.html.twig',$params);
-      }
+
+      $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']); #findAll
+      $params=array('me'=>$usuario);
+      return $this->render('intranetBundle:Default:settings.html.twig',$params);
+      
   }
 
   public function settingsbAction(){
@@ -258,34 +253,15 @@ class DefaultController extends Controller{
      return $this->render('intranetBundle:Default:newuser.html.twig', $params);
    }
 
+   
+
    public function updateUserAction(){
-     if (isset($_POST['update'])) {
-         return self::updatUserAction();
-     } else if (isset($_POST['delete'])) {
-         return self::deletUserAction();
-     }
-   }
-
-   public function updatUserAction(){
+    echo "Llegaste a la linea 265";
        $em = $this->getDoctrine()->getManager();
-       $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_REQUEST['myLogin']);
+       $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
+       echo $product->getLang();
 
-       //  $product->setLogin($_REQUEST['myLogin']);
-       $product->setNameU($_REQUEST['myName']);
-       $product->setSurnameU($_REQUEST['mySurname']);
-       $product->setLang($_REQUEST['myLanguage']);
-       $product->setPhoto($_REQUEST['myPhoto']);
-       if(isset($_REQUEST['myOnboard'])){
-            $product->setOnboard(1);
-        }
-       $product->setNotifications($_REQUEST['myNotifications']);
-       $em->flush();
-
-       //if ADMIN, USERMANAGEMENT
-       if($_SESSION['rol']=="Admin")
-       return self::userManagementAction();
-       //IF NOT, HOMEPAGE
-       else return $this->render('intranetBundle:Default:landing.html.twig');
+       return $this->redirect($this->generateUrl('intranet_settings', ['_locale'=>$product->getLang()] ));
    }
 
    public function deletUserAction(){

@@ -289,7 +289,7 @@
 
    function deleteFormDialogController($scope, $mdDialog, $http, currentForm){
                 $scope.form = currentForm;
-                
+                console.log($scope.form.type);
                 $scope.closeDialog = function(){
                     $mdDialog.hide();
                  };
