@@ -7,7 +7,7 @@
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
     });
     app.controller('incomingsController', incomingsController);
-    
+
     function incomingsController($rootScope, $scope, $mdDialog, $http){
       $scope.filtrotipo = null;
       $scope.filtro1=null;
@@ -113,19 +113,19 @@
           var formsListOutput = [];
 
           $.each($scope.hoursList, function(index, currentForm){
-            formsListOutput.push(currentForm);    
+            formsListOutput.push(currentForm);
           });
           $.each($scope.vacationsList, function(index, currentForm){
-            formsListOutput.push(currentForm);    
+            formsListOutput.push(currentForm);
           });
           $.each($scope.expensesList, function(index, currentForm){
-            formsListOutput.push(currentForm);    
+            formsListOutput.push(currentForm);
           });
           $.each($scope.tripsList, function(index, currentForm){
-            formsListOutput.push(currentForm);    
+            formsListOutput.push(currentForm);
           });
           $.each($scope.homesList, function(index, currentForm){
-            formsListOutput.push(currentForm);    
+            formsListOutput.push(currentForm);
           });
 
           return formsListOutput;
@@ -151,7 +151,7 @@
             var datos = [];
             var user = null;
             if (form.type == "OvertimeHours"){
-            
+
                 $.each($scope.hoursdataList, function(index, intermediate){
                     if (intermediate.id_form == form.id){
                         $.each($scope.dataList, function(index, dat){
@@ -162,7 +162,7 @@
                     }
                 });
 
-                
+
                 $.each($scope.usershoursList, function(index, intermediate){
                     if (intermediate.id_form == form.id){
                         $.each($scope.usersList, function(index, u){
@@ -222,7 +222,7 @@
                 }
 
                 $scope.changingStatus = function(status){
-                    
+
                     //form filter status legend
                     //0 -> Pending
                     //1 -> Accepted
@@ -269,15 +269,15 @@
                         }
                     );
                 }
-                
+
         }
-      
+
       $scope.deleteForm = function(ev, form){
           $mdDialog.show({
               templateUrl: "{{path('intranet_delete_dialog')}}",
               locals: {
                   currentForm: form
-              }, 
+              },
               parent: angular.element(document.body),
               targetEvent: ev,
               clickOutsideToClose: true,
@@ -285,7 +285,7 @@
               onRemoving: $scope.getAll
           });
       }
-   }    
+   }
 
    function deleteFormDialogController($scope, $mdDialog, $http, currentForm){
                 $scope.form = currentForm;
@@ -312,7 +312,7 @@
                             break;
                     }
 
-                    
+
 
 
                 $scope.delete=function(){
@@ -324,15 +324,15 @@
                     }).then(function success(response){
                         $scope.closeDialog();
                     }, function error(response){
-                        
+
                         console.log("ERROR: "+response.statusText);
                     });
-                    
-                 };   
-            } 
+
+                 };
+            }
     </script>
 
-<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak">
+<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak>
     <md-content layout="row" layout-align="center start">
         <md-list flex-gt-xs="60" style="overflow: auto;">
             <md-divider></md-divider>
@@ -355,7 +355,7 @@
                       <span ng-if="form.isread == 1" style="margin-left: 25%;">{[{form.send}]}</span>
 
                     </div>
-                    
+
                     <div style="width: 40%">
                       <span ng-if="form.status == 0" style="color:#4073A5; font-weight:bold;">{% trans %}pending_form{% endtrans %}</span>
                       <span ng-if="form.status == 1" style="color:#389C97; font-weight:bold;">{% trans %}approved_form{% endtrans %}</span>
@@ -366,7 +366,7 @@
                     </div>
 
                 </md-list-item>
-    
+
                 <md-divider></md-divider>
             </div>
         </md-list>

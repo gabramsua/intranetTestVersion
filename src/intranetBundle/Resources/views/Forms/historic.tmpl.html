@@ -19,9 +19,9 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
             </md-list-item>
             <md-divider></md-divider>
             <md-divider></md-divider>
+            <span class="md-headline" ng-if="filteredFormsList.length == 0 && !loading" layout-margin>There are not forms to show.</span>
             <div ng-repeat="form in filteredFormsList">
                 <md-list-item ng-click="showFormDetails($event, form)">
-
                     <span style="width: 30%">{[{form.type}]}</span>
                     <span style="width: 25%" hide-lg>{[{form.send}]}</span>
                     <div style="width: 25%">
@@ -39,7 +39,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
                 <md-divider></md-divider>
             </div>
         </md-list>
-        <div layout="column">
+        <div layout="column" style="margin-left: 5%;">
           <div class="radioButtonList">
               <p>Select a form type:</p>
               <md-radio-group ng-model="filters.formType" >

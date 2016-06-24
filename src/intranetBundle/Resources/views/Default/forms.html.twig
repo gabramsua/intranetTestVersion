@@ -20,7 +20,6 @@
 
         <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController" style="background-color:#FDFDFD !important;">
             <md-content>
-<!--            <md-content class="md-padding">-->
                 <md-tabs id="tabs" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
                     <md-tab id="tab0">
                         <md-tab-label>{% trans %}historic{% endtrans %}</md-tab-label>
@@ -32,14 +31,13 @@
                         <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_vacation')}}'" class="md-padding"></div>
-<!--                            <div ng-include="'vacationForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
               <!--
                     <md-tab id="tab1">
                         <md-tab-label>VacationTest</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_vacation_test')}}'"></div>
+                            <div ng-include="'{{ path('intranet_forms_vacation_test')}}'" class="md-padding"></div>
                             <div ng-include="'vacationFormTest.html'"></div>
                         </md-tab-body>
                     </md-tab>
@@ -47,29 +45,25 @@
                     <md-tab id="tab2">
                         <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_expenses')}}'"></div>
-<!--                            <div ng-include="'expensesForm.html'"></div>-->
+                            <div ng-include="'{{ path('intranet_forms_expenses')}}'" class="md-padding"></div>
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab3">
                         <md-tab-label>{% trans %}business_trip_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_business_trip')}}'" class="md-padding"></div>
-<!--                            <div ng-include="'businessTripForm.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab7">
                         <md-tab-label>{% trans %}overtime_hours_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'" layout-padding></div>
-<!--                            <div ng-include="'overtimeHoursForm2.html'"></div>-->
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab5">
                         <md-tab-label>{% trans %}work_at_home_form{% endtrans %}</md-tab-label>
                         <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_work_at_home')}}'"></div>
-<!--                            <div ng-include="'workAtHomeForm.html'"></div>-->
+                            <div ng-include="'{{ path('intranet_forms_work_at_home')}}'" class="md-padding"></div>
                         </md-tab-body>
                     </md-tab>
                 </md-tabs>
@@ -682,6 +676,13 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                         console.log("ERROR: "+response.statusText);
                     });
                 }
+
+                $scope.$watch('selectedIndex', function(){
+                    if ($scope.selectedIndex == 0){
+                        $scope.fillList();
+                        filterForms();
+                    }
+                });
 
                 function filterForms(){
 

@@ -185,7 +185,7 @@ class DefaultController extends Controller{
                 $object->getWhoCreate()]);
     }
 
-   if (!$tareas) {return $this->render('intranetBundle:Error:error_tasks.html.twig', $params);}
+   if (!$tareas) {return $this->render('intranetBundle:Error:error_tasks.html.twig');}
 
 
    $params=array('listTasks'=>$tasks, 'rol'=>$_SESSION['rol'], 'userLogin'=>$_SESSION['userLDAP']);
@@ -199,7 +199,7 @@ class DefaultController extends Controller{
                         ->findAll();
 
 
-       if (!$channels) {return $this->render('intranetBundle:Error:error_channels.html.twig', $params);}
+       if (!$channels) {return $this->render('intranetBundle:Error:error_channels.html.twig');}
 
        $params=array('listChannels'=>$channels);
        return $this->render('intranetBundle:Default:channels.html.twig',$params);
@@ -224,7 +224,7 @@ class DefaultController extends Controller{
       $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']); #findAll
       $params=array('me'=>$usuario);
       return $this->render('intranetBundle:Default:settings.html.twig',$params);
-      
+
   }
 
   public function settingsbAction(){
@@ -253,7 +253,7 @@ class DefaultController extends Controller{
      return $this->render('intranetBundle:Default:newuser.html.twig', $params);
    }
 
-   
+
 
    public function updateUserAction(){
     echo "Llegaste a la linea 265";
