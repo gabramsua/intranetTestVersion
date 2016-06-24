@@ -1647,37 +1647,37 @@ class ApiRestController extends Controller
         }
     }
 
-    public function deleteExpensesFormAction($login, $idForm){
+    public function deleteExpensesFormAction($idForm){
 
         $em = $this->getDoctrine()->getManager();
         $form = $em->getRepository('intranetBundle:Entity\F_Expenses')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Expenses')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Expenses')->findOneBy(["idForm"=>$idForm]);
         $em->remove($userForm);
         $em->flush();
     }
 
-    public function deleteWorkAtHomeFormAction($login, $idForm){
+    public function deleteWorkAtHomeFormAction($idForm){
 
         $em = $this->getDoctrine()->getManager();
         $form = $em->getRepository('intranetBundle:Entity\F_Home')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Home')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Home')->findOneBy(["idForm"=>$idForm]);
         $em->remove($userForm);
         $em->flush();
     }
 
-    public function deleteOvertimeHoursFormAction($login, $idForm){
+    public function deleteOvertimeHoursFormAction($idForm){
 
         $gm = $this->getDoctrine()->getManager();
         $form = $gm->getRepository('intranetBundle:Entity\F_Hours')->findOneById($idForm);
         $gm->remove($form);
 
-        $userForm = $gm->getRepository('intranetBundle:Entity\Users_F_Hours')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $gm->getRepository('intranetBundle:Entity\Users_F_Hours')->findOneBy(["idForm"=>$idForm]);
         $gm->remove($userForm);
 
         $dayFormIntemediate = $gm->getRepository('intranetBundle:Entity\hours_data')->findByIdForm($idForm);
@@ -1704,26 +1704,26 @@ class ApiRestController extends Controller
         $gm->flush();
     }
 
-    public function deleteBusinessTripFormAction($login, $idForm){
+    public function deleteBusinessTripFormAction($idForm){
 
         $em = $this->getDoctrine()->getManager();
         $form = $em->getRepository('intranetBundle:Entity\F_Trip')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Trip')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Trip')->findOneBy(["idForm"=>$idForm]);
         $em->remove($userForm);
         $em->flush();
     }
 
-    public function deleteVacationFormAction($login, $idForm){
+    public function deleteVacationFormAction($idForm){
 
         $em = $this->getDoctrine()->getManager();
         $form = $em->getRepository('intranetBundle:Entity\F_Vacation')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Vacation')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Vacation')->findOneBy(["idForm"=>$idForm ]);
         $em->remove($userForm);
         $em->flush();
     }

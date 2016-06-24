@@ -91,31 +91,31 @@ api_post_work_at_home_form:
 #DELETE FORMS
 
 api_delete_vacation_form:
-    pattern: /user/{login}/vacationform/{idForm}
+    pattern: vacationform/{idForm}
     defaults: { _controller: "intranetBundle:ApiRest:deleteVacationForm"}
     requirements:
         _method: DELETE
 
 api_delete_expenses_form:
-    pattern: /user/{login}/expensesform/{idForm}
+    pattern: expensesform/{idForm}
     defaults: { _controller: "intranetBundle:ApiRest:deleteExpensesForm"}
     requirements:
         _method: DELETE
 
 api_delete_business_trip_form:
-    pattern: /user/{login}/bussinestripform/{idForm}
+    pattern: bussinestripform/{idForm}
     defaults: { _controller: "intranetBundle:ApiRest:deleteBusinessTripForm"}
     requirements:
         _method: DELETE
 
 api_delete_overtime_hours_form:
-    pattern: /user/{login}/overtimehoursform/{idForm}
+    pattern: overtimehoursform/{idForm}
     defaults: { _controller: "intranetBundle:ApiRest:deleteOvertimeHoursForm"}
     requirements:
         _method: DELETE|GET
 
 api_delete_work_at_home_form:
-    pattern: /user/{login}/workathomeform/{idForm}
+    pattern: workathomeform/{idForm}
     defaults: { _controller: "intranetBundle:ApiRest:deleteWorkAtHomeForm"}
     requirements:
         _method: DELETE

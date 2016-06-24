@@ -806,7 +806,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
 
                     $http({
                         method: 'DELETE',
-                        url: window.location.pathname+'/../../api/user/'+userLogin+'/'+url+'/'+idForm,
+                        url: window.location.pathname+'/../../api/'+url+'/'+idForm,
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function success(response){

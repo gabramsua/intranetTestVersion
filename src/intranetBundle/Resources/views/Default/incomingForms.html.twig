@@ -289,28 +289,45 @@
 
    function deleteFormDialogController($scope, $mdDialog, $http, currentForm){
                 $scope.form = currentForm;
-                
                 $scope.closeDialog = function(){
                     $mdDialog.hide();
                  };
 
-               $scope.delete=function(){
+                var url = null;
+                switch ($scope.form.type){
+                        case "Expenses":
+                            url = "expensesform";
+                            break;
+                        case "OvertimeHours":
+                            url = "overtimehoursform";
+                            break;
+                        case "Vacation":
+                            url = "vacationform";
+                            break;
+                        case "BusinessTrip":
+                            url = "bussinestripform";
+                            break;
+                        case "WorkAtHome":
+                            url = "workathomeform";
+                            break;
+                    }
+
+                    
+
+
+                $scope.delete=function(){
                     $http({
                         method: 'DELETE',
-                        url: window.location.pathname+'/../../api/forms/',
-                        data: {
-                                form: $scope.form,
-                                type: $scope.form.type,
-                                id: $scope.form.id
-                            },
+                        url: window.location.pathname+'/../../api/'+url+'/'+$scope.form.id,
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
-                    })
-                    .then(function success(response){
-                         $scope.closeDialog();
+                    }).then(function success(response){
+                        $scope.closeDialog();
                     }, function error(response){
-                        console.log("Error al delete:" +response.statusText);
-                    });  
+                        
+                        console.log("ERROR: "+response.statusText);
+                    });
+                    
                  };   
             } 
     </script>
