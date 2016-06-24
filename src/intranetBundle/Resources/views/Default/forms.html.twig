@@ -4,7 +4,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
         <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
         <script src="moment.min.js"></script>
         <script src="https://cdn.jsdelivr.net/momentjs/2.13.0/moment.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -28,6 +27,7 @@
             app.controller('businessTripController', businessTripController);
             app.controller('workAtHomeController', workAtHomeController);
             app.controller('historicController', historicController);
+            app.controller('confirmDeleteDialogController', confirmDeleteDialogController);
             app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
@@ -49,25 +49,6 @@
                 $mdDateLocaleProvider.parseDate = function(dateString) {
                     var m = moment(dateString, 'DD/MM/YYYY', true);
                     return m.isValid() ? m.toDate() : new Date(NaN);
-                };
-            });
-
-            app.directive('googleplace', function() {
-                return {
-                    require: 'ngModel',
-                    link: function(scope, element, attrs, model) {
-                        var options = {
-                            types: [],
-                            componentRestrictions: {}
-                        };
-                        scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-                        google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-                            scope.$apply(function() {
-                                model.$setViewValue(element.val());
-                            });
-                        });
-                    }
                 };
             });
 
@@ -484,6 +465,8 @@
 
 
                 var userLogin = ("{{userLogin | json_encode()}}").replace(/&quot;/g, "");
+                var deleting = false;
+                $scope.loading = true;
 
                 $scope.filters = {
                     formType: 'All',
@@ -508,13 +491,19 @@
                         $scope.formsList = response.data.allForms;
                         $scope.filteredFormsList = groupAllFormsInOneArray(response.data.allForms);
                         $scope.daysOnOvertimeHoursForms = response.data.daysOnOvertimeHoursForms;
+                        $scope.loading = false;
+
+                        if (deleting){
+                            filterForms();
+                            deleting = false;
+                        }
                     }, function error(response){
                         //manage error
                         console.log("ERROR: "+response.statusText);
                     });
                 }
 
-                $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
+                function filterForms(){
 
                     $scope.filteredFormsList = [];
                     if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
@@ -545,8 +534,9 @@
                                 break;
                         }
                     }
+                }
 
-                });
+                $scope.$watchGroup(['filters.formType', 'filters.formStatus'], filterForms);
 
                 function filterFormsByStatus(currentTypeFormList, status){
 
@@ -598,7 +588,56 @@
                     });
                 }
 
-                $scope.deleteForm = function (idForm, typeForm){};
+                $scope.showConfirmDelete = function(ev, idForm, typeForm) {
+                    $mdDialog.show({
+                        templateUrl: "{{path('intranet_delete_dialog')}}",
+                        locals: {
+                            idForm: idForm,
+                            typeForm: typeForm
+                        },
+                        scope: $scope,
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        controller: confirmDeleteDialogController
+                    });
+              };
+
+                $scope.deleteForm = function (idForm, typeForm){
+                    var url = "";
+
+                    switch (typeForm){
+                        case "Expenses":
+                            url = "expensesform";
+                            break;
+                        case "OvertimeHours":
+                            url = "overtimehoursform";
+                            break;
+                        case "Vacation":
+                            url = "vacationform";
+                            break;
+                        case "BusinessTrip":
+                            url = "bussinestripform";
+                            break;
+                        case "WorkAtHome":
+                            url = "workathomeform";
+                            break;
+                    }
+
+                    $http({
+                        method: 'DELETE',
+                        url: window.location.pathname+'/../../api/user/'+userLogin+'/'+url+'/'+idForm,
+                        dataType: 'json',
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function success(response){
+
+                        deleting = true;
+                        $scope.fillList();
+                    }, function error(response){
+                        //manage error
+                        console.log("ERROR: "+response.statusText);
+                    });
+                };
             }
 
             function dialogController($scope, $mdDialog, currentForm, daysOnOvertimeHoursForm){
@@ -623,6 +662,18 @@
                         $scope.currentTemplateForm = "{{ path('intranet_forms_dialog_work_at_home')}}";
                         break;
                 }
+
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                }
+            }
+
+            function confirmDeleteDialogController($scope, $mdDialog, idForm, typeForm){
+
+                $scope.delete = function(){
+                    $scope.deleteForm(idForm, typeForm);
+                    $mdDialog.hide();
+                };
 
                 $scope.closeDialog = function() {
                     $mdDialog.hide();

@@ -1475,7 +1475,7 @@ class ApiRestController extends Controller
             ];
 
             return $data;
-        
+
     }
 
     public function getFormsStatusAction($id){
@@ -1544,9 +1544,9 @@ class ApiRestController extends Controller
 
                 $mail->Timeout=40;
 
-                
+
                 $mail->AddAddress($usuario->getEmail());
-                
+
 
                 switch ($usuario->getLang()) {
                   case 'es':
@@ -1579,12 +1579,12 @@ class ApiRestController extends Controller
                     break;
                 }
 
-                
+
                  $mail->AltBody = "Only text format.";
 
                 $exito = $mail->Send();
 
-                //Only 4 attempts will be done if message couldn´t be sent 
+                //Only 4 attempts will be done if message couldn´t be sent
                 //Each attempt is produced every 5 seconds => sleep function
 
                 $intentos=1;
@@ -1607,7 +1607,7 @@ class ApiRestController extends Controller
 
 
             return "ok";
-            
+
 
         }
     }
@@ -1642,7 +1642,7 @@ class ApiRestController extends Controller
             $em->flush();
 
             return "ok";
-            
+
 
         }
     }
@@ -1650,11 +1650,11 @@ class ApiRestController extends Controller
     public function deleteExpensesFormAction($login, $idForm){
 
         $em = $this->getDoctrine()->getManager();
-        $form = $em->getRepository('intranetBundle:Entity\F_Expenses')->findById($idForm);
+        $form = $em->getRepository('intranetBundle:Entity\F_Expenses')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Expenses')->findBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Expenses')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
         $em->remove($userForm);
         $em->flush();
     }
@@ -1662,11 +1662,11 @@ class ApiRestController extends Controller
     public function deleteWorkAtHomeFormAction($login, $idForm){
 
         $em = $this->getDoctrine()->getManager();
-        $form = $em->getRepository('intranetBundle:Entity\F_Home')->findById($idForm);
+        $form = $em->getRepository('intranetBundle:Entity\F_Home')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Home')->findBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Home')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
         $em->remove($userForm);
         $em->flush();
     }
@@ -1707,11 +1707,11 @@ class ApiRestController extends Controller
     public function deleteBusinessTripFormAction($login, $idForm){
 
         $em = $this->getDoctrine()->getManager();
-        $form = $em->getRepository('intranetBundle:Entity\F_Trip')->findById($idForm);
+        $form = $em->getRepository('intranetBundle:Entity\F_Trip')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Trip')->findBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Trip')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
         $em->remove($userForm);
         $em->flush();
     }
@@ -1719,11 +1719,11 @@ class ApiRestController extends Controller
     public function deleteVacationFormAction($login, $idForm){
 
         $em = $this->getDoctrine()->getManager();
-        $form = $em->getRepository('intranetBundle:Entity\F_Vacation')->findById($idForm);
+        $form = $em->getRepository('intranetBundle:Entity\F_Vacation')->findOneById($idForm);
         $em->remove($form);
         $em->flush();
 
-        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Vacation')->findBy(["idForm"=>$idForm, "login"=>$login]);
+        $userForm = $em->getRepository('intranetBundle:Entity\Users_F_Vacation')->findOneBy(["idForm"=>$idForm, "login"=>$login]);
         $em->remove($userForm);
         $em->flush();
     }
