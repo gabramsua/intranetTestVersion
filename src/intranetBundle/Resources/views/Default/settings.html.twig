@@ -6,8 +6,8 @@
     var app=angular.module('settingsApp', ['ngMaterial']);
     app.controller('settingsController', settingsController);
 
-    function settingsController ($scope,$http, $mdToast) { 
-       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");    
+    function settingsController ($scope,$http, $mdToast) {
+       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");
        
        $scope.showphoto = function(){
        alert(subida3);
@@ -16,10 +16,10 @@
             } else {
               alert('The File APIs are not fully supported in this browser.');
             }
-       }  
+       }
 
         $scope.getCurrentUser = function(){
-                    
+
             $http({
                 method: 'GET',
                 url: window.location.pathname+'/../../api/user/'+userLogin,
@@ -27,14 +27,14 @@
                 headers: {'Content-Type': 'application/json'}
             })
             .then(function success(response){
-                
+
                 $scope.user = response.data;
                 console.log($scope.user);
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
         }
-        
+
         $scope.updateUser=function(login){
             $http({
                     method: 'PATCH',
@@ -54,15 +54,15 @@
                 })
                 .then(function success(response){
                     $scope.showSimpleToast();
-                    
+
                 }, function error(response){
                     console.log("Errorrrrr:" +response.statusText);
                 }
-            ); 
-                
+            );
+
         }
 
-        
+
             var last = {
                 bottom: false,
                 top: true,
@@ -76,10 +76,10 @@
                 return Object.keys($scope.toastPosition)
                   .filter(function(pos) { return $scope.toastPosition[pos]; })
                   .join(' ');
-              };      
+              };
 
               $scope.showSimpleToast = function() {
-                
+
                 var pinTo = $scope.getToastPosition();
                 $mdToast.show(
                   $mdToast.simple()
@@ -87,21 +87,21 @@
                     .position(pinTo )
                     .hideDelay(10000)
                 );
-              };  
-        
-    }    
+              };
+
+    }
 
     app.config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
     });
-            
+
 </script>
 
 <!-- action="{{ path('intranet_editchannel') }}" -->
 <div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start" >
     <form name="settingsForm" id="settingsForm" method="POST" novalidate  action="{{ path('intranet_cruduser') }}">
     <!--{{ path('intranet_cruduser') }}-->
-    
+
     <md-content ng-init="getCurrentUser()">
         <md-list layout="column" ng-cloak="">
         <div layout="row" layout-sm="column">
@@ -113,7 +113,7 @@
                     </md-input-container>
                 </md-list-item>
             </div>
-            <div flex>            
+            <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Surname{% endtrans %}</label>
@@ -131,15 +131,15 @@
                             <md-radio-button id="myLanguage" name="myLanguage" value="es" class="md-primary">
                                 ES
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="en" class="md-primary">
                                 EN
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="fr" class="md-primary">
                                 FR
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="de" class="md-primary">
                                 DE
                             </md-radio-button>
@@ -171,18 +171,18 @@
             <div flex>
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
-                    <label>{% trans %}Photo{% endtrans %}</label><br>                  
-                    
+                    <label>{% trans %}Photo{% endtrans %}</label><br>
+
                     <input id="picture" name="picture" type="file" class="ng-hide" ng-model="picture" multiple>
                     <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
                     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
                     <script>
-                    
-                        $('#photo').click(function(){                        
+
+                        $('#photo').click(function(){
                             $('input[type=file]').click();
                         });
-                        
-                        
+
+
                         $('#photo').hover(function(){
                             $(this).css('opacity', '0.5');
                         }, function(){
@@ -200,7 +200,7 @@
                 <md-button>
                     <label for="files">
                        <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/>BUTTOn
-                    </label>  
+                    </label>
                 </md-button>
                 <input id="files" name="file-input" type="file" style="display:none;">
             </md-list-item>
@@ -219,11 +219,13 @@
                     </md-input-container>
                 </md-list-item>
             </div>
-        </div> 
+        </div>
 
         <md-list-item>
 
             <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" >
+
+ <!--           <md-button ng-click="updateUser(user.login)" class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid" href="{{ path('intranet_settingsb') }}"> -->
                 {% trans %}Modify{% endtrans %}
             </md-button>
         </md-list-item>

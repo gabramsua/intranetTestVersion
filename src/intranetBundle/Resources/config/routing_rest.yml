@@ -120,6 +120,8 @@ api_delete_work_at_home_form:
     requirements:
         _method: DELETE
 
+#END DELETE FOTMS
+
 api_get_forms_status:
     pattern: /formsstatus/{id}
     defaults: { _controller: "intranetBundle:ApiRest:getFormsStatus"}

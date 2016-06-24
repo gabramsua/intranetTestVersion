@@ -26,7 +26,7 @@
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block">
                 <label>Enter a location*</label>
-                <input type="text" id="gplace" ng-model="location" name="businessPlace" googleplace required> <!--onclick="$(this).removeAttr('placeholder')"-->
+                <input type="text" id="gplace" ng-model="location" name="businessPlace" required> <!--onclick="$(this).removeAttr('placeholder')"-->
                 <div ng-messages="businessTripForm.businessPlace.$error">
                     <div ng-message="required">You have to specify a place</div>
                 </div>
