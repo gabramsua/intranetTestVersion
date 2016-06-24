@@ -53,11 +53,11 @@
 
 {% block body %}
 
-    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 60%;height: 100%;">
+    <div id="contenido" style="position: relative;margin-top:-45%;margin-left:17%;width: 60%;height: 78vh;overflow: auto;">
         {% block contenido %}
         {% endblock %}
     </div>
-    <div id="newsfeed" style="width: 17%; margin-top: -50%; margin-left: 80%; position: absolute;">
+    <div id="newsfeed" style="width: 17%; margin-top: -38%; margin-left: 80%; position: absolute;">
         {% block newsfeed %}
             {{ render(controller('intranetBundle:News:news')) }}
         {% endblock %}
@@ -67,8 +67,4 @@
 {% endblock %}
 
 {% block footer %}
-    <div id="pie">
-        <hr/>
-        <div align="center"><b>- pie de página -</b></div>
-    </div>
 {% endblock %}

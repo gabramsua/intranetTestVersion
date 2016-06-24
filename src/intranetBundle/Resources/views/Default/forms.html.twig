@@ -85,7 +85,30 @@
                     return date;
             }
 
-            function vacationController($scope, $http){
+            function vacationController($scope, $http, $mdToast){
+                var last = {
+                  bottom: false,
+                  top: true,
+                  left: false,
+                  right: true
+                };
+                $scope.toastPosition = angular.extend({},last);
+
+                $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {//this.showSimpleToast
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                        $mdToast.simple()
+                        .textContent('{% trans %}form_send{% endtrans %}')
+                        .position(pinTo )
+                        .hideDelay(10000)
+                    );
+                  };
 
                 $scope.buttonFlag = false;
                 $scope.surrogate = "";
@@ -133,7 +156,7 @@
                             dataType: 'json',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
-
+                            $scope.showSimpleToast();
                             $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
@@ -151,7 +174,31 @@
                 }
             }
 
-            function expensesController($scope, $http){
+            function expensesController($scope, $http, $mdToast){
+
+                var last = {
+                  bottom: false,
+                  top: true,
+                  left: false,
+                  right: true
+                };
+                $scope.toastPosition = angular.extend({},last);
+
+                $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {//this.showSimpleToast
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                        $mdToast.simple()
+                        .textContent('{% trans %}form_send{% endtrans %}')
+                        .position(pinTo )
+                        .hideDelay(10000)
+                    );
+                  };
 
                 $scope.buttonFlag = false;
                 $scope.data = {
@@ -183,7 +230,7 @@
                             dataType: 'json',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
-
+                            $scope.showSimpleToast();
                             $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
@@ -206,7 +253,31 @@
                 }
             }
 
-            function businessTripController($scope, $http){
+            function businessTripController($scope, $http, $mdToast){
+
+                var last = {
+                  bottom: false,
+                  top: true,
+                  left: false,
+                  right: true
+                };
+                $scope.toastPosition = angular.extend({},last);
+
+                $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {//this.showSimpleToast
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                        $mdToast.simple()
+                        .textContent('{% trans %}form_send{% endtrans %}')
+                        .position(pinTo )
+                        .hideDelay(10000)
+                    );
+                  };
 
                 $scope.buttonFlag = false;
                 $scope.location = "";
@@ -256,7 +327,7 @@
                             dataType: 'json',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
-
+                            $scope.showSimpleToast();
                             $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
@@ -277,7 +348,31 @@
 
             }
 
-            function overtimeHoursController2($scope, $http, $filter){
+            function overtimeHoursController2($scope, $http, $filter, $mdToast){
+
+                var last = {
+                  bottom: false,
+                  top: true,
+                  left: false,
+                  right: true
+                };
+                $scope.toastPosition = angular.extend({},last);
+
+                $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {//this.showSimpleToast
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                        $mdToast.simple()
+                        .textContent('{% trans %}form_send{% endtrans %}')
+                        .position(pinTo )
+                        .hideDelay(10000)
+                    );
+                  };
 
                 $scope.buttonFlag = false;
                 $scope.jiraTicketdID = "";
@@ -392,6 +487,7 @@
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
 
+                            $scope.showSimpleToast();
                             $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             $scope.noDatesFlag = true;
@@ -413,7 +509,31 @@
                 }
             }
 
-            function workAtHomeController($scope, $http){
+            function workAtHomeController($scope, $http, $mdToast){
+
+                var last = {
+                  bottom: false,
+                  top: true,
+                  left: false,
+                  right: true
+                };
+                $scope.toastPosition = angular.extend({},last);
+
+                $scope.getToastPosition = function() {
+                    return Object.keys($scope.toastPosition)
+                      .filter(function(pos) { return $scope.toastPosition[pos]; })
+                      .join(' ');
+                  };      
+
+                  $scope.showSimpleToast = function() {//this.showSimpleToast
+                    var pinTo = $scope.getToastPosition();
+                    $mdToast.show(
+                        $mdToast.simple()
+                        .textContent('{% trans %}form_send{% endtrans %}')
+                        .position(pinTo )
+                        .hideDelay(10000)
+                    );
+                  };
 
                 $scope.buttonFlag = false;
                 $scope.today = moment(new Date()).subtract(1, "days").toDate(); //using moment library to substract 1 day to the date in order to let the current date be selected again. Then parsing the moment object to date object.
@@ -443,7 +563,7 @@
                             dataType: 'json',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function success(response){
-
+                            $scope.showSimpleToast();
                             $scope.returnToHistoric();
                             $scope.buttonFlag = false;
                             reinitializeModel();
@@ -720,7 +840,7 @@
                         </md-tab-body>
                     </md-tab>
                     <md-tab id="tab1">
-                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label>
+                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label> 
                         <md-tab-body>
                             <div ng-include="'{{ path('intranet_forms_vacation')}}'"></div>
 <!--                            <div ng-include="'vacationForm.html'"></div>-->

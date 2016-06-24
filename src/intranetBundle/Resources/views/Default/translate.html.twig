@@ -10,13 +10,36 @@
 Escogiste: {% trans %} lang   {% endtrans %}
 <hr><br>
 
-Please select a Language, remember that this configuration won´t be saved to your personal settings<br><br><br>
-
+{% trans %}translation{% endtrans %}<br><br><br>
+<!-- SOURCE: http://www.iconarchive.com/show/no-patriot-icons-by-mayosoft.html-->
+<md-button>
+    <label for="files">
+       <img class="md-avatar" id="photo" src="../../images/UK-icon.png" style="height: 70px; width: 70px;"/>
+    </label>  
+</md-button>
 <a href="{{ path('intranet_translation', {_locale: 'en'}) }}">ENGLISH </a><br>
+
+
+<md-button>
+    <label for="files">
+       <img class="md-avatar" id="photo" src="../../images/Espanya-Spain-icon.png" style="height: 70px; width: 70px;"/>
+    </label>  
+</md-button>
 <a href="{{ path('intranet_translation', {_locale: 'es'}) }}">SPANISH </a><br>
+
+
+<md-button>
+    <label for="files">
+       <img class="md-avatar" id="photo" src="../../images/France-icon.png" style="height: 70px; width: 70px;"/>
+    </label>  
+</md-button>
 <a href="{{ path('intranet_translation', {_locale: 'fr'}) }}">FRENCH </a><br>
 
 
-
+<md-button>
+    <label for="files">
+       <img class="md-avatar" id="photo" src="../../images/Deutschland-Germany-icon.png" style="height: 70px; width: 70px;"/>
+    </label>  
+</md-button>Coming soon...
 
 {% endblock %}

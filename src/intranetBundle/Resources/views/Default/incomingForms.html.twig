@@ -8,8 +8,11 @@
     });
     app.controller('incomingsController', incomingsController);
     
-    function incomingsController($scope, $mdDialog, $http){
-
+    function incomingsController($rootScope, $scope, $mdDialog, $http){
+      $scope.filtrotipo = null;
+      $scope.filtro1=null;
+      $scope.filtro2=null;
+      $scope.flag=0;
       $scope.allForms = [];
 
       $scope.filters = {
@@ -44,38 +47,62 @@
 
 
                 $scope.filteredFormsList = gimmeAll();
+                $scope.filters.formType = $scope.filtrotipo;
+                $scope.filters.formStatus = $scope.filtro2;
+                if($scope.flag!=0){
+                  $scope.filteredFormsList = filterFormsByStatus($scope.filtro1,  $scope.filtro2);
+                  console.log($scope.filteredFormsList);
+                }
+                $scope.flag=1;
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
         }
 
+
         $scope.$watchGroup(['filters.formType', 'filters.formStatus'], function(){
             $scope.filteredFormsList = [];
             if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
+                $scope.filtrotipo="All";$scope.filtro2=3;
                 $scope.filteredFormsList = gimmeAll();
+                $scope.filtro1 =$scope.filteredFormsList;
             }else if($scope.filters.formType === "All" && $scope.filters.formStatus != 3){
+                $scope.filtrotipo="All";$scope.filtro2=$scope.filters.formStatus;
                 $scope.filteredFormsList = gimmeAll();
                 $scope.filteredFormsList = filterFormsByStatus($scope.filteredFormsList, $scope.filters.formStatus);
+                $scope.filtro1 =$scope.filteredFormsList;
             }else{
-
+                $scope.filtrotipo = $scope.filters.formType
                 switch($scope.filters.formType){
                     case 'Vacation':
                         $scope.filteredFormsList = filterFormsByStatus($scope.vacationsList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.vacationsList;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                     case 'Expenses':
                         $scope.filteredFormsList = filterFormsByStatus($scope.expensesList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.expensesList;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                     case 'BusinessTrip':
                         $scope.filteredFormsList = filterFormsByStatus($scope.tripsList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.tripsList;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                     case 'OvertimeHours':
                         $scope.filteredFormsList = filterFormsByStatus($scope.hoursList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.hoursList;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                     case 'WorkAtHome':
                         $scope.filteredFormsList = filterFormsByStatus($scope.homesList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.homesList;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                     default:
                         $scope.filteredFormsList = filterFormsByStatus($scope.formsList, $scope.filters.formStatus);
+                        $scope.filtro1=$scope.filters.formType;$scope.filtro2=$scope.filters.formStatus;
+                        $scope.filteredFormListAux =$scope.filteredFormsList;
                         break;
                 }
             }
@@ -163,7 +190,11 @@
             });
         }
 
-        function dialogController($scope, $mdDialog, currentForm, daysOnOvertimeHoursForm, user){
+        $rootScope.getAll = function(){
+          $scope.getAll();
+        }
+
+        function dialogController($rootScope, $scope, $mdDialog, currentForm, daysOnOvertimeHoursForm, user){
                 $scope.form = currentForm;
                 $scope.user = user;
 
@@ -232,6 +263,7 @@
                         })
                         .then(function success(response){
                             console.log("El formulario está siendo leído");
+                            $rootScope.getAll();
                         }, function error(response){
                             console.log("Error:" +response.statusText);
                         }
@@ -283,10 +315,9 @@
             } 
     </script>
 
-<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak>
+<div ng-app="MyApp" ng-controller="incomingsController" ng-init="getAll()" ng-cloak">
     <md-content layout="row" layout-align="center start">
-
-        <md-list flex-gt-xs="60">
+        <md-list flex-gt-xs="60" style="overflow: auto;">
             <md-divider></md-divider>
             <md-divider></md-divider>
             <md-list-item style="font-size: large">
@@ -322,7 +353,6 @@
                 <md-divider></md-divider>
             </div>
         </md-list>
-
         <div layout="column" style="margin-left: 50px; margin-right: 0px;">
           <div class="radioButtonList">
               <p>Select a form type:</p>
@@ -344,7 +374,7 @@
                   <md-radio-button value="0" class="md-primary">Pending</md-radio-button>
               </md-radio-group>
           </div>
-      </div>
+        </div>
     </md-content>
 </div>
 
