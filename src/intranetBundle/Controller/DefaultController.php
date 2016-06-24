@@ -38,10 +38,10 @@ class DefaultController extends Controller{
 
     //Once found the user in the LDAP Directory, Store his credentials in variables
     $userLDAP=json_decode(json_encode($params), true);
-    
+
     if (sizeof($userLDAP['user'])>1) {
       //var_dump($userLDAP);
-      
+
 
       $logged=$userLDAP['user'][0]['samaccountname'][0];
       $rol=$userLDAP['user'][0]['memberof'][0];
@@ -82,7 +82,7 @@ class DefaultController extends Controller{
     }else{
 
       return $this->render('intranetBundle:Default:index.html.twig', ['flag'=>false]);//index_error
-      
+
     }
   }
 
@@ -198,7 +198,7 @@ class DefaultController extends Controller{
                         ->getRepository('intranetBundle:Entity\Channel')
                         ->findAll();
 
-    
+
        if (!$channels) {return $this->render('intranetBundle:Error:error_channels.html.twig', $params);}
 
        $params=array('listChannels'=>$channels);
@@ -549,7 +549,7 @@ class DefaultController extends Controller{
      //But it is also needed to insert in the intermediate table
      //login, id_form => I need to take the ID of the last form inserted
      $lastForm = $this->getDoctrine()->getRepository('intranetBundle:Entity\F_Hours')->findBy([], ['id' => 'DESC'], 1);
-     
+
      $usform = new Users_F_Hours();
      $usform->setLogin($_SESSION['userLDAP']);
      $usform->setIdForm($lastForm[0]->getId());
@@ -1602,117 +1602,117 @@ class DefaultController extends Controller{
        'intranetBundle::deleteDialog.tmpl.html'
       );
   }
-  
+
   public function mainNewsDialogAction(){
     return $this->render(
        'intranetBundle:NewsTemplates:newsDialog.tmpl.html'
       );
-  }  
-   
+  }
+
   public function createNewDialogAction(){
     return $this->render(
        'intranetBundle:NewsTemplates:createNewDialog.tmpl.html'
       );
   }
-    
+
     //FORMS
     public function formsAction(){
-        
+
         $params = ['userLogin' => $_SESSION['userLDAP'],
                    'rol' => $_SESSION['rol'],
                    'name' => $_SESSION['name'],
                    'surname' => $_SESSION['surname']];
-        
+
         return $this->render(
            'intranetBundle:Default:forms.html.twig',
             $params
           );
     }
-    
+
     public function formsHistoricAction(){
-        
+
         return $this->render('intranetBundle:Forms:historic.tmpl.html');
     }
-    
+
     public function vacationAction(){
-        
+
         return $this->render('intranetBundle:Forms:vacationForm.tmpl.html');
     }
-    
+
     public function vacationTestAction(){
-        
+
         return $this->render('intranetBundle:Forms:vacationFormTest.tmpl.html');
     }
-    
+
     public function expensesAction(){
-        
+
         return $this->render('intranetBundle:Forms:expensesForm.tmpl.html');
     }
-    
+
     public function businessTripAction(){
-        
+
         return $this->render('intranetBundle:Forms:businessTripForm.tmpl.html');
     }
-    
+
     public function overtimeHours2Action(){
-        
+
         return $this->render('intranetBundle:Forms:overtimeHoursForm2.tmpl.html');
     }
-    
+
     public function overtimeHoursAction(){
-        
+
         return $this->render('intranetBundle:Forms:overtimeHoursForm.tmpl.html');
     }
-    
+
     public function workAtHomeAction(){
-        
+
         return $this->render('intranetBundle:Forms:workAtHomeForm.tmpl.html');
     }
-    
+
     public function formHeaderDataAction(){
-        
+
         return $this->render('intranetBundle:Forms:formHeaderDataTemplate.tmpl.html');
     }
-    
-    
+
+
     //FORMS DIALOGS
-    
+
     public function mainDialogAction(){
-        
+
         $params = ['name' => $_SESSION['name'],
                    'surname' => $_SESSION['surname']];
-        
+
         return $this->render('intranetBundle:DialogTemplates:mainDialog.tmpl.html', $params);
     }
 
     public function mainDialog2Action(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:mainDialog2.tmpl.html');
     }
-    
+
     public function businessTripDialogAction(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:businessTripDialog.tmpl.html');
     }
-    
+
     public function expensesDialogAction(){
 
         return $this->render('intranetBundle:DialogTemplates:expensesDialog.tmpl.html');
     }
-    
+
     public function overtimeHoursDialogAction(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:hoursDialog.tmpl.html');
     }
-    
+
     public function vacationDialogAction(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:vacationDialog.tmpl.html');
     }
-    
+
     public function workAtHomeDialogAction(){
-        
+
         return $this->render('intranetBundle:DialogTemplates:workAtHomeDialog.tmpl.html');
     }
-    
+
 }
