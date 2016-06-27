@@ -362,7 +362,9 @@
                 <span style="width: 60%; white-space: nowrap; text-overflow: ellipsis; display: block; overflow: hidden;; margin-right: 3%;">{[{task.content}]}</span>
                 <span style="width: 25%; margin-right: 3%;">{[{task.who_create}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">X</md-button> <!--sustituir por el icono de abajo-->
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">
+                        <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                    </md-button> <!--sustituir por el icono de abajo-->
                 </div>
 
             </md-list-item>
