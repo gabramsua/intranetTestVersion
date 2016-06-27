@@ -13,11 +13,11 @@
     var app=angular.module('settingsApp', ['ngMaterial']);
     app.controller('settingsController', settingsController);
 
-    function settingsController ($scope,$http ) { 
-       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");       
+    function settingsController ($scope,$http ) {
+       var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");
 
        $scope.getCurrentUser = function(){
-                    
+
             $http({
                 method: 'GET',
                 url: window.location.pathname+'/../../api/user/'+userLogin,
@@ -25,7 +25,7 @@
                 headers: {'Content-Type': 'application/json'}
             })
             .then(function success(response){
-                
+
                 $scope.user = response.data;
                 console.log($scope.user);
             }, function error(response){
@@ -33,19 +33,19 @@
             });
         }
 
-        
-    }    
+
+    }
 
     app.config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
     });
-            
+
 </script>
 
 <div ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start">
     <form name="settingsForm" id="settingsForm" method="POST" action="javaScript:handleClick()" novalidate>
     <!--{{ path('intranet_cruduser') }}-->
-    
+
     <md-content ng-init="getCurrentUser()">
         <md-list layout="column" ng-cloak="">
         <div layout="row" layout-sm="column">
@@ -61,7 +61,7 @@
                     </md-input-container>
                 </md-list-item>
             </div>
-            <div flex>            
+            <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Surname{% endtrans %}</label>
@@ -83,15 +83,15 @@
                             <md-radio-button id="myLanguage" name="myLanguage" value="es" class="md-primary">
                                 ES
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="en" class="md-primary">
                                 EN
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="fr" class="md-primary">
                                 FR
                             </md-radio-button>
-                                
+
                             <md-radio-button id="myLanguage" name="myLanguage" value="de" class="md-primary">
                                 DE
                             </md-radio-button>
@@ -152,7 +152,7 @@
                     </md-input-container>
                 </md-list-item>
             </div>
-        </div> 
+        </div>
 
         <md-list-item>
             <md-button class="md-raised md-primary" id="subm" type="submit" name="update" ng-disabled="settingsForm.$invalid">
@@ -162,7 +162,7 @@
                 {% trans %}Delete{% endtrans %}
             </md-button>
         </md-list-item>
-            
+
         <input type="hidden" value="{{ me.id }}" name="id">
         <input type="hidden" id="hiden1" value="{[{ notific }]}">
         <input type="hidden" id="hiden2" value="{[{ languages }]}">

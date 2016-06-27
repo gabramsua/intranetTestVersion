@@ -6,7 +6,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
 <link rel="stylesheet" href="http://material.angularjs.org/HEAD/angular-material.min.css">
 -->
 
-<div ng-controller="historicController" ng-init="fillList()" ng-cloak>
+<div id="historicDiv" ng-controller="historicController" ng-init="fillList()" ng-cloak>
     <md-content layout="row" layout-align="center start">
 
         <md-list flex-gt-xs="60">
@@ -19,9 +19,9 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
             </md-list-item>
             <md-divider></md-divider>
             <md-divider></md-divider>
+            <span class="md-headline" ng-if="filteredFormsList.length == 0 && !loading" layout-margin>There are not forms to show.</span>
             <div ng-repeat="form in filteredFormsList">
                 <md-list-item ng-click="showFormDetails($event, form)">
-
                     <span style="width: 30%">{[{form.type}]}</span>
                     <span style="width: 25%" hide-lg>{[{form.send}]}</span>
                     <div style="width: 25%">
@@ -30,7 +30,9 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
                       <span ng-if="form.status == 2" style="color:#8A2278; font-weight:bold;">{% trans %}rejected_form{% endtrans %}</span>
                     </div>
                     <div ng-if="form.status == 0">
-                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm(form.id, form.type)" ng-if="form.status == 0">X</md-button> <!--sustituir por el icono de abajo-->
+                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm(form.id, form.type)" ng-if="form.status == 0">
+                            <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                        </md-button> <!--sustituir por el icono de abajo-->
                         <!-- <md-button style="width: 10%" class="md-raised md-secondary" ng-click="showConfirmDelete($event, form.id, form.type)" ng-if="form.status == 0">X</md-button>  -->
                     </div>
 
@@ -39,7 +41,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
                 <md-divider></md-divider>
             </div>
         </md-list>
-        <div layout="column">
+        <div layout="column" style="margin-left: 5%;">
           <div class="radioButtonList">
               <p>Select a form type:</p>
               <md-radio-group ng-model="filters.formType" >
@@ -61,6 +63,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
               </md-radio-group>
           </div>
       </div>
+
 <!--
         <div ng-repeat="type in formTypes">{[{type}]}</div>
         <md-radio-group ng-model="filters.formType">

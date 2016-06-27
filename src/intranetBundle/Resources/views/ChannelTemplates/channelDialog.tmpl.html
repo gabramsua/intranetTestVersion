@@ -5,7 +5,7 @@
                 <h2>Channel: {[{channel.name}]}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="closeDialog()">
-                  <md-icon aria-label="Close dialog"></md-icon>
+                  <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_close_white.svg') }}" aria-label="Close dialog"></md-icon>
                 </md-button>
               </div>
         </md-toolbar>
@@ -40,7 +40,7 @@
                         </div>
                     </md-list-item>
             </div>
-            
+
 
         <md-list-item>
             <md-button class="md-raised md-primary" id="subm" type="submit" name="update"  ng-click="update(channel.id)"><!--ng-disabled="settingsForm.$invalid"-->

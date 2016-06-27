@@ -3,14 +3,14 @@
 {% block contenido %}
 <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
-            app.config(function($interpolateProvider){ 
+            app.config(function($interpolateProvider){
                 $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
             });
 
             app.controller('newsController', newsController);
             app.controller('updateNewDialogController ', updateNewDialogController );
-            
-            
+
+
             function newsController($rootScope, $scope, $mdDialog, $http){
 
                 $scope.getAllNews = function(){
@@ -36,7 +36,7 @@
 
                         }else{
                             var urlapi=window.location.pathname+'/../../api/news/'+$ch;
-                         }  
+                         }
                         $http({
                             method: 'GET',
                             url: urlapi,
@@ -57,7 +57,7 @@
 
                         }else{
                             var urlapi=window.location.pathname+'/../../api/news/'+$ch;
-                         }  
+                         }
                         $http({
                             method: 'GET',
                             url: urlapi,
@@ -77,7 +77,7 @@
                         templateUrl: "{{path('intranet_delete_dialog')}}",
                         locals: {
                             currentNew: n
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -96,14 +96,15 @@
                                                 dataType: 'json',
                                                 headers: {'Content-Type': 'application/json'}
                                             })
-                                            .then(function success(response){                        
+                                            .then(function success(response){
                                                 $scope.closeDialog();
                                             }, function error(response){
                                                 console.log("Error al delete:" +response.statusText);
-                                            });  
+                                            });
                                         };
                                     },
-                    }); 
+                    });
+
                 }
 
                 $scope.readNewDialog = function(ev, n) {
@@ -111,7 +112,7 @@
                         templateUrl: "{{path('intranet_main_new_dialog')}}",
                         locals: {
                             currentNew: n
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -121,7 +122,7 @@
                 }
 
                 $scope.showCreateNewDialog = function(ev) {
-                    
+
                     $mdDialog.show({
                         templateUrl: "{{path('intranet_main_create_new_dialog')}}",
                         parent: angular.element(document.body),
@@ -136,7 +137,7 @@
             function updateNewDialogController($scope, $mdDialog, $http, currentNew){
                 $scope.new = currentNew;
                 $scope.getInfo = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/new/'+$scope.new.id+'/channels',
@@ -144,7 +145,7 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         $scope.allData = {
                             "newData": response.data.channelData,
                             "channelsInNew": $.map(response.data.channelsInNew, function(elem){return elem.name}),
@@ -153,29 +154,29 @@
 
                         $scope.allChannels = $scope.allData.allChannels;
                         $scope.channelsInNew = $scope.allData.allChannels.filter(function(channel){
-                            
+
                             if (($scope.allData.channelsInNew).indexOf(channel.name) > -1)
                                 return channel;
                         });
-                       
+
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
                 };
-                
+
                 $scope.closeDialog = function(){
                     $mdDialog.hide();
                  };
 
                 $scope.alreadyIn = function(channel){
-                    
+
                     return ($scope.allData.channelsInNew).indexOf(channel.name) > -1;
                 };
-                
+
                 $scope.toggle = function(channel){
-                 
+
                     var index = ($scope.allData.channelsInNew).indexOf(channel.name);
-                    
+
                     if (index > -1)
                         ($scope.allData.channelsInNew).splice(index, 1);
                     else
@@ -201,8 +202,8 @@
                         }, function error(response){
                             console.log("Error:" +response.statusText);
                         }
-                    );   
-                 };   
+                    );
+                 };
             }
 
             function createNewDialogController($scope, $mdDialog, $http){
@@ -210,7 +211,7 @@
                 $listChecked=[];
 
                 $scope.getInfo = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/channels',
@@ -223,16 +224,16 @@
                         console.log("Error:" +response.statusText);
                     });
                 }
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
 
                 $scope.alreadyIn = function(user){
-                
+
                     return ($listChecked).indexOf(channel.name) > -1;
                 };
-                
+
                 $scope.toggle = function(channel){
                     var index = ($listChecked).indexOf(channel.name);
 
@@ -243,7 +244,7 @@
                         ($listChecked).push(channel.name);
                     }
 
-                };  
+                };
 
                 $scope.create=function(){
 
@@ -265,8 +266,8 @@
                         $scope.closeDialog();
                     }, function error(response){
                         console.log("Error:" +response.statusText);
-                    });   
-                };    
+                    });
+                };
             }
 
             function deleteNewDialogController($scope, $mdDialog, $http, currentNew){
@@ -284,11 +285,11 @@
                         dataType: 'json',
                         headers: {'Content-Type': 'application/json'}
                     })
-                    .then(function success(response){                        
+                    .then(function success(response){
                         $scope.closeDialog();
                     }, function error(response){
                         console.log("Error al delete:" +response.statusText);
-                    });  
+                    });
                 };
             }
 </script>
@@ -301,7 +302,7 @@
 
     {% set flag=0 %}
     <div ng-cloak ng-app="MyApp" ng-controller="newsController" layout-align="center start">
-    
+
     <md-list ng-init="getAllNews()">
     <md-button class="md-raised md-primary" ng-click="showCreateNewDialog($event)">Create New</md-button>
     <md-input-container>
@@ -328,15 +329,15 @@
 
         <div ng-repeat="n in newsList">
             <md-list-item ng-click="readNewDialog($event, n)">
-    
+
                 <span style="width: 30%">{[{ n.title }]}</span>
                 <span style="width: 50%">{[{ n.content }]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteNew($event,n)">
-                        Delete
-                    </md-button> 
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteNew($event,n)">
+                        <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                    </md-button>
                 </div>
-            
+
             </md-list-item>
             <md-divider></md-divider>
         </div>

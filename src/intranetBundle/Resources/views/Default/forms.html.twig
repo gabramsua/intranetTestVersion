@@ -16,8 +16,62 @@
         <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
-        <script>
-            var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
+        <!-- <script src="{{ asset('bundles/intranet/js/forms.js') }}"></script> -->
+
+        <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController" style="background-color:#FDFDFD !important;">
+            <md-content>
+                <md-tabs id="tabs" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
+                    <md-tab id="tab0">
+                        <md-tab-label>{% trans %}historic{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_historic')}}'" layout-padding></div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab id="tab1">
+                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_vacation')}}'" class="md-padding"></div>
+                        </md-tab-body>
+                    </md-tab>
+              <!--
+                    <md-tab id="tab1">
+                        <md-tab-label>VacationTest</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_vacation_test')}}'" class="md-padding"></div>
+                            <div ng-include="'vacationFormTest.html'"></div>
+                        </md-tab-body>
+                    </md-tab>
+              -->
+                    <md-tab id="tab2">
+                        <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_expenses')}}'" class="md-padding"></div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab id="tab3">
+                        <md-tab-label>{% trans %}business_trip_form{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_business_trip')}}'" class="md-padding"></div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab id="tab7">
+                        <md-tab-label>{% trans %}overtime_hours_form{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'" layout-padding></div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab id="tab5">
+                        <md-tab-label>{% trans %}work_at_home_form{% endtrans %}</md-tab-label>
+                        <md-tab-body>
+                            <div ng-include="'{{ path('intranet_forms_work_at_home')}}'" class="md-padding"></div>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </md-content>
+
+        </div>
+<script>
+var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
             app.controller('tabsController', tabsController);
             app.controller('formHeaderController', formHeaderController);
             app.controller('dateRangeController', dateRangeController);
@@ -53,8 +107,13 @@
             });
 
             function tabsController($scope){
+
+                $scope.filters = {};
+
                 $scope.returnToHistoric = function() {
                     $scope.selectedIndex = 0;
+                    $scope.filters.formType = 'All';
+                    $scope.filters.formStatus = 3;
                 };
             }
 
@@ -98,7 +157,7 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {//this.showSimpleToast
                     var pinTo = $scope.getToastPosition();
@@ -188,7 +247,7 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {//this.showSimpleToast
                     var pinTo = $scope.getToastPosition();
@@ -267,7 +326,7 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {//this.showSimpleToast
                     var pinTo = $scope.getToastPosition();
@@ -362,7 +421,7 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {//this.showSimpleToast
                     var pinTo = $scope.getToastPosition();
@@ -523,7 +582,7 @@
                     return Object.keys($scope.toastPosition)
                       .filter(function(pos) { return $scope.toastPosition[pos]; })
                       .join(' ');
-                  };      
+                  };
 
                   $scope.showSimpleToast = function() {//this.showSimpleToast
                     var pinTo = $scope.getToastPosition();
@@ -622,6 +681,14 @@
                         console.log("ERROR: "+response.statusText);
                     });
                 }
+
+                $scope.$watch('selectedIndex', function(){
+                    if ($scope.selectedIndex == 0){
+                        deleting = true; //Nothing is being delete here, just inserting a new form and this var can be used in order to filter forms in the "comeback" to the historic.
+                        $scope.fillList();
+                        //filterForms();
+                    }
+                });
 
                 function filterForms(){
 
@@ -825,69 +892,7 @@
                     $scope.minFinishDate = $scope.startDate;
                 });
             }
-
-
-        </script>
-
-        <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController" style="background-color:#FDFDFD !important;">
-            <md-content>
-<!--            <md-content class="md-padding">-->
-                <md-tabs id="tabs" md-selected="selectedIndex" md-align-tabs="top" md-dynamic-height>
-                    <md-tab id="tab0">
-                        <md-tab-label>{% trans %}historic{% endtrans %}</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_historic')}}'"></div>
-                        </md-tab-body>
-                    </md-tab>
-                    <md-tab id="tab1">
-                        <md-tab-label>{% trans %}vacation_form{% endtrans %}</md-tab-label> 
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_vacation')}}'"></div>
-<!--                            <div ng-include="'vacationForm.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
-              <!--
-                    <md-tab id="tab1">
-                        <md-tab-label>VacationTest</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_vacation_test')}}'"></div>
-                            <div ng-include="'vacationFormTest.html'"></div>
-                        </md-tab-body>
-                    </md-tab>
-              -->
-                    <md-tab id="tab2">
-                        <md-tab-label>{% trans %}expenses_form{% endtrans %}</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_expenses')}}'"></div>
-<!--                            <div ng-include="'expensesForm.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
-                    <md-tab id="tab3">
-                        <md-tab-label>{% trans %}business_trip_form{% endtrans %}</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_business_trip')}}'"></div>
-<!--                            <div ng-include="'businessTripForm.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
-                    <md-tab id="tab7">
-                        <md-tab-label>{% trans %}overtime_hours_form{% endtrans %}</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_overtime_hours2')}}'"></div>
-<!--                            <div ng-include="'overtimeHoursForm2.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
-                    <md-tab id="tab5">
-                        <md-tab-label>{% trans %}work_at_home_form{% endtrans %}</md-tab-label>
-                        <md-tab-body>
-                            <div ng-include="'{{ path('intranet_forms_work_at_home')}}'"></div>
-<!--                            <div ng-include="'workAtHomeForm.html'"></div>-->
-                        </md-tab-body>
-                    </md-tab>
-                </md-tabs>
-            </md-content>
-
-        </div>
-
+</script>
 
 
 {% endblock %}
