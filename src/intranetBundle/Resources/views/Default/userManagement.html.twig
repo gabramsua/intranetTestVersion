@@ -55,7 +55,7 @@
                         controller: updateUserDialogController,
                         onRemoving: $scope.getAllUsers
                     });
-                    //alert(user.name);
+                    
                 }
 
                 $scope.deleteUser = function(ev, user){
@@ -108,8 +108,7 @@
                 
 
                 $scope.updateUser=function(id){
-                //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
-                    alert($scope.user.name);
+                
                     $http({
                             method: 'PATCH',
                             url: window.location.pathname+'/../../api/user/'+$scope.user.login,

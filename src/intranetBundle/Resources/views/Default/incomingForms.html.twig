@@ -46,14 +46,11 @@
                 $scope.daysOnOvertimeHoursForms = response.data.daysOnOvertimeHoursForms;
 
 
-                $scope.filteredFormsList = gimmeAll();
+                $scope.formsList = gimmeAll();
                 $scope.filters.formType = $scope.filtrotipo;
                 $scope.filters.formStatus = $scope.filtro2;
-                if($scope.flag!=0){
-                  $scope.filteredFormsList = filterFormsByStatus($scope.filtro1,  $scope.filtro2);
-                  console.log($scope.filteredFormsList);
-                }
-                $scope.flag=1;
+                $scope.filteredFormsList = filterFormsByStatus($scope.formsList,  $scope.filtro2);
+                  
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
@@ -65,7 +62,7 @@
             if($scope.filters.formType === "All" && $scope.filters.formStatus == 3){
                 $scope.filtrotipo="All";$scope.filtro2=3;
                 $scope.filteredFormsList = gimmeAll();
-                $scope.filtro1 =$scope.filteredFormsList;
+                $scope.filtro1 = $scope.filteredFormsList;
             }else if($scope.filters.formType === "All" && $scope.filters.formStatus != 3){
                 $scope.filtrotipo="All";$scope.filtro2=$scope.filters.formStatus;
                 $scope.filteredFormsList = gimmeAll();
@@ -162,7 +159,6 @@
                     }
                 });
 
-                
                 $.each($scope.usershoursList, function(index, intermediate){
                     if (intermediate.id_form == form.id){
                         $.each($scope.usersList, function(index, u){
@@ -172,7 +168,51 @@
                         });
                     }
                 });
+            }
 
+            if (form.type == "Vacation"){
+                $.each($scope.usersvacationsList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.usersList, function(index, u){
+                            if (u.login == intermediate.login){
+                                user = u;
+                            }
+                        });
+                    }
+                });
+            }
+            if (form.type == "Expenses"){
+                $.each($scope.usersexpensesList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.usersList, function(index, u){
+                            if (u.login == intermediate.login){
+                                user = u;
+                            }
+                        });
+                    }
+                });
+            }
+            if (form.type == "BusinessTrip"){
+                $.each($scope.userstripsList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.usersList, function(index, u){
+                            if (u.login == intermediate.login){
+                                user = u;
+                            }
+                        });
+                    }
+                });
+            }
+            if (form.type == "WorkAtHome"){
+                $.each($scope.usershomesList, function(index, intermediate){
+                    if (intermediate.id_form == form.id){
+                        $.each($scope.usersList, function(index, u){
+                            if (u.login == intermediate.login){
+                                user = u;
+                            }
+                        });
+                    }
+                });
             }
 
             $mdDialog.show({
@@ -185,8 +225,7 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                controller: dialogController,
-                onRemoving: $scope.getAll
+                controller: dialogController
             });
         }
 
@@ -218,6 +257,7 @@
                 }
 
                 $scope.closeDialog = function() {
+                    $rootScope.getAll();
                     $mdDialog.hide();
                 }
 
@@ -250,6 +290,10 @@
                 }
 
                 function markAsRead(){
+
+                    //abrir modal
+
+                    //si status =0
                     $http({
                             method: 'PATCH',
                             url: window.location.pathname+'/../../api/formsread/'+$scope.form.id,

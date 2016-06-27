@@ -23,8 +23,8 @@
                 <div ng-include="currentTemplateForm"></div>
             </md-list>
              <md-list-item>
-             <md-button class="md-raised md-primary" ng-click="changingStatus(1)" ng-disabled="buttonFlag">{% trans %}_acceptForm{% endtrans %}</md-button>
-             <md-button class="md-raised md-primary" ng-click="changingStatus(2)" ng-disabled="buttonFlag">{% trans %}_rejectForm{% endtrans %}</md-button>
+             <md-button class="md-raised md-primary" ng-click="changingStatus(1)" ng-disabled="{[{form.status}]}==1">{% trans %}_acceptForm{% endtrans %}</md-button>
+             <md-button class="md-raised md-primary" ng-click="changingStatus(2)" ng-disabled="{[{form.status}]}==2">{% trans %}_rejectForm{% endtrans %}</md-button>
             </md-list>
         </div>
     </md-dialog-content>

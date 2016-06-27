@@ -23,6 +23,7 @@
                         .then(function success(response){
                             $scope.items = response.data;
                             //$scope.items.unshift('ALL');
+                            $scope.selected(null);
                         }, function error(response){
                             console.log("Error:" +response.statusText);
                         });
@@ -102,8 +103,6 @@
                                             });  
                                         };
                                     },
-                        //deleteNewDialogController,
-                        //onRemoving: console.log("cerraste el dialogo") //$scope.selected(null)
                     }); 
                 }
 

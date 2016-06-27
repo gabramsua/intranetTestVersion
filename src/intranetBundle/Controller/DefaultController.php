@@ -163,10 +163,6 @@ class DefaultController extends Controller{
 
       $params= array('new' => $allNews);
 
-      if (!$allNews) {
-        return $this->render('intranetBundle:Error:error_news.html.twig', $params);
-      }
-
       return $this->render('intranetBundle:Default:news.html.twig',$params);
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }
@@ -185,9 +181,6 @@ class DefaultController extends Controller{
                 $object->getWhoCreate()]);
     }
 
-   if (!$tareas) {return $this->render('intranetBundle:Error:error_tasks.html.twig', $params);}
-
-
    $params=array('listTasks'=>$tasks, 'rol'=>$_SESSION['rol'], 'userLogin'=>$_SESSION['userLDAP']);
    return $this->render('intranetBundle:Default:tasks.html.twig',$params);
   }
@@ -197,9 +190,6 @@ class DefaultController extends Controller{
        $channels = $this->getDoctrine()
                         ->getRepository('intranetBundle:Entity\Channel')
                         ->findAll();
-
-    
-       if (!$channels) {return $this->render('intranetBundle:Error:error_channels.html.twig', $params);}
 
        $params=array('listChannels'=>$channels);
        return $this->render('intranetBundle:Default:channels.html.twig',$params);
