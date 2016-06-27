@@ -107,8 +107,13 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
             });
 
             function tabsController($scope){
+
+                $scope.filters = {};
+
                 $scope.returnToHistoric = function() {
                     $scope.selectedIndex = 0;
+                    $scope.filters.formType = 'All';
+                    $scope.filters.formStatus = 3;
                 };
             }
 
@@ -679,8 +684,9 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
 
                 $scope.$watch('selectedIndex', function(){
                     if ($scope.selectedIndex == 0){
+                        deleting = true; //Nothing is being delete here, just inserting a new form and this var can be used in order to filter forms in the "comeback" to the historic.
                         $scope.fillList();
-                        filterForms();
+                        //filterForms();
                     }
                 });
 

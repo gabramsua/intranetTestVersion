@@ -362,7 +362,9 @@
                       <span ng-if="form.status == 2" style="color:#8A2278; font-weight:bold;">{% trans %}rejected_form{% endtrans %}</span>
                     </div>
                     <div ng-if="form.status == 0">
-                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm($event, form)" ng-if="form.status == 0">X</md-button> <!--sustituir por el icono de abajo-->
+                        <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteForm($event, form)" ng-if="form.status == 0">
+                            <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                        </md-button> <!--sustituir por el icono de abajo-->
                     </div>
 
                 </md-list-item>

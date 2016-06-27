@@ -15,7 +15,7 @@
 <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
 <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
@@ -25,8 +25,8 @@
 
             app.controller('userManagementController', userManagementController);
             app.controller('updateUserDialogController', updateUserDialogController);
-            
-            
+
+
             function userManagementController($scope, $mdDialog, $http){
                 $scope.getAllUsers = function(){
                     $http({
@@ -48,7 +48,7 @@
                         templateUrl: "{{path('intranet_main_userManagement_dialog')}}",
                         locals: {
                             currentUser: user
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -63,7 +63,7 @@
                         templateUrl: "{{path('intranet_delete_dialog')}}",
                         locals: {
                             currentUser: user
-                        }, 
+                        },
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -76,9 +76,9 @@
 
             function updateUserDialogController($scope, $mdDialog, $http, currentUser){
                 $scope.user = currentUser;
-                
+
                 $scope.getInfo = function(){
-                    
+
                     $http({
                         method: 'GET',
                         url: window.location.pathname+'/../../api/user/'+$scope.user.login,
@@ -86,13 +86,13 @@
                         headers: {'Content-Type': 'application/json'}
                     })
                     .then(function success(response){
-                        
+
                         $scope.allData = {
                             "userData": response.data.userData
                         };
                         console.log($scope.allData.userData);
-                       
-                        
+
+
                     }, function error(response){
                         console.log("Error =( line:84:" +response.statusText);
                     });
@@ -100,12 +100,12 @@
 
 
                 };
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
-                      
-                
+
+
 
                 $scope.updateUser=function(id){
                 //Recoger los datos del modal y pasarlos a la bd mediante AJAX?
@@ -132,13 +132,13 @@
                         }, function error(response){
                             console.log("Error:" +response.statusText);
                         });
-                    
+
                     }
             }
-   
+
             function deleteUserDialogController($scope, $mdDialog, $http, currentUser){
                 $scope.user = currentUser;
-                
+
                 $scope.closeDialog = function(){
                     $mdDialog.hide();
                  };
@@ -155,7 +155,7 @@
                          $scope.closeDialog();
                     }, function error(response){
                         console.log("Error al borrar:" +response.statusText);
-                    });  
+                    });
                  };
             }
 </script>
@@ -166,7 +166,7 @@
 
 
 <div ng-cloak ng-app="MyApp" ng-controller="userManagementController" layout-align="center start" style="width: 80%;">
-    
+
     <md-list ng-init="getAllUsers()">
         <md-divider></md-divider>
         <md-divider></md-divider>
@@ -181,15 +181,15 @@
 
         <div ng-repeat="user in usersList">
             <md-list-item ng-click="showUpdateUserDialog($event, user)">
-    
+
                 <span style="width: 50%">{[{user.name}]} {[{user.surname}]}</span>
                 <span style="width: 50%">{[{user.login}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-warn md-secondary" ng-click="deleteUser($event, user)">
-                        Delete
-                    </md-button> 
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteUser($event, user)">
+                        <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                    </md-button>
                 </div>
-            
+
             </md-list-item>
             <md-divider></md-divider>
         </div>
