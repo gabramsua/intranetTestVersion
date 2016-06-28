@@ -12,4 +12,11 @@
 	<b>Tasks	 </b>  /<i>language</i>/tasks<br>
   <b>User Management	 </b>  /<i>language</i>/userManagement<br>
 <br>The language can be /es/, /en/ or /fr/
+
+<span ng-app="ficticiusCtrl"><span>
+<script>
+//Given that "newsFeedApp" controller is always the second controlled added, it needs to be bootstrapped but given that in this page there isn't any controller needed we have to include this ficticious controller first.
+var app = angular.module('ficticiusCtrl',['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+</script>
+
 {% endblock %}
