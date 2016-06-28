@@ -2,10 +2,42 @@
 
  {% block contenido %}
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-        <link rel="stylesheet" href="taskStyles.css">
-        <script src="moment.min.js"></script>
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css"> -->
+
+
+<div ng-cloak ng-app="MyApp" ng-controller="tasksController" ng-init="userRol == 'developer' ? getTasksOfUser() : getAllTasks()">
+
+    <md-list>
+        <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol != 'developer'">New Task</md-button>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <md-list-item style="font-size: large">
+            <span style="width: 15%;">Title</span>
+            <span style="width: 60%;">Description</span>
+            <span style="width: 25%;">Owner</span>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-divider></md-divider>
+        <div ng-repeat="task in tasksList track by $index">
+            <md-list-item ng-click="showUpdateTaskDialog($event, task)">
+
+                <span style="width: 15%; margin-right: 3%;">{[{task.title}]}</span>
+                <span style="width: 60%; white-space: nowrap; text-overflow: ellipsis; display: block; overflow: hidden;; margin-right: 3%;">{[{task.content}]}</span>
+                <span style="width: 25%; margin-right: 3%;">{[{task.who_create}]}</span>
+                <div>
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">
+                        <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>
+                    </md-button> <!--sustituir por el icono de abajo-->
+                </div>
+
+            </md-list-item>
+<!--            <md-icon md-svg-src="/es/ic_delete_black_24px.svg" aria-label="android "></md-icon>-->
+            <md-divider></md-divider>
+        </div>
+    </md-list>
+</div>
+
 
         <script>
             var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
