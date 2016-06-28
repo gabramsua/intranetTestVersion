@@ -1147,7 +1147,8 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return "ok";
+        return self::sendMailsToBuos($login, $type);
+        //return "ok";
     }
 
 
@@ -1733,6 +1734,102 @@ class ApiRestController extends Controller
         $em->flush();
     }
 
+    public function sendMailsToBuos($login, $type){
+
+        $user = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
+
+        //Get all the emails of users who has the notifications activated
+        //Compare them to the emails of admins stored in session
+        $em = $this->getDoctrine()->getEntityManager();
+        $qb = $em->createQueryBuilder()
+                 ->select('u.email, u.lang')
+                 ->from('intranetBundle:Entity\Users', 'u')
+                 ->where('u.notifications = :active')
+                 ->setParameter('active', 1)
+                 ->getQuery();
+
+        $info = $qb->getArrayResult();
+
+
+        for ($i=0; $i < sizeof($_SESSION['dirs']); $i++) { 
+            foreach ($info as $key => $mailo) {
+
+                if(strcmp($_SESSION['dirs'][$i], $mailo['email']) == 0){
+                    require("class.phpmailer.php");
+                    require("class.smtp.php");
+
+                    $mail = new PHPMailer();
+                    $mail->PluginDir = "includes/";
+
+                    //Con la propiedad Mailer le indicamos que vamos a usar un servidor smtp
+                    $mail->Mailer = "smtp";
+
+                    //Asignamos a Host el nombre de nuestro servidor smtp
+                    $mail->Host = "webcity10.code-labs.net";
+
+                    //Le indicamos que el servidor smtp requiere autenticación
+                    $mail->SMTPAuth = true;
+                    $mail->Username = "relay@appcuisine.de";
+                    $mail->Password = "U41jLVpuROD0";
+
+                    $mail->From = "intranet@appcuisine.de";
+                    $mail->FromName = "webCuisine";
+
+                    $mail->Timeout=40;
+
+                    //Indicamos cual es la dirección de destino del correo
+                    $mail->AddAddress($mailo['email']);
+                    
+                    switch ($mailo['lang']) {
+                      case 'es':
+                          
+                            $mail->Subject = "Alguien envió formulario en la intranet.";
+                          
+                            $mail->Body = "El usuario ".$user->getName()." ".$user->getSurname()." ha enviado un formulario del tipo ".$type.". Por favor, échale un vistazo <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
+                          break;
+                      case 'en':
+                          
+                            $mail->Subject = "Somebody send a form to the intranet.";
+                          
+                            $mail->Body = "You send a ". $formtype." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
+                          break;
+                      case 'fr':
+                          
+                              $mail->Subject = "Sa forme a été rejetée.";
+                          
+                            $mail->Body = "La forme que vous avez envoyé le gars ". $formtype.", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
+                          break;
+
+                      default:
+                        # code...
+                        break;
+                    }
+
+                    //Definimos AltBody por si el destinatario del correo no admite email con formato html
+                     $mail->AltBody = "Only text format.";
+
+                    $exito = $mail->Send();
+                    //Si el mensaje no ha podido ser enviado se realizaran 4 intentos más como mucho
+                    //para intentar enviar el mensaje, cada intento se hará 5 segundos después
+                    //del anterior, para ello se usa la funcion sleep
+                    $intentos=1;
+                    while ((!$exito) && ($intentos < 5)) {
+                    sleep(5);
+                        $exito = $mail->Send();
+                        $intentos=$intentos+1;
+                     }
+
+                     if(!$exito){
+                        echo "<br>A problem was found while sending the email notification.";
+                        echo "<br/>".$mail->ErrorInfo;
+                     }else{
+                        echo "<br><b><u>Mensaje enviado correctamente</u></b>";
+                     }
+                
+                }//CLOSE IF
+            }//CLOSE FOREACH queryBuilder
+        }//CLOSE FOR LDAP mails
+    }
 
 }
 

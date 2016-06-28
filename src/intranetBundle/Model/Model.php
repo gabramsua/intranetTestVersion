@@ -44,4 +44,64 @@
       return explode("=",explode(",",$rol)[0]);
    }
 
+   public function getAllAdmins($ldaprdn, $ldappass){
+      $ldapDomainName = 'cuisine.lan';
+
+      $ldapconn = ldap_connect($ldapDomainName, 3268) or die("Could not connect to LDAP server.");
+      if ($ldapconn) {
+
+          $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+
+          if ($ldapbind) {
+
+          } else {
+            //echo "LDAP bind failed...<br>";
+            return new Response("A problem occurred during the submit of your credentials");
+
+          }
+      }else{echo "no connection =(";}
+
+      $baseDN ="dc=cuisine, dc=lan";
+      $query = "(cn=intranet-admins)";
+      // limit attributes we want to look for
+      $attributes_ad = array("member");
+      $result = ldap_search($ldapconn, $baseDN, $query, $attributes_ad) or die ("Error in search query");
+      // put search results into the array ($conn variable is defined in the included 'ad_con.php')
+      $admins = ldap_get_entries($ldapconn, $result);
+      return $admins;
+      ldap_close($ldapconn);
+   }
+
+   public function getSplitNamesAdmin($admin){
+      return explode("=",explode(",",$admin)[0])[1];
+   }
+
+   public function getEmailsAdmins($ldaprdn,$ldappass, $uh){
+      $ldapDomainName = 'cuisine.lan';
+      // conexión al servidor LDAP
+      $ldapconn = ldap_connect($ldapDomainName, 3268) or die("Could not connect to LDAP server.");
+      if ($ldapconn) {
+          // realizando la autenticación && Suppress the warning with @ as already doing
+          $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+          // verificación del enlace
+          if ($ldapbind) {
+              //echo "<b>LDAP bind successful...</b><br><br>";
+          } else {
+            //echo "LDAP bind failed...<br>";
+            return new Response("A problem occurred during the submit of your credentials");
+            //return $this->redirect($this->generateUrl('intranet_logout'));
+          }
+      }else{echo "no connection =(";}
+
+      $baseDN ="dc=cuisine, dc=lan";
+      $query = "(cn=".$uh.")";
+      // limit attributes we want to look for
+      $attributes_ad = array("mail");
+      $result = ldap_search($ldapconn, $baseDN, $query, $attributes_ad) or die ("Error in search query");
+      // put search results into the array ($conn variable is defined in the included 'ad_con.php')
+      $email = ldap_get_entries($ldapconn, $result);
+      return $email;
+      ldap_close($ldapconn);
+   }
 }
+

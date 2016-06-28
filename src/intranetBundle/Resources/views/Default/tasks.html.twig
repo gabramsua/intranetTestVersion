@@ -345,7 +345,7 @@
 <div ng-cloak ng-app="MyApp" ng-controller="tasksController" ng-init="userRol == 'developer' ? getTasksOfUser() : getAllTasks()">
 
     <md-list>
-        <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol != 'developer'">New Task</md-button>
+        <md-button class="md-raised md-primary" ng-click="showCreateTaskDialog($event)" ng-if="userRol == 'buo'">New Task</md-button>
         <md-divider></md-divider>
         <md-divider></md-divider>
         <md-list-item style="font-size: large">
@@ -359,10 +359,10 @@
             <md-list-item ng-click="showUpdateTaskDialog($event, task)">
 
                 <span style="width: 15%; margin-right: 3%;">{[{task.title}]}</span>
-                <span style="width: 60%; white-space: nowrap; text-overflow: ellipsis; display: block; overflow: hidden;; margin-right: 3%;">{[{task.content}]}</span>
+                <span style="width: 60%; white-space: nowrap; text-overflow: ellipsis; display: block; overflow: hidden; margin-right: 3%;">{[{task.content}]}</span>
                 <span style="width: 25%; margin-right: 3%;">{[{task.who_create}]}</span>
                 <div>
-                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol != 'developer'">X</md-button> <!--sustituir por el icono de abajo-->
+                    <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteTask($event, task)" ng-if="userRol == 'buo'">X</md-button> <!--sustituir por el icono de abajo-->
                 </div>
 
             </md-list-item>

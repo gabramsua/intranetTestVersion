@@ -1,7 +1,7 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_host: '192.168.37.26:3306'
-    database_port: null
+    database_host: '192.168.37.26'
+    database_port: 3306
     database_name: intranet
     database_user: intranet
     database_password: 8k7jpasUQM
