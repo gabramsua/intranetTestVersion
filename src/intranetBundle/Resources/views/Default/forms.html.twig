@@ -1,11 +1,8 @@
 {% extends 'intranetBundle::layout.html.twig' %}
 
  {% block contenido %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-        <link rel="stylesheet" href="style.css">
-        <script src="moment.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/momentjs/2.13.0/moment.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
@@ -15,8 +12,8 @@
         <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
-        <!-- <script src="{{ asset('bundles/intranet/js/forms.js') }}"></script> -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> -->
+        <script src="{{ asset('bundles/intranet/js/moment.min.js') }}"></script>
 
         <div ng-cloak="" class="" ng-app="MyApp" ng-controller="tabsController" style="background-color:#FDFDFD !important;">
             <md-content>
@@ -190,7 +187,6 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
 
                 $scope.$watch("minFinishDate", function(data){
 
-                    console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
                 //DATES FUNCTIONALITY
@@ -220,7 +216,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
-                            alert("Error:" +response.statusText);
+                            console.log("Error:" +response.statusText);
                         });
                     }
                 };
@@ -294,7 +290,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
-                            alert("Error:" +response.statusText);
+                            console.log("Error:" +response.statusText);
                         });
                     }
                 };
@@ -359,7 +355,6 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
 
                 $scope.$watch("minFinishDate", function(data){
 
-                    console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
                 //DATES FUNCTIONALITY
@@ -391,7 +386,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
-                            alert("Error:" +response.statusText);
+                            console.log("Error:" +response.statusText);
                         });
                     }
                 };
@@ -506,7 +501,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                 };
 
                 $scope.isEmptyList = function(){
-                    console.log($.isEmptyObject($scope.overtimeList));
+                    //console.log($.isEmptyObject($scope.overtimeList));
                     return $.isEmptyObject($scope.overtimeList);
                 };
 
@@ -553,7 +548,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                             $scope.timeFlag = true;
                             reinitializeModel();
                         }, function error(response){
-                            alert("Error:" +response.statusText);
+                            console.log("Error:" +response.statusText);
                         });
                     }
                 };
@@ -627,7 +622,7 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
                             $scope.buttonFlag = false;
                             reinitializeModel();
                         }, function error(response){
-                            alert("Error:" +response.statusText);
+                            console.log("Error:" +response.statusText);
                         });
                     }
                 };
@@ -888,7 +883,6 @@ var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'materi
 
                 $scope.$watch("minFinishDate", function(data){
 
-                    console.log(data);
                     $scope.minFinishDate = $scope.startDate;
                 });
             }

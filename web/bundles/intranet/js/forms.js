@@ -1,5 +1,3 @@
-<?php header("Content-type: application/javascript"); ?>
-
 var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
 app.controller('tabsController', tabsController);
 app.controller('formHeaderController', formHeaderController);

@@ -4,8 +4,8 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc.5/angular-material.css">
-<link rel="stylesheet" type="text/css" href="https://material.angularjs.org/1.1.0-rc.5/docs.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc.5/angular-material.css">
+<link rel="stylesheet" type="text/css" href="https://material.angularjs.org/1.1.0-rc.5/docs.css"> -->
 <style>
     #container {
         height: 450px;
@@ -65,7 +65,6 @@
         var offset = 0;
         $user="{{login}}";
         $scope.populateChannelsList = function(){
-            console.log($user);
             $http({
                 method: 'GET',
                 url: 'http://localhost/intranettestversion/web/app_dev.php/api/users/'+$user+'/channels',
@@ -76,9 +75,6 @@
                 $.each(response.data, function(key, elem){
                     $scope.userChannels.push(elem.name);
                 });
-                //$scope.channelSelected = $scope.userChannels.join();
-                //$scope.channelSelected = $scope.userChannels[0];
-                console.log($scope.userChannels);
                 $scope.getNews();
             },function error(response){
                 console.log(response.statusText);
