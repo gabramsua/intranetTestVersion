@@ -1,6 +1,7 @@
 <?php
 namespace intranetBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use intranetBundle\Model\Model;
 use intranetBundle\Entity\Entity\Users;
@@ -40,8 +41,6 @@ class DefaultController extends Controller{
     $userLDAP=json_decode(json_encode($params), true);
 
     if (sizeof($userLDAP['user'])>1) {
-      //var_dump($userLDAP);
-
 
       $logged=$userLDAP['user'][0]['samaccountname'][0];
       $rol=$userLDAP['user'][0]['memberof'][0];
@@ -64,19 +63,25 @@ class DefaultController extends Controller{
 
       $m = new Model();
       //$u = $m->getSplitRole($userLDAP['user'][0]['memberof']);
+      $roleAssigned = 0;
       foreach ($userLDAP['user'][0]['memberof'] as $index => $object) {
           //echo $m->getSplitRole($object)[1][0];
         foreach ($m->getSplitRole($object) as $key => $value) {
             if(strcmp($value, "intranet-admins") == 0){
-              echo "you are ADMIN";
+              //echo "you are ADMIN";
               $_SESSION['rol'] = "admin";
+              $roleAssigned = 1;
+              break;
             }else if(strcmp($value, "intranet-buo") == 0){
               //echo "you are BUO";
               $_SESSION['rol'] = "buo";
-            }else if(strcmp($value, "intranet-users") == 0){
+              $roleAssigned = 1;
+              break;
+            }else{// if(strcmp($value, "intranet-users") == 0){
               //echo "you are developer";
               $_SESSION['rol'] = "developer";
             }
+            if($roleAssigned != 0) break;
         }
       }
 
@@ -99,7 +104,7 @@ class DefaultController extends Controller{
       }
       //var_dump($dirs);
       for ($i=0; $i < sizeof($dirs); $i++) { 
-          echo "<br>".$dirs[$i];
+          //echo "<br>".$dirs[$i];
       }
       $_SESSION['dirs']=$dirs;
 
@@ -179,6 +184,7 @@ class DefaultController extends Controller{
   }
 
   public function newsAction(){
+    if(isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
     if($_SESSION['rol']=='buo'){
       
       return $this->render('intranetBundle:Default:news.html.twig');
@@ -204,12 +210,14 @@ class DefaultController extends Controller{
   }
 
   public function channelsAction(){
-    if($_SESSION['rol']!='buo'){
+    if(isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
+    if($_SESSION['rol']=='buo'){
        return $this->render('intranetBundle:Default:channels.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }
 
    public function userManagementAction(){
+     if(isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
      if($_SESSION['rol']=='admin'){
 
       return $this->render('intranetBundle:Default:userManagement.html.twig');
@@ -225,14 +233,20 @@ class DefaultController extends Controller{
   }
 
   public function logoutAction(){
+
+  if (isset($_SESSION))
+      session_destroy();
+      
+/*
     unset($_SESSION['name']);
     unset($_SESSION['surname']);
     unset($_SESSION['userLDAP']);
     //unset($_SESSION['rol']);
-    unset($_SESSION['email']);
+    unset($_SESSION['email']);*/
     return $this->render(
       'intranetBundle:Default:index.html.twig'
      );
+
   }
 
 
@@ -252,7 +266,8 @@ class DefaultController extends Controller{
 
     //In this page we can see all the forms send, order by non-read forms, date and type.
     public function incomingFormsAction(){
-      if($_SESSION['rol']=='buo'){
+      if(isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
+      if($_SESSION['rol']!='buo'){
            return $this->render('intranetBundle:Default:incomingForms.html.twig');
        }else return $this->redirect($this->generateUrl('intranet_homepage'));
     }
@@ -707,7 +722,7 @@ class DefaultController extends Controller{
 
     //FORMS
     public function formsAction(){
-
+      if(isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
         $params = ['userLogin' => $_SESSION['userLDAP'],
                    'rol' => $_SESSION['rol'],
                    'name' => $_SESSION['name'],

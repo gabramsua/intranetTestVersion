@@ -1147,7 +1147,7 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return self::sendMailsToBuos($login, $type);
+        return self::sendMailsToBuos($login, "Vacation");
         //return "ok";
     }
 
@@ -1184,7 +1184,7 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return "ok";
+        return self::sendMailsToBuos($login, "Expenses");
     }
 
 
@@ -1221,7 +1221,7 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return "ok";
+        return self::sendMailsToBuos($login, "Business Trip");
     }
 
 
@@ -1293,7 +1293,7 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return "ok";
+        return self::sendMailsToBuos($login, "Overtine Hours");
     }
 
     public function postWorkAtHomeformAction($login){
@@ -1321,7 +1321,7 @@ class ApiRestController extends Controller
         $em->persist($usform);
         $em->flush();
 
-        return "ok";
+        return self::sendMailsToBuos($login, "Work at Home");
     }
 
     public function getFormsHoursAction(){
@@ -1554,29 +1554,29 @@ class ApiRestController extends Controller
                       if ($formIncoming['status']==1){
                           $mail->Subject = "Su formulario ha sido aceptado.";
 
-                          $mail->Body = "El formulario que mandaste del tipo ".$formIncoming['type']." ha sido aceptado, por favor chequea que es correcto <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>aqui</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                          $mail->Body = "El formulario que mandaste del tipo ".$formIncoming['type']." ha sido aceptado, por favor chequea que es correcto <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }else{
                           $mail->Subject = "Su formulario ha sido rechazado.";
 
-                          $mail->Body = "El formulario que mandaste del tipo ".$formIncoming['type']." ha sido rechazado, por favor chequea que es correcto <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>aqui</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                          $mail->Body = "El formulario que mandaste del tipo ".$formIncoming['type']." ha sido rechazado, por favor chequea que es correcto <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }
                       break;
                   case 'en':
                       if ($formIncoming['status']==1){
                         $mail->Subject = "Your form has been accepted.";
-                        $mail->Body = "You send a ".$formIncoming['type']." form, and it has been accepted please check it <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                        $mail->Body = "You send a ".$formIncoming['type']." form, and it has been accepted please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }else{
                         $mail->Subject = "Your form has been rejected.";                      
-                        $mail->Body = "You send a ".$formIncoming['type']." form, and it has been rejected please check it <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                        $mail->Body = "You send a ".$formIncoming['type']." form, and it has been rejected please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }
                       break;
                   case 'fr':
                       if ($formIncoming['status']==1){
                           $mail->Subject = "Sa forme a été acceptée.";
-                          $mail->Body = "La forme que vous avez envoyé le gars ".$formIncoming['type']." a eté accepté, S'il vous plaît vérifier qu'il est <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>ici</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                          $mail->Body = "La forme que vous avez envoyé le gars ".$formIncoming['type']." a eté accepté, S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }else{
                           $mail->Subject = "Sa forme a été rejetée.";
-                          $mail->Body = "La forme que vous avez envoyé le gars ".$formIncoming['type']." a été rejetée, S'il vous plaît vérifier qu'il est <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>ici</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
+                          $mail->Body = "La forme que vous avez envoyé le gars ".$formIncoming['type']." a été rejetée, S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }
                       break;
 
@@ -1755,8 +1755,12 @@ class ApiRestController extends Controller
             foreach ($info as $key => $mailo) {
 
                 if(strcmp($_SESSION['dirs'][$i], $mailo['email']) == 0){
-                    require("class.phpmailer.php");
-                    require("class.smtp.php");
+                    //require("class.phpmailer.php");
+                    //require("class.smtp.php");
+                    if (!class_exists("phpmailer")) {
+                        require_once('class.phpmailer.php');
+                        require_once('class.smtp.php');
+                    }
 
                     $mail = new PHPMailer();
                     $mail->PluginDir = "includes/";
@@ -1785,19 +1789,19 @@ class ApiRestController extends Controller
                           
                             $mail->Subject = "Alguien envió formulario en la intranet.";
                           
-                            $mail->Body = "El usuario ".$user->getName()." ".$user->getSurname()." ha enviado un formulario del tipo ".$type.". Por favor, échale un vistazo <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
+                            $mail->Body = "El usuario ".$user->getNameU()." ".$user->getSurnameU()." ha enviado un formulario del tipo ".$type.". Por favor, échale un vistazo <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
                           break;
                       case 'en':
                           
                             $mail->Subject = "Somebody send a form to the intranet.";
                           
-                            $mail->Body = "You send a ". $formtype." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
+                            $mail->Body = "The user ".$user->getNameU()." ".$user->getSurnameU()."has just send a ".$type." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
                           break;
                       case 'fr':
                           
-                              $mail->Subject = "Sa forme a été rejetée.";
+                              $mail->Subject = "Quelqu'en a envoyée a form";
                           
-                            $mail->Body = "La forme que vous avez envoyé le gars ". $formtype.", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
+                            $mail->Body = "Le user ".$user->getNameU()." ".$user->getSurnameU()." a envoyée a ".$type." form. S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
                           break;
 
                       default:
@@ -1823,9 +1827,11 @@ class ApiRestController extends Controller
                         echo "<br>A problem was found while sending the email notification.";
                         echo "<br/>".$mail->ErrorInfo;
                      }else{
-                        echo "<br><b><u>Mensaje enviado correctamente</u></b>";
+                        //echo "<br><b><u>Mensaje enviado correctamente</u></b>";
                      }
-                
+                ob_start();
+                var_dump($mailo['lang']);
+                $result = ob_get_clean();
                 }//CLOSE IF
             }//CLOSE FOREACH queryBuilder
         }//CLOSE FOR LDAP mails
