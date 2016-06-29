@@ -97,7 +97,7 @@
 </script>
 
 <div  ng-app="settingsApp" ng-controller="settingsController" layout="row" layout-align="center start" >
-    <form name="settingsForm" id="settingsForm" method="POST" novalidate  action="{{ path('intranet_cruduser') }}">
+    <form name="settingsForm" id="settingsForm" method="POST" novalidate  action="{{ path('intranet_cruduser') }}" enctype="multipart/form-data">
     <!--{{ path('intranet_cruduser') }}-->
 
     <md-content ng-init="getCurrentUser()">
@@ -106,7 +106,7 @@
             <div flex>
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
-                        <label>{% trans %}Name{% endtrans %}</label>
+                        <label>{% trans %}Name{% endtrans %}{{surni}}{{flag}}</label>
                         <input type='text' name="myName" id="myName" ng-model="user.name" required="required">
                     </md-input-container>
                 </md-list-item>
@@ -169,28 +169,44 @@
             <div flex>
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
-                    <label>{% trans %}Photo{% endtrans %}</label><br>
-
+                    <label>{% trans %}Photo{% endtrans %} (4MB MAX)</label><br>
                     <input id="picture" name="picture" type="file" class="ng-hide" ng-model="picture" multiple>
-                    <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
+                    <img class="md-avatar" id="photo" src="{{ image }}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
                     <!-- <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script> -->
                     <script>
 
                         $('#photo').click(function(){
                             $('input[type=file]').click();
+                            $(this).css('cursor', 'pointer');
                         });
-
 
                         $('#photo').hover(function(){
                             $(this).css('opacity', '0.5');
                         }, function(){
                             $(this).css('opacity', '1');
                         });
+
+                        function readURL(input) {
+
+                            if (input.files && input.files[0]) {
+                                var reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                    $('#photo').attr('src', e.target.result);
+                                }
+
+                                reader.readAsDataURL(input.files[0]);
+                            }
+                        }
+
+                        $("#picture").change(function(){
+                            readURL(this);
+                        });
                     </script>
                 </md-input-container>
 
 
-                <md-input-container class="md-block">
+                <!-- <md-input-container class="md-block">
                     <md-button aria-label="photo" class="md-raised md-primary" ng-click="showphoto()">
                 </md-input-container>
                 <hr>
@@ -199,8 +215,8 @@
                     <label for="files">
                        <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/>BUTTOn
                     </label>
-                </md-button>
-                <input id="files" name="file-input" type="file" style="display:none;">
+                </md-button> -->
+                <!-- <input id="files" name="file-input" type="file" style="display:none;"> -->
             </md-list-item>
             </div>
         </div>

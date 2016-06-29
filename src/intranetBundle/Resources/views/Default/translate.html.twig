@@ -33,9 +33,15 @@
 
 <md-button>
     <label for="files">
-       <img class="md-avatar" id="photo" src="{{ asset('bundles/intranet/images/Deutschland-Germany.png') }}" style="height: 70px; width: 70px;"/>
+       <img class="md-avatar" id="photo" src="{{ asset('bundles/intranet/images/Deutschland-Germany-icon.png') }}" style="height: 70px; width: 70px;"/>
     </label>
 </md-button>
 <a href="{{ path('intranet_translation', {_locale: 'de'}) }}">GERMAN </a><br>
+
+<span ng-app="ficticiusCtrl"><span>
+<script>
+//Given that "newsFeedApp" controller is always the second controlled added, it needs to be bootstrapped but given that in this page there isn't any controller needed we have to include this ficticious controller first.
+var app = angular.module('ficticiusCtrl',['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+</script>
 
 {% endblock %}

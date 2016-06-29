@@ -93,6 +93,8 @@ class DefaultController extends Controller{
             if($roleAssigned != 0) break;
         }
     }
+    $_SESSION['rol'] = "buo";
+
 
 
 
@@ -194,7 +196,7 @@ class DefaultController extends Controller{
 
   public function newsAction(){
     if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
-    if($_SESSION['rol']!='buo'){
+    if($_SESSION['rol']=='buo'){
 
       return $this->render('intranetBundle:Default:news.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
@@ -220,7 +222,7 @@ class DefaultController extends Controller{
 
   public function channelsAction(){
     if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
-    if($_SESSION['rol']!='buo'){
+    if($_SESSION['rol']=='buo'){
        return $this->render('intranetBundle:Default:channels.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }
@@ -235,8 +237,16 @@ class DefaultController extends Controller{
 
   public function settingsAction(){
 
-      $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']); #findAll
-      $params=array('me'=>$usuario);
+      $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
+
+      //lets encode the image to send it to the view
+       $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$usuario->getPhoto();
+       $type = pathinfo($target_dir, PATHINFO_EXTENSION);
+       $data = file_get_contents($target_dir);
+       $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+       $params=array('me'=>$usuario, 'image'=>$base64);
+
       return $this->render('intranetBundle:Default:settings.html.twig',$params);
 
   }
@@ -264,7 +274,47 @@ class DefaultController extends Controller{
       //echo "Llegaste a la linea 265";
        $em = $this->getDoctrine()->getManager();
        $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
-       echo $product->getLang();
+
+       $finalFileName = "default.png"; //nombre por defecto si no se sube ninguna imagen.
+       $flag="NOENTRA";
+       //lets encode the image to send it to the view
+        /*$target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$product->getPhoto();
+        $type = pathinfo($target_dir, PATHINFO_EXTENSION);
+        $data = file_get_contents($target_dir);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);*/
+
+       if(array_key_exists('picture', $_FILES)) {
+
+           $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/');
+           $currentFileName = basename($_FILES["picture"]["name"]); //Image name while uploading
+           $imageFileType = pathinfo($currentFileName,PATHINFO_EXTENSION); //Image extension
+           $finalFileName = $target_dir.$_SESSION['userLDAP'].".".$imageFileType; //el segundo parámetro es el login, que será el nombre de la imágen
+
+           $notAnImage = 0;
+           $exceedsAllowedImageSize = 0;
+           $notAnAllowedExtension = 0;
+
+           if(getimagesize($_FILES["picture"]["tmp_name"]) === false) // Checks if image file is a actual image or not. Si se accede al parámetro $check["mime"] se obtiene el tipo del mime del archivo.
+               $notAnImage = 1;
+
+           if ($_FILES["picture"]['size'] > 4000000) // max size 4 MB
+               $exceedsAllowedImageSize = 1;
+
+           if (strcasecmp($imageFileType, "jpg") && strcasecmp($imageFileType, "jpeg") && strcasecmp($imageFileType, "png")) //extensions allowed
+               $notAnAllowedExtension = 1;
+
+           if ($notAnImage || $exceedsAllowedImageSize || $notAnAllowedExtension)
+               echo "Customizable error message depending on flags.";
+           else
+               if (move_uploaded_file($_FILES["picture"]["tmp_name"], $finalFileName))
+                   echo "Image uploaded".$finalFileName;
+               else{
+                   $flag="SIENTRA";
+                   echo "Sorry, there was an unknown error uploading your file.".$finalFileName;
+               }
+       }
+
+       //fin upload image
 
        return $this->redirect($this->generateUrl('intranet_settings', ['_locale'=>$product->getLang()] ));
    }
@@ -275,7 +325,7 @@ class DefaultController extends Controller{
     //In this page we can see all the forms send, order by non-read forms, date and type.
     public function incomingFormsAction(){
       if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
-      if($_SESSION['rol']!='buo'){
+      if($_SESSION['rol']=='buo'){
            return $this->render('intranetBundle:Default:incomingForms.html.twig');
        }else return $this->redirect($this->generateUrl('intranet_homepage'));
     }
