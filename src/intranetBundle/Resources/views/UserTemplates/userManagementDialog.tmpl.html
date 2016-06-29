@@ -54,7 +54,7 @@
                 <md-list-item layout-lg="row" layout-xl="row">
                     <md-input-container class="md-block">
                         <label>{% trans %}Login{% endtrans %}</label>
-                        <input type="text" name="myLogin" id="myLogin" value="user.login" readonly>
+                        <input type="text" name="myLogin" id="myLogin" ng-model="user.login" readonly>
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify an email.</div>
                         </div>

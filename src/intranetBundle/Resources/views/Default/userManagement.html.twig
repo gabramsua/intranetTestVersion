@@ -22,7 +22,6 @@
                     })
                     .then(function success(response){
                         $scope.usersList = response.data;
-                        console.log($scope.usersList);
                     }, function error(response){
                         console.log("Error:" +response.statusText);
                     });
@@ -75,7 +74,6 @@
                         $scope.allData = {
                             "userData": response.data.userData
                         };
-                        console.log($scope.allData.userData);
 
 
                     }, function error(response){
@@ -111,7 +109,6 @@
                             headers: {'Content-Type': 'application/json'}
                         })
                         .then(function success(response){
-                            console.log("PArty time");
                             $scope.closeDialog();
                         }, function error(response){
                             console.log("Error:" +response.statusText);
@@ -156,7 +153,7 @@
         <md-divider></md-divider>
 
         <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 50%">User</span>
+            <span style="width: 50%">{% trans %}current_user{% endtrans %}</span>
             <span style="width: 50%">Login</span>
         </md-list-item>
 

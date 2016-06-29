@@ -1,10 +1,10 @@
 #TESTING
-Symfony2 is great: "I love you Symfony2"
+Symfony2 is great: "Ich liebe Symfony2"
 New User: "New User"
-Welcome: "Welcome to the intranet"
-lang: "ENGLISH"
-Hello: "Hi!"
-translation: Please select a Language, remember that this configuration won´t be saved to your personal settings
+Welcome: "Wilkommen das intranet"
+lang: "Deutsch"
+Hello: "Hallo!"
+translation: Bitte wählen Sie eine Sprache, denken Sie daran, dass diese Konfiguration nicht auf Ihre persönlichen Einstellungen gespeichert werden
 sure_delete: Are you sure? You won´t be able to reverse the changes.
 
 #TOASTS
@@ -30,10 +30,10 @@ Form Management: Form Management
 New: New
 
 #LANDING
-langing_page_title: LANDING PAGE
-landing_page_subtitle: This is Landing Page
-landing_1: <b>This page needs to be edited</b>
-landing_2: Menu not visible for all => indicate routes?
+langing_page_title: LANDING GERMAN PAGE
+landing_page_subtitle: This is Landing Page in german
+landing_1: <b>Diese Seite muss bearbeitet werden</b>
+landing_2: Menü nicht sichtbar für alle => indicate routes?
 
 #SETTINGS
 Name: Name

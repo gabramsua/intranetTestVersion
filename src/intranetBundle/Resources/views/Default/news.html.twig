@@ -304,12 +304,12 @@
     <div ng-cloak ng-app="MyApp" ng-controller="newsController" layout-align="center start">
 
     <md-list ng-init="getAllNews()">
-    <md-button class="md-raised md-primary" ng-click="showCreateNewDialog($event)">Create New</md-button>
+    <md-button class="md-raised md-primary" ng-click="showCreateNewDialog($event)">{% trans %}create_new{% endtrans %}</md-button>
     <md-input-container>
         <label>Channels</label>
         <md-select ng-model="selectedItem">
           <md-optgroup label="Channels">
-            <md-option ng-value="item" ng-click="selected(item.name)">ALL</md-option>
+            <md-option ng-value="item" ng-click="selected(item.name)">{% trans %}all{% endtrans %}</md-option>
             <md-option ng-value="item" ng-repeat="item in items" ng-click="selected(item.name)">
                 {[{item.name}]}
             </md-option>
@@ -320,8 +320,8 @@
         <md-divider></md-divider>
 
         <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 30%">Title</span>
-            <span style="width: 50%">Content</span>
+            <span style="width: 30%">{% trans %}title{% endtrans %}</span>
+            <span style="width: 50%">{% trans %}content{% endtrans %}</span>
         </md-list-item>
 
         <md-divider></md-divider>
@@ -331,7 +331,7 @@
             <md-list-item ng-click="readNewDialog($event, n)">
 
                 <span style="width: 30%">{[{ n.title }]}</span>
-                <span style="width: 50%">{[{ n.content }]}</span>
+                <span style="width: 50%; white-space: nowrap; text-overflow: ellipsis; display: block; overflow: hidden; margin-right: 3%;">{[{ n.content }]}</span>
                 <div>
                     <md-button style="width: 10%" class="md-raised md-secondary" ng-click="deleteNew($event,n)">
                         <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_delete_black_24px.svg') }}" aria-label="android "></md-icon>

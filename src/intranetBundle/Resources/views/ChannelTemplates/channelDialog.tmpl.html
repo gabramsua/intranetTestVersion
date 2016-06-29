@@ -2,7 +2,7 @@
     <form name="channelForm" id="channelForm" method="POST" novalidate>
         <md-toolbar>
               <div class="md-toolbar-tools">
-                <h2>Channel: {[{channel.name}]}</h2>
+                <h2>{% trans %}channel{% endtrans %}: {[{channel.name}]}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="closeDialog()">
                   <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_close_white.svg') }}" aria-label="Close dialog"></md-icon>

@@ -298,12 +298,12 @@
 <div ng-cloak ng-app="MyApp" ng-controller="channelController" layout-align="center start">
 
     <md-list ng-init="getAllChannels()">
-    <md-button class="md-raised md-primary" ng-click="showCreateChannelDialog($event)">New Channel</md-button>
+    <md-button class="md-raised md-primary" ng-click="showCreateChannelDialog($event)">{% trans %}new_channel{% endtrans %}</md-button>
         <md-divider></md-divider>
         <md-divider></md-divider>
 
         <md-list-item style="font-size: large" ng-model="prueba">
-            <span style="width: 100%">Name</span><!--
+            <span style="width: 100%">{% trans %}name{% endtrans %}</span><!--
             <span style="width: 50%">Login</span>-->
         </md-list-item>
 

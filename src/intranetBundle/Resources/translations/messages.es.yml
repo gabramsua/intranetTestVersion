@@ -26,11 +26,16 @@ Request Business Trip: Pedir Viaje de Negocios
 Book a room: Reservar una habitación
 Task: Tareas
 User Management: Gestión de Usuarios
-News Feed: Noticias
+New: Noticia
 Form Management: Gestión de Formularios
 Incoming Forms: Formularios Entrantes
 News Feed: Gestión de noticias
 Channels: Canales
+channel: Canal
+
+#CRUD
+create: Crear
+update: Modificar
 
 #SETTINGS
 Name: Nombre
@@ -43,6 +48,7 @@ Modify: Modificar
 modified_yourself: Has modificado tus datos correctamente
 receive_notifications: Recibir Notificaciones
 onboard_user: Usuario nuevo
+user: Usuario
 
 #CHANNEL
 new_channel: "Crear un nuevo Canal"
@@ -88,7 +94,7 @@ filters_accepted: Aceptado
 filters_rejected: Rechazado
 filters_pending: Pendiente
 select_filters_type: Selecciona un tipo de formulario
-select_filters_status: Seleccinoa un estado de los formularios
+select_filters_status: Selecciona un estado de los formularios
 
 #VACATION FORM
 date_begin: Fecha de inicio
@@ -105,7 +111,7 @@ concept: Concepto
 concept_error: Debes especificar un concepto.
 
 #BUSINESS TRIP FORMS
-location: Inserta un lugar
+location: Lugar
 location_error: Debes especificar un lugar
 congress: Nombre del Congreso
 reasons: Motivos
@@ -130,3 +136,19 @@ sendButton: Enviar
 #DIALOG FORMS
 date: Fecha
 modality: Modalidad
+
+#TASKS
+title: Título
+description: Descripción
+owner: Creador
+new_task: Nueva Tarea
+users_in_task: Usuarios en esta tarea
+
+#NEWS
+create_new: Crear Noticia
+all: Todos
+content: Contenido
+
+#CHANNELS
+name: Nombre
+create_this_channel: Crear el Canal

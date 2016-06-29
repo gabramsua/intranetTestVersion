@@ -3,7 +3,7 @@
     <form method="post" id="taskUpdateForm">
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>Task: {[{allData.taskData[0].title}]}</h2><!--task[]-->
+            <h2>{% trans %}Task{% endtrans %}: {[{allData.taskData[0].title}]}</h2><!--task[]-->
             <span flex></span>
             <md-button class="md-icon-button" ng-click="closeDialog()">
               <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_close_white.svg') }}" aria-label="Close dialog"></md-icon>
@@ -15,14 +15,14 @@
                 <md-list>
                     <md-list-item>
                         <md-input-container flex-gt-xs>
-                            <label>Task Title</label>
+                            <label>{% trans %}Task{% endtrans %} {% trans %}title{% endtrans %}</label>
                             <input class="" name="taskTitle" ng-model="allData.taskData[0].title" ng-disabled="userRol == 'developer'">
                         </md-input-container>
                     </md-list-item>
                     <md-list-item>
                         <md-input-container flex-gt-xs>
-                            <label>Task Description</label>
-                            <textarea class="dialogTextarea" rows="4" name="taskContent" ng-model="allData.taskData[0].content" ng-disabled="userRol == 'developer'" style="overflow-y: scroll; height: auto !important;"></textarea>
+                            <label>{% trans %}Task{% endtrans %} {% trans %}description{% endtrans %}</label>
+                            <textarea class="dialogTextarea" rows="4" name="taskContent" ng-model="allData.taskData[0].content" ng-disabled="userRol == 'developer'"></textarea>
                         </md-input-container>
                     </md-list-item>
                     <md-list-item>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div layout-wrap layout="column" ng-if="userRol == 'developer'" style="margin-bottom: 15px">
-                            <span style="font-weight: bold">Users in this task:</span><br>
+                            <span style="font-weight: bold">{% trans %}users_in_task{% endtrans %}</span><br>
                             <div flex="50" ng-repeat="user in usersInTaskShownToDeveloper" style="margin-left: 10px">
                                     {[{user.nameU}]} {[{user.surnameU}]}
                             </div>
@@ -43,8 +43,8 @@
                     <md-list-item>
                         <span flex></span>
 <!--                        <md-button ng-click="update()" class="md-raised md-primary" ng-if="userRol != 'developer' && task" ng-disabled="!infoLoaded">Update</md-button>-->
-                        <md-button ng-click="update(allData.taskData[0].id)" class="md-raised md-primary" ng-if="userRol != 'developer' && task" ng-disabled="loading">Update</md-button>
-                        <md-button ng-click="create()" class="md-raised md-primary" ng-if="userRol != 'developer' && !task">Create</md-button>
+                        <md-button ng-click="update(allData.taskData[0].id)" class="md-raised md-primary" ng-if="userRol != 'developer' && task" ng-disabled="loading">{% trans %}update{% endtrans %}</md-button>
+                        <md-button ng-click="create()" class="md-raised md-primary" ng-if="userRol != 'developer' && !task">{% trans %}create{% endtrans %}</md-button>
                         <md-button ng-click="closeDialog()" class="md-raised md-primary" ng-if="userRol == 'developer'">OK</md-button>
                     </md-list-item>
                 </md-list>

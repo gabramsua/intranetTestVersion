@@ -2,7 +2,7 @@
     <form name="newForm" id="newForm" method="POST" novalidate>
         <md-toolbar>
               <div class="md-toolbar-tools">
-                <h2>New: {[{new.title}]}</h2>
+                <h2>{% trans %}New{% endtrans %}: {[{new.title}]}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="closeDialog()">
                   <md-icon md-svg-src="{{ asset('bundles/intranet/icons/ic_close_white.svg') }}" aria-label="Close dialog"></md-icon>
@@ -12,10 +12,10 @@
     <md-dialog-content ng-init="getCurrentNew()"  class="md-dialog-content">
         <md-list layout="column" ng-cloak="">
         <div layout="row" layout-sm="column">
-            <div flex>
+            <div flex="100">
                 <md-list-item layout-lg="row" layout-xl="row">
-                    <md-input-container class="md-block">
-                        <label>{% trans %}Title{% endtrans %}</label>
+                    <md-input-container  flex-gt-xs>
+                        <label>{% trans %}title{% endtrans %}</label>
                         <input type='text' name="title" id="title" ng-model="new.title" required="required">
 
                         <div ng-messages="expensesForm.seller.$error">
@@ -25,9 +25,11 @@
                 </md-list-item>
 
                 <md-list-item layout-lg="row" layout-xl="row">
-                    <md-input-container class="md-block">
-                        <label>{% trans %}Content{% endtrans %}</label>
-                        <input type='textarea' name="content" id="content" ng-model="new.content" required="required">
+                    <md-input-container  flex-gt-xs>
+                        <label>{% trans %}content{% endtrans %}</label>
+                        <textarea rows="4" name="content" id="content" required="required" style="overflow-y: scroll; height: auto !important;">
+                            {[{new.content}]}
+                        </textarea>
 
                         <div ng-messages="expensesForm.seller.$error">
                             <div ng-message="required">You have to specify a seller.</div>
@@ -36,7 +38,7 @@
                 </md-list-item>
 
                  <md-list-item>
-                        <div layout-wrap layout="row">
+                        <div layout-wrap layout="row"  flex-gt-xs>
                             <div flex="50" ng-repeat="channel in allChannels">
                                 <md-checkbox ng-checked="alreadyIn(channel)" ng-click="toggle(channel)" name="{[{channel.name}]}">
                                     {[{channel.name}]}

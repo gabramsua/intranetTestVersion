@@ -18,13 +18,13 @@ intranet_homepage:
     path:     /{_locale}/
     defaults: { _controller: intranetBundle:Default:index, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_logout:
     path:     /{_locale}/index
     defaults: { _controller: intranetBundle:Default:logout, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 #MENU ROUTING
 
@@ -32,49 +32,49 @@ intranet_formHistorical:
     path:     /{_locale}/MyHistorical
     defaults: { _controller: intranetBundle:Default:myforms, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_news:
     path:     /{_locale}/news
     defaults: { _controller: intranetBundle:Default:news, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_channels:
     path:     /{_locale}/channels
     defaults: { _controller: intranetBundle:Default:channels, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_incomingForms:
     path:     /{_locale}/incomingForms
     defaults: { _controller: intranetBundle:Default:incomingForms, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_tasks:
     path:     /{_locale}/tasks
     defaults: { _controller: intranetBundle:Default:tasks, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_userManagement:
     path:     /{_locale}/userManagement
     defaults: { _controller: intranetBundle:Default:userManagement, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_settings:
     path:     /{_locale}/settings
     defaults: { _controller: intranetBundle:Default:settings, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 intranet_forms:
     path:     /{_locale}/forms
     defaults: { _controller: intranetBundle:Default:forms, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 #CRUD OPERATIONS
 intranet_cruduser:
@@ -95,7 +95,7 @@ intranet_translation:
     path:     /{_locale}/translation
     defaults: { _controller: intranetBundle:Default:translation, _locale:en }
     requirements:
-        _locale: en|fr|es
+        _locale: en|fr|es|de
 
 
 #TASKTEMPLATES

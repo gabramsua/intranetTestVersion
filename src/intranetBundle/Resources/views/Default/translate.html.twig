@@ -2,12 +2,7 @@
 
 {% block contenido %}
 <br>
-<h1>Inicio</h1>
-<h2>{% trans %} TRANSLATING PAGE   {% endtrans %}</h2>
-{% trans %}  New User{% endtrans %}<br>
 {% trans %}  Welcome {% endtrans %}<br>
-{% trans %}Symfony2 is great{% endtrans %}<br>
-Escogiste: {% trans %} lang   {% endtrans %}
 <hr><br>
 
 {% trans %}translation{% endtrans %}<br><br><br>
@@ -40,6 +35,7 @@ Escogiste: {% trans %} lang   {% endtrans %}
     <label for="files">
        <img class="md-avatar" id="photo" src="{{ asset('bundles/intranet/images/Deutschland-Germany.png') }}" style="height: 70px; width: 70px;"/>
     </label>
-</md-button>Coming soon...
+</md-button>
+<a href="{{ path('intranet_translation', {_locale: 'de'}) }}">GERMAN </a><br>
 
 {% endblock %}
