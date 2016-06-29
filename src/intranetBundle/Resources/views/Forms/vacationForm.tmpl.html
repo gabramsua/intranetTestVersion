@@ -2,8 +2,8 @@
     <md-list layout="column" ng-cloak="">
         <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
         <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0">
-            <label style="font-size: small;">Fecha comienzo</label>
-            <label style="font-size: small; margin-left: 100px; color:lightgrey;">Fecha comienzo</label>
+            <label style="font-size: small;">{% trans %}date_begin{% endtrans %}</label>
+            <label style="font-size: small; margin-left: 100px; color:lightgrey;">{% trans %}date_end{% endtrans %}</label>
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0">
             <md-datepicker ng-model="startDate" md-placeholder="From" md-min-date="today" class="dtNoSpaceAtLeft"></md-datepicker>
@@ -11,16 +11,16 @@
         </md-list-item>
         <md-list-item>
             <md-input-container class="md-block">
-                <label>Surrogate*</label>
+                <label>{% trans %}surrogate{% endtrans %}*</label>
                 <input type="text" name="surrogate" ng-model="surrogate" required>
                 <div ng-messages="vacationForm.surrogate.$error">
-                    <div ng-message="required">You must specify a surrogate.</div>
+                    <div ng-message="required">{% trans %}surrogate_error{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item>
             <!--<md-button class="md-raised md-primary" style="margin-top: 40px" ng-disabled="vacationForm.$invalid" ng-click="submitting(vacationForm, vacationForm)">Send</md-button>si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
-            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()" ng-disabled="buttonFlag">Send</md-button>
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()" ng-disabled="buttonFlag">{% trans %}send{% endtrans %}</md-button>
         </md-list-item>
     </md-list>
 </div>

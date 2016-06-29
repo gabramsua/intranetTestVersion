@@ -7,6 +7,9 @@ Hello: "Hi!"
 translation: Please select a Language, remember that this configuration won´t be saved to your personal settings
 sure_delete: Are you sured? You won´t be able to reverse the changes.
 
+#TOASTS
+you_dont_exist: Something went wrong while validating your credentials
+
 #LOGIN
 name_and_surname: Please enter your name and surname
 help_login: Please enter your name, surname and your password
@@ -41,6 +44,7 @@ Photo: Profile Picture
 Modify: Update
 receive_notifications: Receive Notifications
 onboard_user: Onboard User
+modified_yourself: You upload your profile.
 
 #CHANNEL
 new_channel: "Create a New Channel"
@@ -58,6 +62,8 @@ expenses_form: Expenses
 business_trip_form: Business Trip
 overtime_hours_form: Overtime Hours
 work_at_home_form: Work at Home
+current_user: User
+current_date: Current Date
 
 #HISTORIC
 type_form: Type
@@ -66,6 +72,48 @@ status_form: Status
 pending_form: Pending
 rejected_form: Rejected
 approved_form: Approved
+no_forms_to_show: There are not forms to show.
+filters_all: All
+filters_vacation: Vacation
+filters_expenses: Expenses
+filters_trip: Business Trip
+filters_overtimehours: Overtime hours
+filters_home: Work at home
+filters_accepted: Accepted
+filters_rejected: Rejected
+filters_pending: Pending
+select_filters_type: Select a form type
+select_filters_status: Select a form status
+
+#VACATION FORM
+date_begin: Date start
+date_end: Date end
+surrogate: Surrogate
+surrogate_error: You must specify a surrogate.
+
+#EXPENSES FORM
+seller_company: Seller
+seller_error: You have to specify a seller.
+amount: Amount
+amount_error: An amount is required.
+concept: Concept
+concept_error: You must specify a concept.
+
+#BUSINESS TRIP FORMS
+location: Enter a location
+location_error: You have to specify a place
+congress: Congress name
+reasons: Reasons
+reasons_error: You have to specify a reason to justify the trip
+
+#OVERTIME HOURS
+ticket_error: You must specify a JIRA ticket ID.
+day: Day
+hours: Hours
+minutes: Minutes
+values_not_zero: Both values cannot be zero
+add_date: You have to add some date
+reasons_hours_error: You have to specify a reason to justify the petition
 
 #WORKATHOME FORM
 full_day: Full day
@@ -74,5 +122,6 @@ reasons: Reasons
 error_reason_required: You have to specify a reason to justify the trip.
 sendButton: Send
 
-#TOASTS
-you_dont_exist: Something went wrong while validating your credentials
+#DIALOG FORMS
+date: Date
+modality: Modality

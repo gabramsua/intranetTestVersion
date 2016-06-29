@@ -498,7 +498,7 @@ class ApiRestController extends Controller
     public function getNewsAction($channelName){
 
         if (strpos($channelName, ',') != false)
-            $channels = split(',', $channelName);
+            $channels = explode(',', $channelName);
 
         $post = file_get_contents("php://input");
         $data = json_decode($post, true);
