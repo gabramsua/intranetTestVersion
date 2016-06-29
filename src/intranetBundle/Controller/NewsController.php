@@ -9,12 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 class NewsController extends Controller{
 
   public function newsAction(){
-      
-      
+
+
       $userLogin = $_SESSION['userLDAP'];
-      
-      $em = $this->getDoctrine()->getEntityManager();
-        
+
+      $em = $this->getDoctrine()->getManager();
+
         $qb = $em->createQueryBuilder()
                  ->select('uc.name')
                  ->from('intranetBundle:Entity\userschannel', 'uc')
@@ -23,13 +23,13 @@ class NewsController extends Controller{
                  ->getQuery();
 
         $channelsList = $qb->getArrayResult();
-      
+
       $news = $this->getDoctrine()
                       ->getRepository('intranetBundle:Entity\NewFeed')
                       ->findAll();
-      
-      
-      
+
+
+
       $news = $this->getDoctrine()
                       ->getRepository('intranetBundle:Entity\NewFeed')
                       ->findAll();
@@ -43,9 +43,9 @@ class NewsController extends Controller{
 
           foreach ($n as $index => $object2) {
               if($object->getId()==$object2->getIdNew()){
-                
+
                     array_push($newschannel,$object);
-                  
+
               }
           }
       }

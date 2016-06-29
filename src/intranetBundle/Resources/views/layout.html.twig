@@ -19,7 +19,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
-<link rel="stylesheet" href="../../assets/menu.css">
+<link rel="stylesheet" href="{{ asset('bundles/intranet/styles/menu.css') }}">
 
 {% endblock %}
 
@@ -27,7 +27,7 @@
 {% block cabecera %}
     <div id="cabecera">
     <a href="{{ path('intranet_homepage')}}">
-      <img href="{{ path('intranet_homepage')}}" class="profile-img" src="../../images/webcuisine-logo.png" alt="" style="margin-top: 1%;margin-left: 2%;">
+      <img href="{{ path('intranet_homepage')}}" class="profile-img" src="{{ asset('bundles/intranet/images/webcuisine-logo.png') }}" alt="" style="margin-top: 1%;margin-left: 2%;">
       </a>
     </div>
 {% endblock %}

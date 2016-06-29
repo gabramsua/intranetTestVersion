@@ -81,7 +81,7 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $userIncoming = json_decode($post, true);
 
-            $em = $this->getDoctrine()->getEntityManager();;
+            $em = $this->getDoctrine()->getManager();;
             $user = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($login);
 
             $user->setNameU($userIncoming['name']);
@@ -127,7 +127,7 @@ class ApiRestController extends Controller
     **/
     public function getUsersAllOnboardAction(){
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('u.login', 'u.nameU', 'u.surnameU')
                  ->from('intranetBundle:Entity\Users', 'u')
@@ -152,7 +152,7 @@ class ApiRestController extends Controller
     **/
     public function getUserTasksAction($login){
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('ut.idTask')
                  ->from('intranetBundle:Entity\userstasks', 'ut')
@@ -214,7 +214,7 @@ class ApiRestController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE'){
 
             //remove the task
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $task = $em->getRepository('intranetBundle:Entity\Tasks')->find($id);
 
             if (!$task) {
@@ -250,7 +250,7 @@ class ApiRestController extends Controller
                                          'mensajemio' => 'no hay titulo'));*/
                 //header("The field Title cannot be blank.", true, 204);
 
-            $em = $this->getDoctrine()->getEntityManager();;
+            $em = $this->getDoctrine()->getManager();;
             $task = $em->getRepository('intranetBundle:Entity\Tasks')->find($id);
 
             $task->setTitle($taskIncoming['title']);
@@ -282,7 +282,7 @@ class ApiRestController extends Controller
                     }
                }else {
 
-                    $em = $this->getDoctrine()->getEntityManager();
+                    $em = $this->getDoctrine()->getManager();
                     $userAux = $em->getRepository('intranetBundle:Entity\userstasks')->findBy(['idTask' =>$id, 'login' => $user->getLogin()]);
 
                     foreach ($userAux as $index => $ob) {
@@ -367,7 +367,7 @@ class ApiRestController extends Controller
         //$usersInTask = $this->getDoctrine()->getRepository('intranetBundle:Entity\userstasks')->findByIdTask($id);
 
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('ut.login')
                  ->from('intranetBundle:Entity\userstasks', 'ut')
@@ -449,7 +449,7 @@ class ApiRestController extends Controller
     **/
     public function getNewschannelAction($offset){
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('cnf')
                  ->from('intranetBundle:Entity\channelnew_feed', 'cnf')
@@ -476,7 +476,7 @@ class ApiRestController extends Controller
 
         //$channelsList = $this->getDoctrine()->getRepository('intranetBundle:Entity\userschannel')->findByLogin($login);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder()
                  ->select('uc.name')
@@ -498,12 +498,12 @@ class ApiRestController extends Controller
     public function getNewsAction($channelName){
 
         if (strpos($channelName, ',') != false)
-            $channels = split(',', $channelName);
+            $channels = explode(',', $channelName);
 
         $post = file_get_contents("php://input");
         $data = json_decode($post, true);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
         $qb->select('cnf.idNew');
@@ -583,7 +583,7 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $newIncoming = json_decode($post, true);
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $new = $em->getRepository('intranetBundle:Entity\NewFeed')->findOneById($id);
             $oldtitle=$new->getTitle();
             $oldcontent=$new->getContent();
@@ -614,7 +614,7 @@ class ApiRestController extends Controller
                     }
                }else {
 
-                    $em = $this->getDoctrine()->getEntityManager();
+                    $em = $this->getDoctrine()->getManager();
                     $channelAux = $em->getRepository('intranetBundle:Entity\channelnew_feed')->findBy(['idNew' => $id, 'name' => $channel->getName()]);
 
                     foreach ($channelAux as $index => $ob) {
@@ -696,7 +696,7 @@ class ApiRestController extends Controller
         $new = $this->getDoctrine()->getRepository('intranetBundle:Entity\NewFeed')->findById($id);
 
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('nc.name')
                  ->from('intranetBundle:Entity\channelnew_feed', 'nc')
@@ -770,7 +770,7 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $channelIncoming = json_decode($post, true);
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $channel = $em->getRepository('intranetBundle:Entity\Channel')->findOneById($id);
             $oldname=$channel->getName();
             $channel->setName($channelIncoming['name']);
@@ -782,7 +782,7 @@ class ApiRestController extends Controller
                              ->getRepository('intranetBundle:Entity\Users')
                              ->findAll();
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             foreach ($allUsers as $index => $user) {
 
@@ -805,7 +805,7 @@ class ApiRestController extends Controller
                     }
                }else {
 
-                    $em = $this->getDoctrine()->getEntityManager();
+                    $em = $this->getDoctrine()->getManager();
                     $userAux = $em->getRepository('intranetBundle:Entity\userschannel')->findBy(['name' => $oldname, 'login' => $user->getLogin()]);
 
                     foreach ($userAux as $index => $ob) {
@@ -900,7 +900,7 @@ class ApiRestController extends Controller
         $channel = $this->getDoctrine()->getRepository('intranetBundle:Entity\Channel')->findByName($name);
 
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('uc.login')
                  ->from('intranetBundle:Entity\userschannel', 'uc')
@@ -944,7 +944,7 @@ class ApiRestController extends Controller
     public function getUserFormsAction($login){
 
         //GETTING IDS FORMS
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         //getting Expenses Forms ids of the user
         $qb = $em->createQueryBuilder()
@@ -1485,7 +1485,7 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $formIncoming = json_decode($post, true);
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             switch ($formIncoming['type']) {
                 case 'OvertimeHours':
                       $formtype='Hours';
@@ -1566,7 +1566,7 @@ class ApiRestController extends Controller
                         $mail->Subject = "Your form has been accepted.";
                         $mail->Body = "You send a ".$formIncoming['type']." form, and it has been accepted please check it <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }else{
-                        $mail->Subject = "Your form has been rejected.";                      
+                        $mail->Subject = "Your form has been rejected.";
                         $mail->Body = "You send a ".$formIncoming['type']." form, and it has been rejected please check it <a href='http://localhost/intranetTestVersion/web/app_dev.php/es/intranet_logout'>here</a>.<br><img class='profile-img' src='../../images/webcuisine-logo.png'>";
                       }
                       break;
@@ -1624,7 +1624,7 @@ class ApiRestController extends Controller
             $post = file_get_contents("php://input");
             $formIncoming = json_decode($post, true);
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             switch ($formIncoming['type']) {
                 case 'OvertimeHours':
                       $formtype='Hours';
@@ -1691,7 +1691,7 @@ class ApiRestController extends Controller
         foreach ($dayFormIntemediate as $dayForm){
 
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $qb = $em->createQueryBuilder();
             $qb->from('intranetBundle:Entity\hours_data','hd');
             $qb->select($qb->expr()->count('hd'));
@@ -1740,7 +1740,7 @@ class ApiRestController extends Controller
 
         //Get all the emails of users who has the notifications activated
         //Compare them to the emails of admins stored in session
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder()
                  ->select('u.email, u.lang')
                  ->from('intranetBundle:Entity\Users', 'u')
@@ -1751,7 +1751,7 @@ class ApiRestController extends Controller
         $info = $qb->getArrayResult();
 
 
-        for ($i=0; $i < sizeof($_SESSION['dirs']); $i++) { 
+        for ($i=0; $i < sizeof($_SESSION['dirs']); $i++) {
             foreach ($info as $key => $mailo) {
 
                 if(strcmp($_SESSION['dirs'][$i], $mailo['email']) == 0){
@@ -1779,24 +1779,24 @@ class ApiRestController extends Controller
 
                     //Indicamos cual es la dirección de destino del correo
                     $mail->AddAddress($mailo['email']);
-                    
+
                     switch ($mailo['lang']) {
                       case 'es':
-                          
+
                             $mail->Subject = "Alguien envió formulario en la intranet.";
-                          
+
                             $mail->Body = "El usuario ".$user->getName()." ".$user->getSurname()." ha enviado un formulario del tipo ".$type.". Por favor, échale un vistazo <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>aqui</a>.";
                           break;
                       case 'en':
-                          
+
                             $mail->Subject = "Somebody send a form to the intranet.";
-                          
+
                             $mail->Body = "You send a ". $formtype." form, please check it <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>here</a>.";
                           break;
                       case 'fr':
-                          
+
                               $mail->Subject = "Sa forme a été rejetée.";
-                          
+
                             $mail->Body = "La forme que vous avez envoyé le gars ". $formtype.", S'il vous plaît vérifier qu'il est <a href='http://intranet.stage.unitedcuisines.net/webCuisine/web/app_dev.php/es/intranet_logout'>ici</a>.";
                           break;
 
@@ -1825,7 +1825,7 @@ class ApiRestController extends Controller
                      }else{
                         echo "<br><b><u>Mensaje enviado correctamente</u></b>";
                      }
-                
+
                 }//CLOSE IF
             }//CLOSE FOREACH queryBuilder
         }//CLOSE FOR LDAP mails

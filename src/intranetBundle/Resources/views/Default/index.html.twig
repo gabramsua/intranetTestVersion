@@ -19,7 +19,7 @@
     <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
 
 <div ng-controller="AppCtrl" layout-fill="" layout="column" class="inset toastdemoBasicUsage" ng-cloak="" paddi="" ng-app="MyApp" ng-init="showSimpleToast()">
@@ -27,8 +27,8 @@
 <script>
       var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
       app.controller('AppCtrl', AppCtrl);
-            
-            
+
+
       function AppCtrl($scope, $mdToast){
           var last = {
             bottom: false,
@@ -43,7 +43,7 @@
             return Object.keys($scope.toastPosition)
               .filter(function(pos) { return $scope.toastPosition[pos]; })
               .join(' ');
-          };      
+          };
 
           $scope.showSimpleToast = function() {
             var pinTo = $scope.getToastPosition();
@@ -62,20 +62,20 @@
     <div class="row" style="margin-top: 15%;">
         <div class="col-sm-6 col-md-4 col-md-offset-4" >
             <div class="account-wall">
-                <img class="profile-img" src="../../images/webcuisine.jpg" alt="" style="margin-left: 17%;">
+                <img class="profile-img" src="{{ asset('bundles/intranet/images/webcuisine.jpg') }}" alt="" style="margin-left: 17%;">
                 <form class="form-signin" action="{{ path('intranet_login')}}" method="post">
 	                <input type="text" name="login" class="form-control" placeholder="{%trans%}name_and_surname{%endtrans%}" required autofocus>
 	                <input type="password" name="pass" class="form-control" placeholder="Password" required>
 	                <button class="btn btn-lg btn-primary btn-block" type="submit">
 	                    {%trans%}Sign_in{%endtrans%}
 	                </button>
-	                
+
 	                <a class="pull-right need-help" title="{%trans%}help_login{%endtrans%}">Need help? </a><span class="clearfix"></span>
                 </form>
 
     		<h6 class="text-center login-title">Copyright (c) 2016 Copyright Holder All Rights Reserved.</h6>
             </div>
-            
+
         </div>
     </div>
 </div>
