@@ -191,7 +191,7 @@ class DefaultController extends Controller{
 
   public function newsAction(){
     if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
-    if($_SESSION['rol']=='buo'){
+    if($_SESSION['rol']!='buo'){
 
       return $this->render('intranetBundle:Default:news.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
@@ -217,7 +217,7 @@ class DefaultController extends Controller{
 
   public function channelsAction(){
     if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
-    if($_SESSION['rol']=='buo'){
+    if($_SESSION['rol']!='buo'){
        return $this->render('intranetBundle:Default:channels.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }

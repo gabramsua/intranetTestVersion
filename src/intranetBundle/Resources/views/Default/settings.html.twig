@@ -29,7 +29,6 @@
             .then(function success(response){
 
                 $scope.user = response.data;
-                console.log($scope.user);
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });

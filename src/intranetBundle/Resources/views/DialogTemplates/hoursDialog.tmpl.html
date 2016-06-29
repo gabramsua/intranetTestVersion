@@ -6,21 +6,21 @@
 </md-list-item>
 <md-list-item ng-repeat="day in daysList">
     <md-input-container>
-        <label>Date</label>
+        <label>{% trans %}date{% endtrans %}</label>
         <input value="{[{day.date1 | date:'dd/MM/yyyy'}]}" disabled="">
     </md-input-container>
     <md-input-container>
-        <label>Hours</label>
+        <label>{% trans %}hours{% endtrans %}</label>
         <input value="{[{day.hour}]}" disabled="">
     </md-input-container>
     <md-input-container>
-        <label>Minutes</label>
+        <label>{% trans %}minutes{% endtrans %}</label>
         <input value="{[{day.minutes}]}" disabled="">
     </md-input-container>
 </md-list-item>
 <md-list-item>
     <md-input-container flex-gt-xs>
-        <label>Reasons</label>
+        <label>{% trans %}reasons{% endtrans %}</label>
         <textarea class="dialogTextarea" rows="4" disabled="">{[{form.reasons}]}</textarea>
     </md-input-container>
 </md-list-item>

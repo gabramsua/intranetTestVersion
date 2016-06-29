@@ -1,26 +1,26 @@
 <md-list-item>
     <md-input-container>
-        <label>Start date</label>
+        <label>{% trans %}date_begin{% endtrans %}</label>
         <input value="{[{form.date1 | date:'dd/MM/yyyy'}]}" disabled="">
     </md-input-container>
     <md-input-container>
-        <label>Finish date</label>
+        <label>{% trans %}date_end{% endtrans %}</label>
         <input value="{[{form.date2 | date:'dd/MM/yyyy'}]}" disabled="">
     </md-input-container>
 </md-list-item>
 <md-list-item>
     <md-input-container>
-        <label>Location</label>
+        <label>{% trans %}location{% endtrans %}</label>
         <input value="{[{form.place}]}" disabled="">
     </md-input-container>
     <md-input-container>
-        <label>Congress name</label>
+        <label>{% trans %}congress{% endtrans %}</label>
         <input value="{[{form.name_congress}]}" disabled="">
     </md-input-container>
 </md-list-item>
 <md-list-item>
     <md-input-container flex-gt-xs>
-        <label>Reasons</label>
+        <label>{% trans %}reasons{% endtrans %}</label>
         <textarea class="dialogTextarea" rows="4" disabled="">{[{form.reasons}]}</textarea>
     </md-input-container>
 </md-list-item>
