@@ -50,7 +50,7 @@
                 $scope.filters.formType = $scope.filtrotipo;
                 $scope.filters.formStatus = $scope.filtro2;
                 $scope.filteredFormsList = filterFormsByStatus($scope.formsList,  $scope.filtro2);
-                  
+
             }, function error(response){
                 console.log("Error:" +response.statusText);
             });
@@ -354,9 +354,6 @@
                             url = "workathomeform";
                             break;
                     }
-
-
-
 
                 $scope.delete=function(){
                     $http({
