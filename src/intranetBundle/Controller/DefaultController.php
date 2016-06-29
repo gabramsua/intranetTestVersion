@@ -92,7 +92,7 @@ class DefaultController extends Controller{
             }
             if($roleAssigned != 0) break;
         }
-    }*/
+    }
 
 
 
