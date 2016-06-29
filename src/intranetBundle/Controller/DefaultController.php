@@ -25,6 +25,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use phpmailer;
 use SMTP;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\FileLocator;
+
 class DefaultController extends Controller{
 
   //Verify LDAP credentials
@@ -50,7 +52,7 @@ class DefaultController extends Controller{
       $email=$userLDAP['user'][0]['mail'][0];
 
       //Method which split the whole role returned from LDAP used to know if the user is admin or not
-      $m = new Model();
+      //$m = new Model();
       $r = $m->getSplitRole($rol);
 
       $_SESSION['name']=$name;         //NAME
@@ -59,35 +61,43 @@ class DefaultController extends Controller{
       $_SESSION['rol']=$r[1];          //Admin, Buo, User
       $_SESSION['email']=$email;
 
+      $configDirectories = array($this->get('kernel')->getRootDir().'/config');
+      $locator = new FileLocator($configDirectories);
+      $groupsFile = $locator->locate('roleGroups.yml', null, true);
 
-      #$groups = Yaml::parse(file_get_contents('roleGroups.yml'));
+      $roles = Yaml::parse(file_get_contents($groupsFile));
 
-      $m = new Model();
-      //$u = $m->getSplitRole($userLDAP['user'][0]['memberof']);
+      $roleAssigned = 0;
       foreach ($userLDAP['user'][0]['memberof'] as $index => $object) {
-          //echo $m->getSplitRole($object)[1][0];
+        if($roleAssigned != 0)
+            break;
         foreach ($m->getSplitRole($object) as $key => $value) {
-            if(strcmp($value, "intranet-admins") == 0){
-              echo "you are ADMIN";
+            if($roleAssigned != 0)
+                break;
+            if(strcmp($value, $roles["admin"]) == 0){
               $_SESSION['rol'] = "admin";
-            }else if(strcmp($value, "intranet-buo") == 0){
-              //echo "you are BUO";
+              $roleAssigned = 1;
+	      break;
+            }else if(strcmp($value, $roles["buo"]) == 0){
               $_SESSION['rol'] = "buo";
-            }else if(strcmp($value, "intranet-users") == 0){
-              //echo "you are developer";
+              $roleAssigned = 1;
+	      break;
+            }else{
               $_SESSION['rol'] = "developer";
             }
         }
       }
 
+
+
       //Now I know the rol in the intranet of the user
       //I need to get all the emails of the admins, BUOS IN FACT
-      $m = new Model();
+      //$m = new Model();
       $admins = $m->getAllAdmins($ldaprdn,$ldappass);
 
       $dirs = array();
 
-      for ($i=0; $i < sizeof($admins[0]['member'])-1; $i++) { 
+      for ($i=0; $i < sizeof($admins[0]['member'])-1; $i++) {
           //echo "<br><b>".$admins[0]['member'][$i]."</b><br>";
           $aux = $admins[0]['member'][$i];
 
@@ -97,8 +107,10 @@ class DefaultController extends Controller{
           //echo "<br>".$emails[0]['mail'][0];
           array_push($dirs, $emails[0]['mail'][0]);
       }
+
+      $m->close_connection();
       //var_dump($dirs);
-      for ($i=0; $i < sizeof($dirs); $i++) { 
+      for ($i=0; $i < sizeof($dirs); $i++) {
           echo "<br>".$dirs[$i];
       }
       $_SESSION['dirs']=$dirs;
@@ -180,7 +192,7 @@ class DefaultController extends Controller{
 
   public function newsAction(){
     if($_SESSION['rol']=='buo'){
-      
+
       return $this->render('intranetBundle:Default:news.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }
@@ -225,11 +237,17 @@ class DefaultController extends Controller{
   }
 
   public function logoutAction(){
-    unset($_SESSION['name']);
-    unset($_SESSION['surname']);
-    unset($_SESSION['userLDAP']);
+
+      if (isset($_SESSION))
+	    session_destroy();
+	else
+	    session_start();
+
+    //unset($_SESSION['name']);
+    //unset($_SESSION['surname']);
+    //unset($_SESSION['userLDAP']);
     //unset($_SESSION['rol']);
-    unset($_SESSION['email']);
+    //unset($_SESSION['email']);
     return $this->render(
       'intranetBundle:Default:index.html.twig'
      );
@@ -367,7 +385,7 @@ class DefaultController extends Controller{
 
     }
 
-   
+
 #NEWS
 
        public function createNewAction(){
@@ -566,7 +584,7 @@ class DefaultController extends Controller{
            //return $this->render('intranetBundle:Default:editTask.html.twig', $params);
            return $this->render('intranetBundle:TaskTemplates:mainTaskDialog.tmpl.html', $params);
         }
-      
+
 #CHANNEL
 
     public function sendEmailAction($login,$formtype,$id,$status){
@@ -597,7 +615,7 @@ class DefaultController extends Controller{
 
         //Indicamos cual es la dirección de destino del correo
         $mail->AddAddress($usuario->getEmail());
-        
+
         switch ($usuario->getLang()) {
           case 'es':
               if ($status==1){
@@ -653,7 +671,7 @@ class DefaultController extends Controller{
      return $this->render('intranetBundle:Default:landing.html.twig');
     }
 
-   
+
       public function translationAction(){
         return $this->render( 'intranetBundle:Default:translate.html.twig');
       }
