@@ -1,6 +1,7 @@
 <?php
 namespace intranetBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use intranetBundle\Model\Model;
 use intranetBundle\Entity\Entity\Users;
@@ -35,15 +36,20 @@ class DefaultController extends Controller{
     $ldaprdn  = $_POST['login'];     // ldap rdn or dn
     $ldappass =$_POST['pass'];
 
-    $m = new Model();
+    $configDirectories = array($this->get('kernel')->getRootDir().'/config');
+    $locator = new FileLocator($configDirectories);
+    $paramsFile = $locator->locate('paramsLDAP.yml', null, true);
+
+    $paramsLDAP = Yaml::parse(file_get_contents($paramsFile));
+
+    $m = new Model($paramsLDAP['ldapDomainName'], $paramsLDAP['ldapPort']);
+
     $params = array('user' => $m->login($ldaprdn,$ldappass),);
 
     //Once found the user in the LDAP Directory, Store his credentials in variables
     $userLDAP=json_decode(json_encode($params), true);
 
     if (sizeof($userLDAP['user'])>1) {
-      //var_dump($userLDAP);
-
 
       $logged=$userLDAP['user'][0]['samaccountname'][0];
       $rol=$userLDAP['user'][0]['memberof'][0];
@@ -61,8 +67,6 @@ class DefaultController extends Controller{
       $_SESSION['rol']=$r[1];          //Admin, Buo, User
       $_SESSION['email']=$email;
 
-      $configDirectories = array($this->get('kernel')->getRootDir().'/config');
-      $locator = new FileLocator($configDirectories);
       $groupsFile = $locator->locate('roleGroups.yml', null, true);
 
       $roles = Yaml::parse(file_get_contents($groupsFile));
@@ -72,21 +76,23 @@ class DefaultController extends Controller{
         if($roleAssigned != 0)
             break;
         foreach ($m->getSplitRole($object) as $key => $value) {
+
             if($roleAssigned != 0)
                 break;
             if(strcmp($value, $roles["admin"]) == 0){
               $_SESSION['rol'] = "admin";
               $roleAssigned = 1;
-	      break;
+	             break;
             }else if(strcmp($value, $roles["buo"]) == 0){
               $_SESSION['rol'] = "buo";
               $roleAssigned = 1;
-	      break;
+	             break;
             }else{
               $_SESSION['rol'] = "developer";
             }
+            if($roleAssigned != 0) break;
         }
-      }
+    }*/
 
 
 
@@ -109,10 +115,6 @@ class DefaultController extends Controller{
       }
 
       $m->close_connection();
-      //var_dump($dirs);
-      for ($i=0; $i < sizeof($dirs); $i++) {
-          echo "<br>".$dirs[$i];
-      }
       $_SESSION['dirs']=$dirs;
 
       //Search the user in the local database with the credentials introduced before
@@ -191,6 +193,7 @@ class DefaultController extends Controller{
   }
 
   public function newsAction(){
+    if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
     if($_SESSION['rol']=='buo'){
 
       return $this->render('intranetBundle:Default:news.html.twig');
@@ -216,12 +219,14 @@ class DefaultController extends Controller{
   }
 
   public function channelsAction(){
-    if($_SESSION['rol']!='buo'){
+    if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
+    if($_SESSION['rol']=='buo'){
        return $this->render('intranetBundle:Default:channels.html.twig');
     }else return $this->redirect($this->generateUrl('intranet_homepage'));
   }
 
    public function userManagementAction(){
+     if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
      if($_SESSION['rol']=='admin'){
 
       return $this->render('intranetBundle:Default:userManagement.html.twig');
@@ -237,11 +242,10 @@ class DefaultController extends Controller{
   }
 
   public function logoutAction(){
-
-      if (isset($_SESSION))
-	    session_destroy();
-	else
-	    session_start();
+    if (isset($_SESSION))
+      session_destroy();
+  else
+      session_start();
 
     //unset($_SESSION['name']);
     //unset($_SESSION['surname']);
@@ -257,7 +261,7 @@ class DefaultController extends Controller{
 #USERS
 
    public function updateUserAction(){
-    echo "Llegaste a la linea 265";
+      //echo "Llegaste a la linea 265";
        $em = $this->getDoctrine()->getManager();
        $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
        echo $product->getLang();
@@ -270,7 +274,8 @@ class DefaultController extends Controller{
 
     //In this page we can see all the forms send, order by non-read forms, date and type.
     public function incomingFormsAction(){
-      if($_SESSION['rol']=='buo'){
+      if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
+      if($_SESSION['rol']!='buo'){
            return $this->render('intranetBundle:Default:incomingForms.html.twig');
        }else return $this->redirect($this->generateUrl('intranet_homepage'));
     }
@@ -725,7 +730,7 @@ class DefaultController extends Controller{
 
     //FORMS
     public function formsAction(){
-
+      if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
         $params = ['userLogin' => $_SESSION['userLDAP'],
                    'rol' => $_SESSION['rol'],
                    'name' => $_SESSION['name'],

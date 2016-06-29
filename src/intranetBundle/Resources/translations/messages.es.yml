@@ -1,11 +1,22 @@
+#LOGIN
+name_and_surname: Por favor introduce tu nombre y apellidos
+help_login: Es necesario tu nombre, apellidos y contraseña
+Sign_in: Entrar
+
+no_exist_welcome: Por favor, selecciona las opciones y haz click en Registrar
+Register: Registrar
+
 #TESTING
 Symfony2 is great: "Te quiero Symfony2"
 New User: "Nuevo Usuario"
 Welcome: "Bienvenido a la intranet"
 lang: "ESPANOL"
 Hello: "Hola!"
+translation: Por favor, selecciona un idioma. Recuerda que esta configuración no será salvada.
+sure_delete: ¿Estás seguro? Los cambios no son revertibles.
 
 #MENU
+Lang: Idioma
 Settings: Configuración
 Forms: Formularios
 Overtime Hours: Horas Extra
@@ -18,7 +29,8 @@ User Management: Gestión de Usuarios
 News Feed: Noticias
 Form Management: Gestión de Formularios
 Incoming Forms: Formularios Entrantes
-Old Forms: Formularios Antiguos
+News Feed: Gestión de noticias
+Channels: Canales
 
 #SETTINGS
 Name: Nombre
@@ -29,6 +41,8 @@ Notifications: Activar Notificaciones
 Photo: Foto de Perfil
 Modify: Modificar
 modified_yourself: Has modificado tus datos correctamente
+receive_notifications: Recibir Notificaciones
+onboard_user: Usuario nuevo
 
 #CHANNEL
 new_channel: "Crear un nuevo Canal"
@@ -38,7 +52,81 @@ create_channel: "Crear el Canal"
 #NEWS
 message_2: "No estaría mal poder hacer un filtro por canal <br> o mostrar también los canales en los que se haya y hacer click en el nombre de la columna"
 
+#LANDING
+langing_page_title: pagina de aterrizaje
+landing_page_subtitle: Esta es la pagina de aterrizaje
+landing_1: <b>Esta página necesita ser editada</b>
+landing_2: Menu no visible para todos => indicate routes?
 
 
+#FORMS
+historic: Histórico
+vacation_form: Vacaciones
+expenses_form: Gastos
+business_trip_form: Viaje de negocios
+overtime_hours_form: Horas extra
+work_at_home_form: Trabaja en casa
+current_user: Usuario
+current_date: Fecha actual
+send: Enviar
 
-This is Landing Page: Esta es la pagina de aterrizaje
+#HISTORIC
+type_form: Tipo
+date_set_form: Fecha de envío
+status_form: Estado
+pending_form: Pendiente
+rejected_form: Rechazado
+approved_form: Aceptado
+no_forms_to_show: No hay formularios para mostrar.
+filters_all: Todos
+filters_vacation: Vacaciones
+filters_expenses: Gastos
+filters_trip: Viaje de negocios
+filters_overtimehours: Horas extra
+filters_home: Trabaja en casa
+filters_accepted: Aceptado
+filters_rejected: Rechazado
+filters_pending: Pendiente
+select_filters_type: Selecciona un tipo de formulario
+select_filters_status: Seleccinoa un estado de los formularios
+
+#VACATION FORM
+date_begin: Fecha de inicio
+date_end: Fecha fin
+surrogate: Sustituto
+surrogate_error: Debes especificar un sutituto.
+
+#EXPENSES FORM
+seller_company: Compañía
+seller_error: Debes especificar una compañía.
+amount: Precio
+amount_error: Una cantidad es requerida.
+concept: Concepto
+concept_error: Debes especificar un concepto.
+
+#BUSINESS TRIP FORMS
+location: Inserta un lugar
+location_error: Debes especificar un lugar
+congress: Nombre del Congreso
+reasons: Motivos
+reasons_error: Debes especificar un motivo que justifique el viaje
+
+#OVERTIME HOURS
+ticket_error: Debes especificar un ticket ID de JIRA.
+day: Día
+hours: Horas
+minutes: Minutos
+values_not_zero: Ambos valores no pueden ser cero
+add_date: Debes anadir una fecha
+reasons_hours_error: Debes especificar un motivo que justifique la necesidad de horas
+
+#WORKATHOME FORM
+full_day: Todo el día
+half_day: Medio día
+error_reason_required: Debes especificar un motivo que justifique la petición.
+sendButton: Enviar
+
+
+#DIALOG FORMS
+date: Fecha
+modality: Modalidad

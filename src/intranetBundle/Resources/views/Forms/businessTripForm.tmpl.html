@@ -25,28 +25,28 @@
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block">
-                <label>Enter a location*</label>
+                <label>{% trans %}location{% endtrans %}*</label>
                 <input type="text" id="gplace" ng-model="location" name="businessPlace" required> <!--onclick="$(this).removeAttr('placeholder')"-->
                 <div ng-messages="businessTripForm.businessPlace.$error">
-                    <div ng-message="required">You have to specify a place</div>
+                    <div ng-message="required">{% trans %}location_error{% endtrans %}</div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block">
-                <label>Congress name</label>
+                <label>{% trans %}congress{% endtrans %}</label>
                 <input type="text" ng-model="congressName" name="congressName">
             </md-input-container>
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block" style="width: 100%;">
-                <label>Reasons*</label>
+                <label>{% trans %}reasons{% endtrans %}*</label>
                 <textarea ng-model="reasons" name="businessTripReasons" md-maxlength="250" rows="3" style="overflow-y: scroll;" md-select-on-focus required></textarea>
                 <div ng-messages="businessTripForm.businessTripReasons.$error">
-                    <div ng-message="required">You have to specify a reason to justify the trip</div>
+                    <div ng-message="required">{% trans %}reasons_error{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item>
-            <md-button class="md-raised md-primary" ng-click="forming()" style="margin-top: 40px" ng-disabled="buttonFlag">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" ng-click="forming()" style="margin-top: 40px" ng-disabled="buttonFlag">{% trans %}send{% endtrans %}</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
         </md-list-item>
     </md-list>
 </div>

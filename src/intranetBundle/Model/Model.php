@@ -8,11 +8,16 @@
  class Model extends Controller{
 
    protected $ldapconn;
-   protected $ldapDomainName = '192.168.30.10';
 
-   function __construct() {
-       $this->ldapconn = ldap_connect($this->ldapDomainName, 3268) or die("Could not connect to LDAP server.");
+   function __construct($serverAddress, $serverPort) {
+       $this->ldapconn = ldap_connect($serverAddress, $serverPort) or die("Could not connect to LDAP server.");
    }
+
+   // function Model($serverAddress, $serverPort) {
+   //     echo "dir:".$serverAddress;
+   //     echo "port:".$serverPort;
+   //     $this->ldapconn = ldap_connect($serverAddress, $serverPort) or die("Could not connect to LDAP server.");
+   // }
 
    function close_connection (){
        ldap_close($this->ldapconn);

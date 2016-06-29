@@ -3,10 +3,10 @@
         <md-list-item layout-lg="row" layout-xl="row" layout-padding="" ng-include="'{{ path('intranet_forms_header_data') }}'" ng-controller="formHeaderController"></md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block">
-                <label>Seller company*</label>
+                <label>{% trans %}seller_company{% endtrans %}*</label>
                 <input type="text" name="seller" ng-model="data.seller" required>
                 <div ng-messages="expensesForm.seller.$error">
-                    <div ng-message="required">You have to specify a seller.</div>
+                    <div ng-message="required">{% trans %}seller_error{% endtrans %}</div>
                 </div>
             </md-input-container>
             <md-datepicker ng-model="data.dateSelected" md-min-date="today" md-placeholder="Before to" name="expenseDate" ></md-datepicker> <!--al dejar el ngmodel vacío, tirar error-->
@@ -14,24 +14,24 @@
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block">
-                <label>Amount (EUR)*</label>
+                <label>{% trans %}amount{% endtrans %} (EUR)*</label>
                 <input type="number" ng-model="data.amount" name="expenseAmount" required>
                 <div ng-messages="expensesForm.expenseAmount.$error">
-                    <div ng-message="required">An amount is required.</div>
+                    <div ng-message="required">{% trans %}amount_error{% endtrans %}</div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block">
-                <label>Concept*</label>
+                <label>{% trans %}concept{% endtrans %} *</label>
                 <input type="text" name="expenseConcept" ng-model="data.concept" required>
                 <div ng-messages="expensesForm.expenseConcept.$error">
-                    <div ng-message="required">You must specify a concept.</div>
+                    <div ng-message="required">{% trans %}concept_error{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item>
             <md-list-item>
 <!--                    <md-button class="md-raised md-primary" id="subm" type="submit" ng-disabled="expensesForm.$invalid" ng-click="submitting(expensesForm)">Send</md-button> -->
-                <md-button class="md-raised md-primary" id="subm" ng-click="forming()" ng-disabled="buttonFlag">Send</md-button>
+                <md-button class="md-raised md-primary" id="subm" ng-click="forming()" ng-disabled="buttonFlag">{% trans %}send{% endtrans %}</md-button>
             </md-list-item>
         </md-list-item>
     </md-list>

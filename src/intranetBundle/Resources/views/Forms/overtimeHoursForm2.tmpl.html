@@ -7,14 +7,14 @@
                 <label>JIRA ticket ID*</label>
                 <input type="text" name="jiraTicketdID" ng-model="jiraTicketdID" required>
                 <div ng-messages="overtimeHoursForm.jiraTicketdID.$error">
-                    <div ng-message="required">You must specify a JIRA ticket ID.</div>
+                    <div ng-message="required">{% trans %}ticket_error{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item layout-lg="row" layout-xl="row" style="margin-top: 0; padding-bottom: 15px" dateRequired datesList="overtimeList">
             <md-datepicker class="dtNoSpaceAtLeft" ng-model="dateSelected" md-min-date="today" ng-change="addDateField2()" md-placeholder="Before to" style="padding-top: 1px;" name="OTdate" md-date-filter="alreadySelectedDatesDates" ng-disabled="timeFlag"></md-datepicker>
             <md-input-container style="margin-left: 30px">
-                <label>Hours*</label> <!--{[{day.minutes}]}-->
+                <label>{% trans %}hours{% endtrans %}*</label> <!--{[{day.minutes}]}-->
                 <md-select ng-model="hoursSelected" ng-change="timeValidation(hoursSelected, minutesSelected)" name="hours"><!--overtimeList[$index].minutes-->
                     <md-option ng-repeat="hour in time.hours" value="{[{hour}]}">
                         {[{hour}]}
@@ -22,7 +22,7 @@
                 </md-select>
             </md-input-container>
             <md-input-container style="margin-left: 30px;">
-                <label>Minutes*</label><!--{[{day.hours}]}-->
+                <label>{% trans %}minutes{% endtrans %}*</label><!--{[{day.hours}]}-->
                 <md-select ng-model="minutesSelected" ng-change="timeValidation(hoursSelected, minutesSelected)" name="minutes"><!--overtimeList[$index].hours-->
                     <md-option ng-repeat="minute in time.minutes" value="{[{minute}]}">
                         {[{minute}]}
@@ -30,24 +30,23 @@
                 </md-select>
             </md-input-container>
             <div layout="column">
-                <span ng-show="timeFlag" style="color: rgb(221,44,0); font-size: 12px; margin-left: 10px">Both values cannot be zero</span>
+                <span ng-show="timeFlag" style="color: rgb(221,44,0); font-size: 12px; margin-left: 10px">{% trans %}values_not_zero{% endtrans %}</span>
                 <br>
-                <span ng-show="noDatesFlag" style="color: rgb(221,44,0); font-size: 12px; margin-left: 10px">You have to add some date</span>
+                <span ng-show="noDatesFlag" style="color: rgb(221,44,0); font-size: 12px; margin-left: 10px">{% trans %}add_date{% endtrans %}</span>
             </div>
         </md-list-item>
         <div ng-repeat="day in overtimeList">
             <md-list-item style="padding-left: 16px;">
                 <md-input-container>
-                    <label>Day {[{$index+1}]}</label>
+                    <label>{% trans %}day{% endtrans %} {[{$index+1}]}</label>
                     <input type="date" ng-model="day.date" disabled="">
                 </md-input-container>
                 <md-input-container style="width: 85px;">
-                    <label>Hours</label>
-                    <label>Hours</label>
+                    <label>{% trans %}hours{% endtrans %}</label>
                     <input type="text" ng-model="day.hours" disabled="">
                 </md-input-container>
                 <md-input-container style="width: 98px;">
-                    <label>Minutes</label>
+                    <label>{% trans %}minutes{% endtrans %}</label>
                     <input type="text" ng-model="day.minutes" disabled="">
                 </md-input-container>
                 <md-button class="md-icon-button" ng-click="removeElement($index)">
@@ -57,15 +56,15 @@
         </div>
         <md-list-item layout-lg="row" layout-xl="row">
             <md-input-container class="md-block" style="width: 100%;">
-                <label>Reasons*</label>
+                <label>{% trans %}reasons{% endtrans %}*</label>
                 <textarea ng-model="reasons" name="overtimeHoursReasons" md-maxlength="250" rows="3" style="overflow-y: scroll;" md-select-on-focus required></textarea>
                 <div ng-messages="overtimeHoursForm.overtimeHoursReasons.$error">
-                    <div ng-message="required">You have to specify a reason to justify the trip</div>
+                    <div ng-message="required">{% trans %}reasons_hours_error{% endtrans %}</div>
                 </div>
             </md-input-container>
         </md-list-item>
         <md-list-item>
-            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()" ng-disabled="buttonFlag">Send</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
+            <md-button class="md-raised md-primary" style="margin-top: 40px" ng-click="forming()" ng-disabled="buttonFlag">{% trans %}send{% endtrans %}</md-button><!--si se le da un href o ng-href se comportará como un <a> https://material.angularjs.org/latest/api/directive/mdButton-->
         </md-list-item>
     </md-list>
 </div>

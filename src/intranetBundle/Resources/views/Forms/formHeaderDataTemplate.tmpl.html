@@ -2,13 +2,13 @@
 <!--    <tr>-->
         <td>
             <md-input-container>
-                <label>User</label>
+                <label>{% trans %}current_user{% endtrans %}</label>
                 <input ng-model="name" disabled="">
             </md-input-container>
         </td>
         <td class="rightCellSeparator">
             <md-input-container>
-                <label>Current Date</label>
+                <label>{% trans %}current_date{% endtrans %}</label>
                 <input disabled="" value="{[{auxDate | date:'dd/MM/yyyy'}]}">
             </md-input-container>
         </td>

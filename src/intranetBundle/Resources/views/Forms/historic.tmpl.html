@@ -19,7 +19,7 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
             </md-list-item>
             <md-divider></md-divider>
             <md-divider></md-divider>
-            <span class="md-headline" ng-if="filteredFormsList.length == 0 && !loading" layout-margin>{% trans %}no_forms_to_show{% endtrans %}There are not forms to show.</span>
+            <span class="md-headline" ng-if="filteredFormsList.length == 0 && !loading" layout-margin>{% trans %}no_forms_to_show{% endtrans %}</span>
             <div ng-repeat="form in filteredFormsList">
                 <md-list-item ng-click="showFormDetails($event, form)">
                     <span style="width: 30%">{[{form.type}]}</span>
@@ -43,23 +43,23 @@ y hay que agregar la siguiente hora de estilos pero muchas otras funcionalidades
         </md-list>
         <div layout="column" style="margin-left: 5%;">
           <div class="radioButtonList">
-              <p>Select a form type:</p>
+              <p>{% trans %}select_filters_type{% endtrans %}:</p>
               <md-radio-group ng-model="filters.formType" >
-                  <md-radio-button value="All" class="md-primary" ng-disabled="loading">All</md-radio-button>
-                  <md-radio-button value="Vacation" class="md-primary" ng-disabled="loading">Vacation</md-radio-button>
-                  <md-radio-button value="Expenses" class="md-primary" ng-disabled="loading">Expenses</md-radio-button>
-                  <md-radio-button value="BusinessTrip" class="md-primary" ng-disabled="loading">Business Trip</md-radio-button>
-                  <md-radio-button value="OvertimeHours" class="md-primary" ng-disabled="loading">Overtime hours</md-radio-button>
-                  <md-radio-button value="WorkAtHome" class="md-primary" ng-disabled="loading">Work at home</md-radio-button>
+                  <md-radio-button value="All" class="md-primary" ng-disabled="loading">{% trans %}filters_all{% endtrans %}</md-radio-button>
+                  <md-radio-button value="Vacation" class="md-primary" ng-disabled="loading">{% trans %}filters_vacation{% endtrans %}</md-radio-button>
+                  <md-radio-button value="Expenses" class="md-primary" ng-disabled="loading">{% trans %}filters_expenses{% endtrans %}</md-radio-button>
+                  <md-radio-button value="BusinessTrip" class="md-primary" ng-disabled="loading">{% trans %}filters_trip{% endtrans %}</md-radio-button>
+                  <md-radio-button value="OvertimeHours" class="md-primary" ng-disabled="loading">{% trans %}filters_overtimehours{% endtrans %}</md-radio-button>
+                  <md-radio-button value="WorkAtHome" class="md-primary" ng-disabled="loading">{% trans %}filters_home{% endtrans %}</md-radio-button>
               </md-radio-group>
           </div>
           <div class="radioButtonList">
-              <p>Select a form status:</p>
+              <p>{% trans %}select_filters_status{% endtrans %}:</p>
               <md-radio-group ng-model="filters.formStatus">
-                  <md-radio-button value="3" class="md-primary" ng-disabled="loading">All</md-radio-button>
-                  <md-radio-button value="1" class="md-primary" ng-disabled="loading">Accepted</md-radio-button>
-                  <md-radio-button value="2" class="md-primary" ng-disabled="loading">Rejected</md-radio-button>
-                  <md-radio-button value="0" class="md-primary" ng-disabled="loading">Pending</md-radio-button>
+                  <md-radio-button value="3" class="md-primary" ng-disabled="loading">{% trans %}filters_all{% endtrans %}</md-radio-button>
+                  <md-radio-button value="1" class="md-primary" ng-disabled="loading">{% trans %}filters_accepted{% endtrans %}</md-radio-button>
+                  <md-radio-button value="2" class="md-primary" ng-disabled="loading">{% trans %}filters_rejected{% endtrans %}</md-radio-button>
+                  <md-radio-button value="0" class="md-primary" ng-disabled="loading">{% trans %}filters_pending{% endtrans %}</md-radio-button>
               </md-radio-group>
           </div>
       </div>
