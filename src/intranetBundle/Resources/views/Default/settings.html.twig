@@ -8,7 +8,7 @@
 
     function settingsController ($scope,$http, $mdToast) {
        var userLogin = ("{{me.login | json_encode()}}").replace(/&quot;/g, "");
-       
+
        $scope.showphoto = function(){
        alert(subida3);
            if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -174,7 +174,7 @@
 
                     <input id="picture" name="picture" type="file" class="ng-hide" ng-model="picture" multiple>
                     <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
-                    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+                    <!-- <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script> -->
                     <script>
 
                         $('#photo').click(function(){
@@ -192,7 +192,7 @@
 
 
                 <md-input-container class="md-block">
-                    <md-button class="md-raised md-primary" ng-click="showphoto()">
+                    <md-button aria-label="photo" class="md-raised md-primary" ng-click="showphoto()">
                 </md-input-container>
                 <hr>
 
