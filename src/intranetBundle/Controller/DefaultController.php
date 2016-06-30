@@ -93,10 +93,6 @@ class DefaultController extends Controller{
             if($roleAssigned != 0) break;
         }
     }
-
-
-
-
       //Now I know the rol in the intranet of the user
       //I need to get all the emails of the admins, BUOS IN FACT
       //$m = new Model();
@@ -166,7 +162,8 @@ class DefaultController extends Controller{
      $newuser->setSurnameU($_REQUEST['mySurname']);
      $newuser->setEmail($_REQUEST['myEmail']);
      $newuser->setLang($_REQUEST['myLang']);
-     $newuser->setPhoto($_REQUEST['myPhoto']);
+     //$newuser->setPhoto($_REQUEST['myPhoto']);
+     $newuser->setPhoto("default.png");
      $newuser->setOnboard(0);
      $newuser->setNotifications($_REQUEST['myNotifications']);
 
@@ -246,21 +243,25 @@ class DefaultController extends Controller{
      }else return $this->redirect($this->generateUrl('intranet_homepage'));
    }
 
-  public function settingsAction(){
+    public function settingsAction(){
 
-      $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
+        $usuario = $this->getDoctrine()->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
 
-      //lets encode the image to send it to the view
-       $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$usuario->getPhoto();
-       $type = pathinfo($target_dir, PATHINFO_EXTENSION);
-       $data = file_get_contents($target_dir);
-       $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        //lets find the  encode the image to send it to the view
+        $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$usuario->getPhoto();
 
-       $params=array('me'=>$usuario, 'image'=>$base64);
+        /*if (!file_exists($target_dir))
+            $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/')."default.png";*/
 
-      return $this->render('intranetBundle:Default:settings.html.twig',$params);
+        $type = pathinfo($target_dir, PATHINFO_EXTENSION);
+        $data = file_get_contents($target_dir);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-  }
+        $params=array('me'=>$usuario, 'image'=>$base64);
+
+        return $this->render('intranetBundle:Default:settings.html.twig',$params);
+
+    }
 
   public function logoutAction(){
     if (isset($_SESSION))
@@ -278,22 +279,22 @@ class DefaultController extends Controller{
    public function updateUserAction(){
       //echo "Llegaste a la linea 265";
        $em = $this->getDoctrine()->getManager();
-       $product = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
+       $user = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
 
        $finalFileName = "default.png"; //nombre por defecto si no se sube ninguna imagen.
-       $flag="NOENTRA";
        //lets encode the image to send it to the view
-        /*$target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$product->getPhoto();
+        /*$target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/').$user->getPhoto();
         $type = pathinfo($target_dir, PATHINFO_EXTENSION);
         $data = file_get_contents($target_dir);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);*/
 
-       if(array_key_exists('picture', $_FILES)) {
+       if(array_key_exists('picture', $_FILES) && !empty($_FILES['picture']['name'])) {
 
            $target_dir = $this->container->get('kernel')->locateResource('@intranetBundle/Resources/public/userProfileImages/');
            $currentFileName = basename($_FILES["picture"]["name"]); //Image name while uploading
            $imageFileType = pathinfo($currentFileName,PATHINFO_EXTENSION); //Image extension
-           $finalFileName = $target_dir.$_SESSION['userLDAP'].".".$imageFileType; //el segundo parámetro es el login, que será el nombre de la imágen
+           $newImageName = $_SESSION['userLDAP'].".".$imageFileType; //image named to login + filetype
+           $finalFileName = $target_dir.$newImageName; //target + imageName
 
            $notAnImage = 0;
            $exceedsAllowedImageSize = 0;
@@ -313,15 +314,17 @@ class DefaultController extends Controller{
            else
                if (move_uploaded_file($_FILES["picture"]["tmp_name"], $finalFileName))
                    echo "Image uploaded".$finalFileName;
-               else{
-                   $flag="SIENTRA";
+               else
                    echo "Sorry, there was an unknown error uploading your file.".$finalFileName;
-               }
+
+           $user->setPhoto($newImageName);
+           $em->persist($user);
+           $em->flush();
        }
 
-       //fin upload image
+       //end upload image
 
-       return $this->redirect($this->generateUrl('intranet_settings', ['_locale'=>$product->getLang()] ));
+       return $this->redirect($this->generateUrl('intranet_settings', ['_locale'=>$user->getLang()] ));
    }
 
 

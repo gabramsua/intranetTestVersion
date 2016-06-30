@@ -14,7 +14,7 @@
 <script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.0/angular-material-icons.min.js"></script>
 
 
 <div ng-controller="AppCtrl" layout-fill="" layout="column" class="inset toastdemoBasicUsage" ng-cloak="" paddi="" ng-app="MyApp" ng-init="showSimpleToast()">
@@ -22,8 +22,8 @@
 <script>
       var app = angular.module('MyApp',['ngRoute', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngMdIcons']);
       app.controller('AppCtrl', AppCtrl);
-            
-            
+
+
       function AppCtrl($scope, $mdToast){
           var last = {
             bottom: false,
@@ -39,7 +39,7 @@
             return Object.keys($scope.toastPosition)
               .filter(function(pos) { return $scope.toastPosition[pos]; })
               .join(' ');
-          };      
+          };
 
           $scope.showSimpleToast = function() {//this.showSimpleToast
             var pinTo = $scope.getToastPosition();
@@ -73,17 +73,16 @@
                           <option value="de">DE</option>
                         </select>
                   <BR>
-                  <label>{% trans %}Photo{% endtrans %}</label><input type='file' id="myPhoto"name="myPhoto"><img src=""><BR>
                   <label class="radio">{% trans %}Notifications{% endtrans %}</label>
                                   <input type='radio' id="myNotification" name="myNotifications" value="1"><label for="myNotification">ON</label>
                                   <input type='radio' id="myNotifications" name="myNotifications" value="0"   checked ><label for="myNotifications">OFF</label><br>
                   <button class="btn btn-lg btn-primary btn-block" type="submit">
                       {% trans %}Register{% endtrans %}
                   </button>
-                  
+
                 </form>
             </div>
-            
+
         </div>
     </div>
 </div>
