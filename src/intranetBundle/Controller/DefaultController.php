@@ -38,8 +38,8 @@ class DefaultController extends Controller{
 
     $configDirectories = array($this->get('kernel')->getRootDir().'/config');
     $locator = new FileLocator($configDirectories);
-    $paramsFile = $locator->locate('paramsLDAP.yml', null, true);
 
+    $paramsFile = $locator->locate('paramsLDAP.yml', null, true);
     $paramsLDAP = Yaml::parse(file_get_contents($paramsFile));
 
     $m = new Model($paramsLDAP['ldapDomainName'], $paramsLDAP['ldapPort']);
@@ -93,7 +93,6 @@ class DefaultController extends Controller{
             if($roleAssigned != 0) break;
         }
     }
-    $_SESSION['rol'] = "buo";
 
 
 
@@ -191,15 +190,22 @@ class DefaultController extends Controller{
    }
 
   public function indexAction(){
-     return $this->render('intranetBundle:Default:landing.html.twig');
+    if(!isset($_SESSION)) return $this->render('intranetBundle:Default:index.html.twig');
+    return $this->render('intranetBundle:Default:landing.html.twig');
   }
 
   public function newsAction(){
-    if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
+    //if(session_status()!=2)return $this->redirect($this->generateUrl('intranet_logout'));
+
     if($_SESSION['rol']=='buo'){
 
       return $this->render('intranetBundle:Default:news.html.twig');
-    }else return $this->redirect($this->generateUrl('intranet_homepage'));
+    }else{
+      var_dump(is_session_started()); 
+      if(session_status()!=2) echo "No hay sesion picha";
+      else echo "Sí hay session";
+      return $this->redirect($this->generateUrl('intranet_homepage'));
+    }
   }
 
   public function tasksAction(){
@@ -230,8 +236,13 @@ class DefaultController extends Controller{
    public function userManagementAction(){
      if(!isset($_SESSION))return $this->render('intranetBundle:Default:landing.html.twig');
      if($_SESSION['rol']=='admin'){
-
-      return $this->render('intranetBundle:Default:userManagement.html.twig');
+      $em = $this->getDoctrine()->getManager();
+          $currentUser = $em->getRepository('intranetBundle:Entity\Users')->findOneByLogin($_SESSION['userLDAP']);
+          /*$currentUser = $this->getDoctrine()
+                              ->getRepository('intranetBundle:Entity\Users')
+                              ->findBy(['login' => $_SESSION['userLDAP']]);*/
+          $params = array('currentUserLogin' =>$currentUser->getLogin());
+      return $this->render('intranetBundle:Default:userManagement.html.twig', $params);
      }else return $this->redirect($this->generateUrl('intranet_homepage'));
    }
 
@@ -256,12 +267,6 @@ class DefaultController extends Controller{
       session_destroy();
   else
       session_start();
-
-    //unset($_SESSION['name']);
-    //unset($_SESSION['surname']);
-    //unset($_SESSION['userLDAP']);
-    //unset($_SESSION['rol']);
-    //unset($_SESSION['email']);
     return $this->render(
       'intranetBundle:Default:index.html.twig'
      );
