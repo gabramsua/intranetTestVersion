@@ -169,9 +169,9 @@
             <div flex>
              <md-list-item layout-lg="row" layout-xl="row">
                 <md-input-container class="md-block">
-                    <label>{% trans %}Photo{% endtrans %} (4MB MAX)</label><br>
+                    <label>{% trans %}Photo{% endtrans %} </label><br>
                     <input id="picture" name="picture" type="file" class="ng-hide" ng-model="picture" multiple>
-                    <img class="md-avatar" id="photo" src="{{ image }}" style="border: 1px solid black; height: 70px; width: 70px;"/> {[{user.photo}]}
+                    <img class="md-avatar" id="photo" src="{{ image }}" style="border: 1px solid black; height: 70px; width: 70px;"/>(4MB MAX)(jpg, jpeg, png)
                     <!-- <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script> -->
                     <script>
 
@@ -204,19 +204,6 @@
                         });
                     </script>
                 </md-input-container>
-
-
-                <!-- <md-input-container class="md-block">
-                    <md-button aria-label="photo" class="md-raised md-primary" ng-click="showphoto()">
-                </md-input-container>
-                <hr>
-
-                <md-button>
-                    <label for="files">
-                       <img class="md-avatar" id="photo" src="../../images/{[{user.photo}]}" style="border: 1px solid black; height: 70px; width: 70px;"/>BUTTOn
-                    </label>
-                </md-button> -->
-                <!-- <input id="files" name="file-input" type="file" style="display:none;"> -->
             </md-list-item>
             </div>
         </div>
